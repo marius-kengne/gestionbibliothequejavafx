@@ -1,0 +1,26 @@
+<component name="ArtifactManager">
+  <artifact name="GestionBibliothequeJavaFX:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/GestionBibliothequeJavaFX_jar</output-path>
+    <root id="root">
+      <element id="archive" name="GestionBibliothequeJavaFX.jar">
+        <element id="module-output" name="GestionBibliothequeJavaFX" />
+      </element>
+      <element id="library" level="project" name="Maven: org.jvnet.staxex:stax-ex:1.8" />
+      <element id="library" level="project" name="Maven: com.sun.xml.fastinfoset:FastInfoset:1.2.15" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:win:21.0.1" />
+      <element id="library" level="project" name="Maven: org.glassfish.jaxb:txw2:2.3.1" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:17.0.6" />
+      <element id="library" level="project" name="Maven: org.glassfish.jaxb:jaxb-runtime:2.3.1" />
+      <element id="library" level="project" name="Maven: org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:21.0.1" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:17.0.6" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:win:17.0.6" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:win:17.0.6" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:17.0.6" />
+      <element id="library" level="project" name="Maven: com.sun.istack:istack-commons-runtime:3.0.7" />
+      <element id="library" level="project" name="Maven: javax.xml.bind:jaxb-api:2.3.1" />
+      <element id="library" level="project" name="Maven: javax.activation:javax.activation-api:1.2.0" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:win:17.0.6" />
+    </root>
+  </artifact>
+</component>
