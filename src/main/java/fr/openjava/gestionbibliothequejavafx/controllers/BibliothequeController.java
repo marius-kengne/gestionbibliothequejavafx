@@ -22,15 +22,12 @@ import javafx.stage.FileChooser;
 import java.time.LocalDate;
 import java.util.Optional;
 
+/**
+ * Cette classe de controller permet de gérer toutes les fonctionnalités de notre application
+ * notament la création d'un livre, l'édition d'un livre, la suppression d'un livre, l'enregistrement du livre
+ * et la mise à jour d'un livre
+ */
 public class BibliothequeController {
-
-    @FXML
-    private Label welcomeText;
-
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
 
     @FXML
     private TableView<Bibliotheque.Livre> tableView = null;
@@ -54,7 +51,7 @@ public class BibliothequeController {
     private TableColumn<Bibliotheque.Livre, Integer> rangeeColumn;
 
     private ObservableList<Bibliotheque.Livre> livres = FXCollections.observableArrayList();
-    //private Bibliotheque.Livre currentLivre = new Bibliotheque.Livre();
+
     private List<Bibliotheque.Livre> allCurrentLivre = new ArrayList<Bibliotheque.Livre>();
     @FXML
     private TextArea titreTextArea;
@@ -79,7 +76,9 @@ public class BibliothequeController {
     }
 
     /**
-     * Méthode pour initialiser le contenu des colones du tableau
+     * Méthode pour initialiser le contenu des colones du tableau avec les données
+     * présent dans le fichier XML initial
+     * C'est cette méthode qui reflete le listing des livres via l'interface
      */
     public void initialize() {
 
@@ -131,55 +130,11 @@ public class BibliothequeController {
     }
 
     /**
-     * Méthode pour récupérer les données du formulaire et
-     * créer un nouveau livre
+     * Méthode pour récupérer les données du livre du formulaire et
+     * l' enregistrer dans le fichier XML
      */
     public void saveLivre() {
-
-        /*
-        // Récupérer les valeurs des champs
-        String titre = titreTextArea.getText();
-        String[] auteur = auteurTextArea.getText().split(" ");
-        if (auteur.length == 1){
-            Utilities.showAlert("Erreur de validation", "Vous devez saisir le nom suivi du prénom de l'auteur");
-        }
-        String presentation = presentationTextArea.getText();
-
-        int parution=0, colonne=0, rangee=0;
-        try {
-            parution = Integer.parseInt(parutionTextArea.getText());
-        } catch (NumberFormatException e) {
-            Utilities.showAlert("Erreur de validation", "La parution doit être une année valide !");
-        }
-
-        try {
-            colonne = Integer.parseInt(colonneTextArea.getText());
-        } catch (NumberFormatException e) {
-            Utilities.showAlert("Erreur de validation", "La colone doit être un nombre valide !");
-        }
-
-        try {
-            rangee = Integer.parseInt(rangeeTextArea.getText());
-        } catch (NumberFormatException e) {
-            Utilities.showAlert("Erreur de validation", "La colone doit être un nombre valide !");
-        }
-
-        Bibliotheque.Livre livre = new Bibliotheque.Livre();
-        livre.setTitre(titre);
-
-        Bibliotheque.Livre.Auteur auteurObj = new Bibliotheque.Livre.Auteur();
-        auteurObj.setNom(auteur[0]);
-        auteurObj.setPrenom(auteur[1]);
-        livre.setAuteur(auteurObj);
-
-        livre.setPresentation(presentation);
-        livre.setParution(parution);
-        livre.setColonne((short) colonne);
-        livre.setRangee((short) rangee);
-*/
-        /**
-         * Enregistrer le livre courant au fichier XML
-          */
+        //Enregistrer le livre courant au fichier XML
         addLivreToXML();
     }
 
@@ -259,10 +214,8 @@ public class BibliothequeController {
                 return;
             }
 
+            //Créer un nouvel objet Livre et l'ajouter dans le tableau
 
-            /**
-             * Créer un nouvel objet Livre et l'ajouter dans le tableau
-             */
             currentLivre.setTitre(titre);
             Bibliotheque.Livre.Auteur currentAuteur = new Bibliotheque.Livre.Auteur();
             currentAuteur.setNom(auteur[0]);
@@ -368,7 +321,7 @@ public class BibliothequeController {
     }
 
     /**
-     * Méthode pour ajouter un livre dans le fichier XML
+     * Méthode permettant d'ajouter un livre dans le fichier XML
      */
     private void addLivreToXML() {
         try {
@@ -423,9 +376,9 @@ public class BibliothequeController {
 
 
     /**
-     * Méthode pour mettre à jour un livre dans le fichier XML
+     * Méthode permettant de mettre à jour un livre dans le fichier XML
      */
-    private void updateLivreToXML() {
+    public void updateLivreToXML() {
 
         Bibliotheque.Livre currentLivre = new Bibliotheque.Livre();
         LocalDate currentDate = LocalDate.now();
@@ -476,9 +429,8 @@ public class BibliothequeController {
                 return;
             }
 
-            /**
-             * Créer un nouvel objet Livre et l'ajouter dans le tableau
-             */
+            // Créer un nouvel objet Livre et l'ajouter dans le tableau
+
             currentLivre.setTitre(titre);
             Bibliotheque.Livre.Auteur currentAuteur = new Bibliotheque.Livre.Auteur();
             currentAuteur.setNom(auteur[0]);
@@ -488,9 +440,7 @@ public class BibliothequeController {
 
         }
 
-        /**
-         * Mise à jour du fichier XML
-         */
+        // Mise à jour du fichier XML
 
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Bibliotheque.class);
@@ -508,24 +458,28 @@ public class BibliothequeController {
             // Ajouter le livre à la liste des livres
             Iterator<Bibliotheque.Livre> iterator = bibliotheque.getLivre().iterator();
             List<Bibliotheque.Livre> copyAllCurrentLivre = new ArrayList<>();
-            copyAllCurrentLivre.addAll(allCurrentLivre);
+            //copyAllCurrentLivre.addAll(allCurrentLivre);
 
-            while (iterator.hasNext()) {
-                Bibliotheque.Livre e = iterator.next();
-                if ((e.getTitre().equalsIgnoreCase(currentLivre.getTitre())
-                        && e.getAuteur().getNom().equalsIgnoreCase(currentLivre.getAuteur().getNom())
-                        && e.getAuteur().getPrenom().equals(currentLivre.getAuteur().getPrenom())
-                        && e.getParution() == currentLivre.getParution())) {
-                    //iterator.remove();
+                while (iterator.hasNext()) {
+                    Bibliotheque.Livre e = iterator.next();
+                    if ((e.getTitre().equalsIgnoreCase(currentLivre.getTitre())
+                            && e.getAuteur().getNom().equalsIgnoreCase(currentLivre.getAuteur().getNom())
+                            && e.getAuteur().getPrenom().equals(currentLivre.getAuteur().getPrenom())
+                            && e.getParution() == currentLivre.getParution())) {
+                        copyAllCurrentLivre.add(currentLivre);
+                    } else {
+                        copyAllCurrentLivre.add(e);
+                    }
                 }
-            }
 
+                bibliotheque.getLivre().clear();
+                bibliotheque.getLivre().addAll(copyAllCurrentLivre);
 
-            bibliotheque.getLivre().addAll(allCurrentLivre);
+                // Enregistrer les modifications dans le fichier XML
+                marshaller.marshal(bibliotheque, file);
+                Utilities.showAlertSuccess("Confirmation", "Le livre a bien été mise à jour");
+                reloadDataToXML();
 
-            // Enregistrer les modifications dans le fichier XML
-            marshaller.marshal(bibliotheque, file);
-            Utilities.showAlertSuccess("Confirmation", "Le livre a bien été enregistré");
         } catch (JAXBException e) {
             e.printStackTrace();
         }

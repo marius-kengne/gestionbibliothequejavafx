@@ -57,7 +57,7 @@
                 <!-- Boutons Éditer et Supprimer -->
                 <HBox prefHeight="40.0" prefWidth="800.0" spacing="10.0" alignment="CENTER" AnchorPane.topAnchor="290.0">
                     <children>
-                        <Button text=" Mettre à jour  " />
+                        <Button text=" Mettre à jour  " onAction="#updateLivreToXML"/>
                         <Button text="Supprimer" onAction="#deleteLivre" style="-fx-background-color: red"/>
                     </children>
                 </HBox>
