@@ -11,6 +11,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import javax.xml.bind.*;
@@ -50,6 +52,9 @@ public class BibliothequeController {
     @FXML
     private TableColumn<Bibliotheque.Livre, Integer> rangeeColumn;
 
+    @FXML
+    private TableColumn<Bibliotheque.Livre, String> imageColumn;
+
     private ObservableList<Bibliotheque.Livre> livres = FXCollections.observableArrayList();
 
     private List<Bibliotheque.Livre> allCurrentLivre = new ArrayList<Bibliotheque.Livre>();
@@ -82,9 +87,10 @@ public class BibliothequeController {
      */
     public void initialize() {
 
+        imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
         titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
         auteurColumn.setCellValueFactory(cellData -> {
-            /**
+            /*
              * Récupérer l'objet Livre correspondant à la ligne actuelle
              * Récupérer l'objet Auteur du livre
              * Retourner une SimpleStringProperty contenant le nom complet de l'auteur
@@ -99,6 +105,7 @@ public class BibliothequeController {
         rangeeColumn.setCellValueFactory(new PropertyValueFactory<>("rangee"));
         editLivreListener();
         chargerDonneesDuXML();
+        setImageUrl();
     }
 
     /**
@@ -106,27 +113,49 @@ public class BibliothequeController {
      */
     private void chargerDonneesDuXML() {
         try {
-
             JAXBContext jaxbContext = JAXBContext.newInstance(Bibliotheque.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            //unmarshaller.setValidating(true);
             Bibliotheque bibliotheque = (Bibliotheque) unmarshaller.unmarshal(new File(Utilities.XML_FILE_PATH));
-            for (Bibliotheque.Livre livre : bibliotheque.getLivre()) {
-                String data = livre.getAuteur().getNom() + " " + livre.getAuteur().getPrenom();
-                Bibliotheque.Livre.Auteur auteur =  new Bibliotheque.Livre.Auteur();
-                //auteur.setNom(livre.getAuteur().getNom());
-                //auteur.setPrenom(livre.getAuteur().getPrenom());
-                //livre.setAuteur(auteur);
-                System.out.println("########################## nom " + livre.getAuteur().getNom());
-
-                System.out.println("########################## prenom " + livre.getAuteur().getPrenom());
-            }
-
             livres.addAll(bibliotheque.getLivre());
             tableView.setItems(livres);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Methode pour remplacer l'url de l'image par l'image proprement dite
+     */
+    private void setImageUrl(){
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        imageColumn.setCellFactory(column -> new TableCell<Bibliotheque.Livre, String>() {
+
+            @Override
+            protected void updateItem(String url, boolean empty) {
+                super.updateItem(url, empty);
+
+                if (empty || url == null) {
+                    setGraphic(null);
+                } else {
+                    if (url.isEmpty()){
+                        Image image = new Image(Utilities.URL_DEFAULT);
+                        imageView.setImage(image);
+                        setGraphic(imageView);
+                    }else {
+                        try {
+                            Image image = new Image(url);
+                            imageView.setImage(image);
+                            setGraphic(imageView);
+                        }catch (Exception e){
+                            Utilities.showAlert("Erreur", "L'url de l'image n'est pas valide");
+                        }
+
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -627,13 +656,14 @@ public class BibliothequeController {
                         System.out.println("################## le livre existe déjà : " + e.toString());
                             iterator2.remove();
                             livres.remove(iterator2);
-                            tableView.setItems(livres);
-                            Utilities.showAlert("Echec d'enregistrement","Vous avez deux livres avec des informations identiques !");
-                            return;
+
+                            //Utilities.showAlert("Echec d'enregistrement","Vous avez deux livres avec des informations identiques !");
+                            //return;
 
                     }
                 }
             }
+            tableView.setItems(livres);
 
             bibliotheque.getLivre().addAll(allCurrentLivre);
             File currentFile = new File(pathOfFile);

@@ -43,7 +43,7 @@
                 <Label text="Liste des livres de la bibliothèque" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-background-color: blue" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="10" alignment="CENTER"/>
                 <TableView fx:id="tableView" layoutX="8.0" layoutY="60.0" prefHeight="200.0" prefWidth="784.0">
                     <columns>
-                        <TableColumn prefWidth="100.0" text="Image" fx:id="actionColumn"/>
+                        <TableColumn prefWidth="100.0" text="Image" style="-fx-alignment: CENTER" fx:id="imageColumn"/>
                         <TableColumn prefWidth="100.0" text="Titre" fx:id="titreColumn"/>
                         <TableColumn prefWidth="150.0" text="Auteur" fx:id="auteurColumn" />
                         <TableColumn prefWidth="200.0" text="Présentation" fx:id="presentationColumn"/>

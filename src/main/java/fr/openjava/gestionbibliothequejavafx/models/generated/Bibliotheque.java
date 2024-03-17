@@ -156,7 +156,8 @@ public class Bibliotheque {
         "presentation",
         "parution",
         "colonne",
-        "rangee"
+        "rangee",
+        "image"
     })
     public static class Livre {
 
@@ -172,6 +173,8 @@ public class Bibliotheque {
         protected short colonne;
         @XmlSchemaType(name = "unsignedByte")
         protected short rangee;
+        @XmlElement(required = false)
+        protected String image;
 
         /**
          * Obtient la valeur de la propriété titre.
@@ -183,6 +186,14 @@ public class Bibliotheque {
          */
         public String getTitre() {
             return titre;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
         }
 
         /**
