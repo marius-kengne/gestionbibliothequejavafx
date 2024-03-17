@@ -17,4 +17,12 @@ public class Utilities {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    public static void showAlertSuccess(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

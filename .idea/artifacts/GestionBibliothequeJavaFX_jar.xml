@@ -1,26 +1,102 @@
 <component name="ArtifactManager">
-  <artifact name="GestionBibliothequeJavaFX:jar">
+  <artifact type="jar" name="GestionBibliothequeJavaFX:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/GestionBibliothequeJavaFX_jar</output-path>
-    <root id="root">
-      <element id="archive" name="GestionBibliothequeJavaFX.jar">
-        <element id="module-output" name="GestionBibliothequeJavaFX" />
-      </element>
-      <element id="library" level="project" name="Maven: org.jvnet.staxex:stax-ex:1.8" />
-      <element id="library" level="project" name="Maven: com.sun.xml.fastinfoset:FastInfoset:1.2.15" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:win:21.0.1" />
-      <element id="library" level="project" name="Maven: org.glassfish.jaxb:txw2:2.3.1" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:17.0.6" />
-      <element id="library" level="project" name="Maven: org.glassfish.jaxb:jaxb-runtime:2.3.1" />
-      <element id="library" level="project" name="Maven: org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:21.0.1" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:17.0.6" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:win:17.0.6" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:win:17.0.6" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:17.0.6" />
-      <element id="library" level="project" name="Maven: com.sun.istack:istack-commons-runtime:3.0.7" />
-      <element id="library" level="project" name="Maven: javax.xml.bind:jaxb-api:2.3.1" />
-      <element id="library" level="project" name="Maven: javax.activation:javax.activation-api:1.2.0" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:win:17.0.6" />
+    <root id="archive" name="GestionBibliothequeJavaFX.jar">
+      <element id="module-output" name="GestionBibliothequeJavaFX" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-xml/3.0.0/plexus-xml-3.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/17.0.6/javafx-graphics-17.0.6-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/17.0.6/javafx-controls-17.0.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-interpolation/1.27/plexus-interpolation-1.27.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/luben/zstd-jni/1.5.5-11/zstd-jni-1.5.5-11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/17.0.6/javafx-base-17.0.6-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jvnet/staxex/stax-ex/1.8/stax-ex-1.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/resolver/maven-resolver-api/1.4.1/maven-resolver-api-1.4.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/iq80/snappy/snappy/0.4/snappy-0.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/inject/javax.inject/1/javax.inject-1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/sun/xml/fastinfoset/FastInfoset/1.2.15/FastInfoset-1.2.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/17.0.6/javafx-base-17.0.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/21.0.1/javafx-fxml-21.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-io/3.4.2/plexus-io-3.4.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/shared/maven-common-artifact-filters/3.3.2/maven-common-artifact-filters-3.3.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/sun/istack/istack-commons-runtime/3.0.7/istack-commons-runtime-3.0.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/21.0.1/javafx-fxml-21.0.1-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/maven-archiver/3.6.1/maven-archiver-3.6.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-io/commons-io/2.15.1/commons-io-2.15.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-compress/1.25.0/commons-compress-1.25.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-utils/4.0.0/plexus-utils-4.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/glassfish/jaxb/txw2/2.3.1/txw2-2.3.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/sonatype/plexus/plexus-build-api/0.0.7/plexus-build-api-0.0.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/tukaani/xz/1.9/xz-1.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/kordamp/bootstrapfx/bootstrapfx-core/0.4.0/bootstrapfx-core-0.4.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/shared/maven-filtering/3.3.1/maven-filtering-3.3.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/17.0.6/javafx-controls-17.0.6-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/glassfish/jaxb/jaxb-runtime/2.3.1/jaxb-runtime-2.3.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/plugins/maven-assembly-plugin/3.7.0/maven-assembly-plugin-3.7.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/resolver/maven-resolver-util/1.4.1/maven-resolver-util-1.4.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/activation/javax.activation-api/1.2.0/javax.activation-api-1.2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-archiver/4.9.1/plexus-archiver-4.9.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/17.0.6/javafx-graphics-17.0.6.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-console-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-console-l1-2-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-datetime-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-debug-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-errorhandling-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-file-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-file-l1-2-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-file-l2-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-handle-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-heap-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-interlocked-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-libraryloader-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-localization-l1-2-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-memory-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-namedpipe-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-processenvironment-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-processthreads-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-processthreads-l1-1-1.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-profile-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-rtlsupport-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-string-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-synch-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-synch-l1-2-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-sysinfo-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-timezone-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-core-util-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-crt-conio-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-crt-convert-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-crt-environment-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-crt-filesystem-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-crt-heap-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-crt-locale-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-crt-math-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-crt-multibyte-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-crt-private-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-crt-process-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-crt-runtime-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-crt-stdio-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-crt-string-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-crt-time-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/api-ms-win-crt-utility-l1-1-0.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/decora_sse.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/fxplugins.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/glass.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/glib-lite.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/gstreamer-lite.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/javafx_font.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/javafx_iio.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/jfxmedia.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/jfxwebkit.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/msvcp140.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/msvcp140_1.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/msvcp140_2.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/prism_common.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/prism_d3d.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/prism_sw.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/ucrtbase.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/vcruntime140.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../javafx-sdk-22/bin/vcruntime140_1.dll" />
     </root>
   </artifact>
 </component>

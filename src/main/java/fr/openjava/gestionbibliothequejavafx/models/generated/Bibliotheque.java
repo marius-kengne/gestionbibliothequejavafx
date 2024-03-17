@@ -102,6 +102,17 @@ public class Bibliotheque {
         return this.livre;
     }
 
+    /**
+     * Sets the value of the livre property.
+     *
+     * <p>
+     * This setter method replaces the current list with a new list.
+     *
+     * @param livre the new list of Livre objects
+     */
+    public void setLivre(List<Bibliotheque.Livre> livre) {
+        this.livre = livre;
+    }
 
     /**
      * <p>Classe Java pour anonymous complex type.
@@ -268,7 +279,7 @@ public class Bibliotheque {
 
         /**
          * Obtient la valeur de la propriété rangee.
-         * 
+         *
          */
         public short getRangee() {
             return rangee;
@@ -365,6 +376,16 @@ public class Bibliotheque {
 
         }
 
+        @Override
+        public String toString() {
+            return "Infos du Livre : " +
+                    "titre='" + titre + '\'' +
+                    ", auteur=" + auteur.getNom() + ' ' +auteur.getPrenom() +
+                    ", presentation='" + presentation + '\'' +
+                    ", parution=" + parution +
+                    ", colonne=" + colonne +
+                    ", rangee=" + rangee;
+        }
     }
 
 }
