@@ -20,7 +20,7 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Fichier">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Ouvrir" />
+                        <MenuItem mnemonicParsing="false" onAction="#ImportXMLFile" text="Ouvrir" />
                         <MenuItem mnemonicParsing="false" text="Quitter" />
                     </items>
                 </Menu>

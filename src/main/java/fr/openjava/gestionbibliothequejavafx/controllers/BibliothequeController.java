@@ -160,6 +160,71 @@ public class BibliothequeController {
 
     }
 
+
+    /**
+     * Méthode pour importer un fichier contenant les livres dans l'application
+     */
+    public void ImportXMLFile() throws JAXBException {
+
+        Stage stage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisir le fichier que vous souhaitez ouvrir");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers XML", "*.xml"));
+        File file = fileChooser.showOpenDialog(tableView.getScene().getWindow());
+
+        if (file != null) {
+            titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
+            auteurColumn.setCellValueFactory(cellData -> {
+                Bibliotheque.Livre livre = cellData.getValue();
+                Bibliotheque.Livre.Auteur auteur = livre.getAuteur();
+                return new SimpleStringProperty(auteur.getNom() + " " + auteur.getPrenom());
+            });
+            presentationColumn.setCellValueFactory(new PropertyValueFactory<>("presentation"));
+            parutionColumn.setCellValueFactory(new PropertyValueFactory<>("parution"));
+            colonneColumn.setCellValueFactory(new PropertyValueFactory<>("colonne"));
+            rangeeColumn.setCellValueFactory(new PropertyValueFactory<>("rangee"));
+
+            try {
+                JAXBContext jaxbContext = JAXBContext.newInstance(Bibliotheque.class);
+                Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+                Bibliotheque bibliotheque = (Bibliotheque) unmarshaller.unmarshal(new File(file.getAbsolutePath()));
+                livres.clear();
+                livres.addAll(bibliotheque.getLivre());
+                allCurrentLivre.clear();
+                allCurrentLivre.addAll(livres);
+                tableView.setItems(livres);
+                Utilities.showAlertSuccess("Confirmation", "Fichier importer avec success");
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
+     * Méthode pour récupérer les livres d'un fichier XML
+     * @param filePath : url du fichier que l'on veut importer les livres
+     * @return ObservableList<Bibliotheque.Livre> la liste des livres dans une collection
+     */
+    public ObservableList<Bibliotheque.Livre> getLivresInXML(String filePath) {
+        try {
+            // Créer le contexte JAXB
+            JAXBContext context = JAXBContext.newInstance(Bibliotheque.class);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+
+            // Charger le fichier XML et obtenir la liste des livres
+            File file = new File(filePath);
+            Bibliotheque bibliotheque = (Bibliotheque) unmarshaller.unmarshal(file);
+
+            // Retourner la liste des livres
+            return FXCollections.observableArrayList(bibliotheque.getLivre());
+        } catch (JAXBException e) {
+            e.printStackTrace();
+            return FXCollections.observableArrayList();
+        }
+    }
+
+
     /**
      * Méthode pour ajouter un livre dans le tableau sans l'enregistrer dans le fichier XML
      */
@@ -385,11 +450,13 @@ public class BibliothequeController {
 
         if (titreTextArea.getText().isEmpty() || auteurTextArea.getText().isEmpty() || presentationTextArea.getText().isEmpty() || rangeeTextArea.getText().isEmpty() || colonneTextArea.getText().isEmpty() || parutionTextArea.getText().isEmpty() ){
             Utilities.showAlert("Erreur de validation", "Tous les champs sont obligatoires !");
+            return;
         }else {
             String titre = titreTextArea.getText();
             String[] auteur = auteurTextArea.getText().split(" ");
             if (auteur.length == 1){
                 Utilities.showAlert("Erreur de validation", "Vous devez saisir le nom suivi du prénom de l'auteur");
+                return;
             }
             String presentation = presentationTextArea.getText();
 

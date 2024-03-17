@@ -5,6 +5,7 @@ module fr.openjava.gestionbibliothequejavafx {
 
     requires org.kordamp.bootstrapfx.core;
     requires java.xml.bind;
+    requires plexus.io;
 
 
     opens fr.openjava.gestionbibliothequejavafx to javafx.fxml;
