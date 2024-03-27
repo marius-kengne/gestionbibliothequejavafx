@@ -55,6 +55,12 @@ public class BibliothequeController {
     @FXML
     private TableColumn<Bibliotheque.Livre, String> imageColumn;
 
+    @FXML
+    private TableColumn<Bibliotheque.Livre, String> resumeColumn;
+
+    @FXML
+    private TableColumn<Bibliotheque.Livre, String> statusColumn;
+
     private ObservableList<Bibliotheque.Livre> livres = FXCollections.observableArrayList();
 
     private List<Bibliotheque.Livre> allCurrentLivre = new ArrayList<Bibliotheque.Livre>();
@@ -76,6 +82,26 @@ public class BibliothequeController {
     @FXML
     private TextArea rangeeTextArea;
 
+    @FXML
+    private TextArea imageTextArea;
+
+    @FXML
+    private ImageView imageView;
+
+    @FXML
+    private TextArea resumeTextArea;
+
+    @FXML
+    private TextArea statusTextArea;
+
+    @FXML
+    private CheckBox disponibleCheckBox;
+
+    @FXML
+    private SplitMenuButton splitMenuButton;
+
+    private String statusCurrentLivre = "";
+
     public BibliothequeController(){
         System.out.println("################## Lancement");
     }
@@ -90,11 +116,6 @@ public class BibliothequeController {
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
         titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
         auteurColumn.setCellValueFactory(cellData -> {
-            /*
-             * Récupérer l'objet Livre correspondant à la ligne actuelle
-             * Récupérer l'objet Auteur du livre
-             * Retourner une SimpleStringProperty contenant le nom complet de l'auteur
-              */
             Bibliotheque.Livre livre = cellData.getValue();
             Bibliotheque.Livre.Auteur auteur = livre.getAuteur();
             return new SimpleStringProperty(auteur.getNom() + " " + auteur.getPrenom());
@@ -103,9 +124,45 @@ public class BibliothequeController {
         parutionColumn.setCellValueFactory(new PropertyValueFactory<>("parution"));
         colonneColumn.setCellValueFactory(new PropertyValueFactory<>("colonne"));
         rangeeColumn.setCellValueFactory(new PropertyValueFactory<>("rangee"));
+        resumeColumn.setCellValueFactory(new PropertyValueFactory<>("resume"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+
         editLivreListener();
-        chargerDonneesDuXML();
+        //chargerDonneesDuXML();
         setImageUrl();
+
+        imageTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+                imageView.setImage(new Image(newValue));
+                imageView.setFitWidth(120);
+                imageView.setFitHeight(100);
+            }
+        });
+
+        for (MenuItem item : splitMenuButton.getItems()) {
+            item.setOnAction(event -> {
+                // Obtenez le texte de l'élément sélectionné
+                String status = ((MenuItem) event.getSource()).getText();
+                splitMenuButton.setText(status);
+                // Faites quelque chose avec le texte sélectionné, par exemple :
+                System.out.println("Sélection : " + status);
+                statusCurrentLivre = status;
+                // Ou déclenchez une méthode pour gérer la sélection
+                handleSelection(status);
+            });
+        }
+    }
+
+    // Méthode pour gérer la sélection
+    private void handleSelection(String selectedText) {
+        // Ajoutez votre logique pour traiter la sélection ici
+        if (selectedText.equals("disponible")) {
+            // Faites quelque chose si "disponible" est sélectionné
+            System.out.println("Article disponible");
+        } else if (selectedText.equals("indisponible")) {
+            // Faites quelque chose si "indisponible" est sélectionné
+            System.out.println("Article indisponible");
+        }
     }
 
     /**
@@ -202,6 +259,7 @@ public class BibliothequeController {
         File file = fileChooser.showOpenDialog(tableView.getScene().getWindow());
 
         if (file != null) {
+            imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
             titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
             auteurColumn.setCellValueFactory(cellData -> {
                 Bibliotheque.Livre livre = cellData.getValue();
@@ -212,6 +270,8 @@ public class BibliothequeController {
             parutionColumn.setCellValueFactory(new PropertyValueFactory<>("parution"));
             colonneColumn.setCellValueFactory(new PropertyValueFactory<>("colonne"));
             rangeeColumn.setCellValueFactory(new PropertyValueFactory<>("rangee"));
+            resumeColumn.setCellValueFactory(new PropertyValueFactory<>("resume"));
+            statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
             try {
                 JAXBContext jaxbContext = JAXBContext.newInstance(Bibliotheque.class);
@@ -226,6 +286,9 @@ public class BibliothequeController {
             } catch (JAXBException e) {
                 e.printStackTrace();
             }
+
+            editLivreListener();
+            setImageUrl();
         }
 
     }
@@ -308,8 +371,35 @@ public class BibliothequeController {
                 return;
             }
 
+            try {
+                String resume = resumeTextArea.getText();
+                if (resume.isEmpty()){
+                    Utilities.showAlert("Erreur de validation", "Le résumé doit être rempli");
+                    return;
+                }
+                currentLivre.setResume(resume);
+            } catch (NumberFormatException e) {
+                Utilities.showAlert("Erreur de validation", "Le résumé doit être rempli");
+                return;
+            }
+
+            try {
+                String status = statusCurrentLivre;
+                if (status.isEmpty()){
+                    Utilities.showAlert("Erreur de validation", "Le status doit être rempli");
+                    return;
+                }
+                currentLivre.setStatus(status);
+            } catch (NumberFormatException e) {
+                Utilities.showAlert("Erreur de validation", "Le status doit être rempli");
+                return;
+            }
+
             //Créer un nouvel objet Livre et l'ajouter dans le tableau
 
+            if (! imageTextArea.getText().isEmpty()){
+                currentLivre.setImage(imageTextArea.getText());
+            }
             currentLivre.setTitre(titre);
             Bibliotheque.Livre.Auteur currentAuteur = new Bibliotheque.Livre.Auteur();
             currentAuteur.setNom(auteur[0]);
@@ -350,7 +440,6 @@ public class BibliothequeController {
                 if (allCurrentLivre.contains(currentLivre)){
                     allCurrentLivre.remove(currentLivre);
                     Utilities.showAlertSuccess("Confirmation", "Le livre a été supprimé");
-                    return;
                 }
 
                 deleteLivreToXML(currentLivre);
@@ -525,8 +614,35 @@ public class BibliothequeController {
                 return;
             }
 
+            try {
+                String resume = resumeTextArea.getText();
+                if (resume.isEmpty()){
+                    Utilities.showAlert("Erreur de validation", "Le résumé doit être rempli");
+                    return;
+                }
+                currentLivre.setResume(resume);
+            } catch (NumberFormatException e) {
+                Utilities.showAlert("Erreur de validation", "Le résumé doit être rempli");
+                return;
+            }
+
+            try {
+                String status = statusCurrentLivre;
+                if (status.isEmpty()){
+                    Utilities.showAlert("Erreur de validation", "Le status doit être rempli");
+                    return;
+                }
+                currentLivre.setStatus(status);
+            } catch (NumberFormatException e) {
+                Utilities.showAlert("Erreur de validation", "Le status doit être rempli");
+                return;
+            }
+
             // Créer un nouvel objet Livre et l'ajouter dans le tableau
 
+            if (! imageTextArea.getText().isEmpty()){
+                currentLivre.setImage(imageTextArea.getText());
+            }
             currentLivre.setTitre(titre);
             Bibliotheque.Livre.Auteur currentAuteur = new Bibliotheque.Livre.Auteur();
             currentAuteur.setNom(auteur[0]);
@@ -552,7 +668,8 @@ public class BibliothequeController {
             }
 
             // Ajouter le livre à la liste des livres
-            Iterator<Bibliotheque.Livre> iterator = bibliotheque.getLivre().iterator();
+            //Iterator<Bibliotheque.Livre> iterator = bibliotheque.getLivre().iterator();
+            Iterator<Bibliotheque.Livre> iterator = allCurrentLivre.iterator();
             List<Bibliotheque.Livre> copyAllCurrentLivre = new ArrayList<>();
             //copyAllCurrentLivre.addAll(allCurrentLivre);
 
@@ -574,7 +691,10 @@ public class BibliothequeController {
                 // Enregistrer les modifications dans le fichier XML
                 marshaller.marshal(bibliotheque, file);
                 Utilities.showAlertSuccess("Confirmation", "Le livre a bien été mise à jour");
-                reloadDataToXML();
+                //reloadDataToXML();
+                livres.clear();
+                livres.addAll(copyAllCurrentLivre);
+                tableView.setItems(livres);
 
         } catch (JAXBException e) {
             e.printStackTrace();
@@ -610,6 +730,7 @@ public class BibliothequeController {
         tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 // Récupérez les valeurs sélectionnées et affichez-les dans les champs de texte
+                imageTextArea.setText(newSelection.getImage());
                 titreTextArea.setText(newSelection.getTitre());
                 Bibliotheque.Livre.Auteur auteur = newSelection.getAuteur();
                 auteurTextArea.setText(auteur.getNom().concat(" ").concat(auteur.getPrenom()));
@@ -617,6 +738,11 @@ public class BibliothequeController {
                 parutionTextArea.setText(Integer.toString(newSelection.getParution()));
                 colonneTextArea.setText(Short.toString(newSelection.getColonne()));
                 rangeeTextArea.setText(Short.toString(newSelection.getRangee()));
+                resumeTextArea.setText(newSelection.getResume());
+                statusCurrentLivre = newSelection.getStatus();
+
+                splitMenuButton.setText(statusCurrentLivre);
+                //statusTextArea.setText(newSelection.getStatus());
             }
         });
     }

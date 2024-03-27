@@ -14,6 +14,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.collections.FXCollections?>
+<?import com.sun.org.apache.xpath.internal.operations.String?>
+<?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.Region?>
 <VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.openjava.gestionbibliothequejavafx.controllers.BibliothequeController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
@@ -40,8 +49,8 @@
         <AnchorPane prefHeight="400.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
             <children>
                 <!-- Tableau de listing des livres -->
-                <Label text="Liste des livres de la bibliothèque" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-background-color: blue" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="10" alignment="CENTER"/>
-                <TableView fx:id="tableView" layoutX="8.0" layoutY="60.0" prefHeight="200.0" prefWidth="784.0">
+                <Label text="Liste des livres de la bibliothèque" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-background-color: blue" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="15" AnchorPane.rightAnchor="10" alignment="CENTER"/>
+                <TableView fx:id="tableView" layoutX="8.0" layoutY="60.0" prefHeight="180.0" prefWidth="784.0">
                     <columns>
                         <TableColumn prefWidth="100.0" text="Image" style="-fx-alignment: CENTER" fx:id="imageColumn"/>
                         <TableColumn prefWidth="100.0" text="Titre" fx:id="titreColumn"/>
@@ -50,22 +59,24 @@
                         <TableColumn prefWidth="100.0" text="Parution" fx:id="parutionColumn" />
                         <TableColumn prefWidth="100.0" text="Colonne" fx:id="colonneColumn"/>
                         <TableColumn prefWidth="100.0" text="Rangée" fx:id="rangeeColumn"/>
+                        <TableColumn prefWidth="100.0" text="Resumé" fx:id="resumeColumn"/>
+                        <TableColumn prefWidth="100.0" text="Status" fx:id="statusColumn"/>
                     </columns>
                 </TableView>
                 <VBox prefHeight="20.0" prefWidth="800.0" AnchorPane.topAnchor="270.0"/>
 
                 <!-- Boutons Éditer et Supprimer -->
-                <HBox prefHeight="40.0" prefWidth="800.0" spacing="10.0" alignment="CENTER" AnchorPane.topAnchor="290.0">
+                <HBox prefHeight="40.0" prefWidth="800.0" spacing="10.0" alignment="CENTER" AnchorPane.topAnchor="250.0">
                     <children>
                         <Button text=" Mettre à jour  " onAction="#updateLivreToXML"/>
                         <Button text="Supprimer" onAction="#deleteLivre" style="-fx-background-color: red"/>
                     </children>
                 </HBox>
-                <VBox prefHeight="20.0" prefWidth="800.0" AnchorPane.topAnchor="340.0"/>
+                <VBox prefHeight="20.0" prefWidth="800.0" AnchorPane.topAnchor="30.0"/>
 
                 <!-- Formulaire de creation du livre -->
-                <Label text="Ajouter un nouveau Livre" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-background-color: blue" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="360" AnchorPane.rightAnchor="10" alignment="CENTER"/>
-                <GridPane  layoutX="8.0" layoutY="400.0" prefHeight="200.0" prefWidth="600.0">
+                <Label text="Ajouter un nouveau Livre" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-background-color: blue" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="300" AnchorPane.rightAnchor="10" alignment="CENTER"/>
+                <GridPane  layoutX="8.0" AnchorPane.topAnchor="340" layoutY="400.0" prefHeight="200.0" prefWidth="600.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
@@ -75,27 +86,50 @@
                     </rowConstraints>
                     <children>
                         <Label text="Titre :" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <TextArea fx:id="titreTextArea" prefWidth="200" GridPane.columnIndex="1" promptText="Entrez le titre" />
+                        <TextArea fx:id="titreTextArea" prefWidth="100" GridPane.columnIndex="1" promptText="Entrez le titre" />
 
                         <Label text="Auteur :" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <TextArea fx:id="auteurTextArea" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Entrez l'auteur" />
+                        <TextArea fx:id="auteurTextArea" prefWidth="100" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Entrez l'auteur" />
 
                         <Label text="Présentation :" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                        <TextArea fx:id="presentationTextArea" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="Entrez la présentation" />
+                        <TextArea fx:id="presentationTextArea" prefWidth="100" GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="Entrez la présentation" />
 
                         <Label text="Parution :" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-                        <TextArea fx:id="parutionTextArea" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="Entrez la parution" />
+                        <TextArea fx:id="parutionTextArea" prefWidth="100" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="Entrez la parution" />
 
                         <Label text="Colonne :" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
-                        <TextArea fx:id="colonneTextArea" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="4" promptText="Entrez la colonne" />
+                        <TextArea fx:id="colonneTextArea" prefWidth="100" GridPane.columnIndex="1" GridPane.rowIndex="4" promptText="Entrez la colonne" />
 
-                        <Label text="Rangée :" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
-                        <TextArea fx:id="rangeeTextArea" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="5" promptText="Entrez la rangée" />
+                        <Label text="Rangée :" prefHeight="100" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <TextArea fx:id="rangeeTextArea" prefWidth="100" prefHeight="100" GridPane.columnIndex="1" GridPane.rowIndex="5" promptText="Entrez la rangée" />
 
-                        <Button text="Valider" onAction="#addLivreToTabview" style="-fx-background-color: green" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+                        <Label text="Résumé :" GridPane.halignment="CENTER" prefHeight="100" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+                        <TextArea fx:id="resumeTextArea" prefWidth="100" prefHeight="100" GridPane.columnIndex="1" GridPane.rowIndex="6" promptText="Entrez la présentation" />
+
+                        <Label text="Status :" GridPane.halignment="CENTER" prefHeight="100" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+                        <!--TextArea fx:id="resumeTextArea" prefWidth="100" prefHeight="100" GridPane.columnIndex="1" GridPane.rowIndex="7" promptText="Entrez la présentation" /-->
+                        <SplitMenuButton fx:id="splitMenuButton" prefWidth="360" prefHeight="100" GridPane.columnIndex="1" GridPane.rowIndex="7" text="">
+                            <items>
+                                <MenuItem mnemonicParsing="false" text="disponible" />
+                                <MenuItem mnemonicParsing="false" text="indisponible" />
+                            </items>
+                        </SplitMenuButton>
+                        <Label text="URL de l'image :" prefHeight="100" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
+                        <TextArea fx:id="imageTextArea" prefWidth="100" prefHeight="100" GridPane.columnIndex="1" GridPane.rowIndex="8" promptText="Entrez l'URL de l'image" />
+
+                        <!--Label text="Image :" prefHeight="100" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.valignment="CENTER" /-->
+                        <!--ImageView fx:id="imageView" GridPane.halignment="CENTER" fitHeight="80" fitWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="9" /-->
+                        <!--Label text="Titre 2 :" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.valignment="CENTER" GridPane.rowIndex="6"/-->
+                        <ImageView fx:id="imageView" AnchorPane.topAnchor="640" GridPane.halignment="CENTER" fitHeight="100" fitWidth="100" GridPane.columnIndex="6" GridPane.rowIndex="6" />
+
+                        <Button text="Valider" onAction="#addLivreToTabview" style="-fx-background-color: green" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="10" GridPane.valignment="CENTER" />
 
                     </children>
+
+
                 </GridPane>
+
+
             </children>
         </AnchorPane>
     </children>

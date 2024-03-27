@@ -10,6 +10,9 @@
         <parution>2000</parution>
         <colonne>5</colonne>
         <rangee>2</rangee>
+        <image>https://www.bod.fr/fileadmin/_processed_/8/b/csm_FR-0021-KT-PB_b6094c5aec.jpg</image>
+        <resume>mauvais livre</resume>
+        <status>disponible</status>
     </livre>
     <livre>
         <titre>marius</titre>
@@ -21,6 +24,9 @@
         <parution>1925</parution>
         <colonne>2</colonne>
         <rangee>3</rangee>
+        <image>https://d19rpgkrjeba2z.cloudfront.net/static/images/business/topic-cover/personal-care.png</image>
+        <resume>moyens livre</resume>
+        <status>disponible</status>
     </livre>
     <livre>
         <titre>tresor</titre>
@@ -32,28 +38,22 @@
         <parution>2000</parution>
         <colonne>3</colonne>
         <rangee>3</rangee>
-        <image></image>
+        <image>https://www.bod.fr/fileadmin/_processed_/2/0/csm_FR-easyCover_Roman-modern-1_d65ba05c25.jpg</image>
+        <resume>bon livre</resume>
+        <status>indisponible</status>
     </livre>
     <livre>
         <titre>test</titre>
         <auteur>
-            <nom>lola</nom>
+            <nom>test</nom>
             <prenom>test</prenom>
         </auteur>
-        <presentation>plus de description</presentation>
-        <parution>2021</parution>
-        <colonne>3</colonne>
-        <rangee>5</rangee>
-    </livre>
-    <livre>
-        <titre>HarryPotter</titre>
-        <auteur>
-            <nom>Rowling</nom>
-            <prenom>JK</prenom>
-        </auteur>
         <presentation>Ce livre est une introduction au schema XSD</presentation>
-        <parution>1996</parution>
-        <colonne>2</colonne>
-        <rangee>1</rangee>
+        <parution>2024</parution>
+        <colonne>3</colonne>
+        <rangee>3</rangee>
+        <image>https://www.bod.fr/fileadmin/_processed_/2/0/csm_FR-easyCover_Roman-modern-1_d65ba05c25.jpg</image>
+        <resume>test de création</resume>
+        <status>indisponible</status>
     </livre>
 </bibliotheque>

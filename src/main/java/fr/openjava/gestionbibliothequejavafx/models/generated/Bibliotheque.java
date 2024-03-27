@@ -157,7 +157,9 @@ public class Bibliotheque {
         "parution",
         "colonne",
         "rangee",
-        "image"
+        "image",
+        "resume",
+        "status"
     })
     public static class Livre {
 
@@ -175,6 +177,10 @@ public class Bibliotheque {
         protected short rangee;
         @XmlElement(required = false)
         protected String image;
+        @XmlElement(required = true)
+        protected String resume;
+        @XmlElement(required = true)
+        protected String status;
 
         /**
          * Obtient la valeur de la propriété titre.
@@ -304,6 +310,21 @@ public class Bibliotheque {
             this.rangee = value;
         }
 
+        public String getResume() {
+            return resume;
+        }
+
+        public void setResume(String resume) {
+            this.resume = resume;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
 
         /**
          * <p>Classe Java pour anonymous complex type.
