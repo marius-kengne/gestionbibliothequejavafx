@@ -378,6 +378,9 @@ public class Bibliotheque {
              *     {@link String }
              *     
              */
+
+
+
             public void setNom(String value) {
                 this.nom = value;
             }

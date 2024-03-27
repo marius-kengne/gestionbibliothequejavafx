@@ -6,8 +6,7 @@ module fr.openjava.gestionbibliothequejavafx {
     requires org.kordamp.bootstrapfx.core;
     requires java.xml.bind;
     requires plexus.io;
-
-
+    requires org.apache.poi.ooxml;
     opens fr.openjava.gestionbibliothequejavafx to javafx.fxml;
     exports fr.openjava.gestionbibliothequejavafx;
     exports fr.openjava.gestionbibliothequejavafx.controllers;

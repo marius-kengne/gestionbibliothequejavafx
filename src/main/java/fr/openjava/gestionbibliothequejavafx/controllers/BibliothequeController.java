@@ -17,10 +17,17 @@ import javafx.stage.Stage;
 
 import javax.xml.bind.*;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javafx.stage.FileChooser;
+import java.util.Date;
+import org.apache.poi.wp.usermodel.HeaderFooterType;
+import org.apache.poi.xwpf.usermodel.*;
+
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -537,11 +544,11 @@ public class BibliothequeController {
 
                         System.out.println("################## le livre existe déjà : " + e.toString());
 
-                            iterator2.remove();
-                            livres.remove(iterator2);
-                            tableView.setItems(livres);
-                            Utilities.showAlert("Echec d'enregistrement","Vous avez deux livres avec des informations identiques !");
-                            return;
+                        iterator2.remove();
+                        livres.remove(iterator2);
+                        tableView.setItems(livres);
+                        Utilities.showAlert("Echec d'enregistrement","Vous avez deux livres avec des informations identiques !");
+                        return;
 
                     }
                 }
@@ -673,28 +680,28 @@ public class BibliothequeController {
             List<Bibliotheque.Livre> copyAllCurrentLivre = new ArrayList<>();
             //copyAllCurrentLivre.addAll(allCurrentLivre);
 
-                while (iterator.hasNext()) {
-                    Bibliotheque.Livre e = iterator.next();
-                    if ((e.getTitre().equalsIgnoreCase(currentLivre.getTitre())
-                            && e.getAuteur().getNom().equalsIgnoreCase(currentLivre.getAuteur().getNom())
-                            && e.getAuteur().getPrenom().equals(currentLivre.getAuteur().getPrenom())
-                            && e.getParution() == currentLivre.getParution())) {
-                        copyAllCurrentLivre.add(currentLivre);
-                    } else {
-                        copyAllCurrentLivre.add(e);
-                    }
+            while (iterator.hasNext()) {
+                Bibliotheque.Livre e = iterator.next();
+                if ((e.getTitre().equalsIgnoreCase(currentLivre.getTitre())
+                        && e.getAuteur().getNom().equalsIgnoreCase(currentLivre.getAuteur().getNom())
+                        && e.getAuteur().getPrenom().equals(currentLivre.getAuteur().getPrenom())
+                        && e.getParution() == currentLivre.getParution())) {
+                    copyAllCurrentLivre.add(currentLivre);
+                } else {
+                    copyAllCurrentLivre.add(e);
                 }
+            }
 
-                bibliotheque.getLivre().clear();
-                bibliotheque.getLivre().addAll(copyAllCurrentLivre);
+            bibliotheque.getLivre().clear();
+            bibliotheque.getLivre().addAll(copyAllCurrentLivre);
 
-                // Enregistrer les modifications dans le fichier XML
-                marshaller.marshal(bibliotheque, file);
-                Utilities.showAlertSuccess("Confirmation", "Le livre a bien été mise à jour");
-                //reloadDataToXML();
-                livres.clear();
-                livres.addAll(copyAllCurrentLivre);
-                tableView.setItems(livres);
+            // Enregistrer les modifications dans le fichier XML
+            marshaller.marshal(bibliotheque, file);
+            Utilities.showAlertSuccess("Confirmation", "Le livre a bien été mise à jour");
+            //reloadDataToXML();
+            livres.clear();
+            livres.addAll(copyAllCurrentLivre);
+            tableView.setItems(livres);
 
         } catch (JAXBException e) {
             e.printStackTrace();
@@ -709,7 +716,7 @@ public class BibliothequeController {
     public void reloadDataToXML(){
         livres.clear();
         titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
-         auteurColumn.setCellValueFactory(cellData -> {
+        auteurColumn.setCellValueFactory(cellData -> {
             Bibliotheque.Livre livre = cellData.getValue();
             Bibliotheque.Livre.Auteur auteur = livre.getAuteur();
             return new SimpleStringProperty(auteur.getNom() + " " + auteur.getPrenom());
@@ -780,11 +787,11 @@ public class BibliothequeController {
                             && e.getParution() == thelivre.getParution())) {
 
                         System.out.println("################## le livre existe déjà : " + e.toString());
-                            iterator2.remove();
-                            livres.remove(iterator2);
+                        iterator2.remove();
+                        livres.remove(iterator2);
 
-                            //Utilities.showAlert("Echec d'enregistrement","Vous avez deux livres avec des informations identiques !");
-                            //return;
+                        //Utilities.showAlert("Echec d'enregistrement","Vous avez deux livres avec des informations identiques !");
+                        //return;
 
                     }
                 }
@@ -805,6 +812,82 @@ public class BibliothequeController {
 
 
     /**
+     * Méthode pour exporter les données dans un fichier Word.
+     */
+    public void ExportWordFile(){
+        if (tableView == null) {
+            System.out.println(("Erreur: le tableau des livres est vide."));
+        }
+
+        Stage stage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Veuillez le dossier pour enregistrer votre fichier");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier Word", "*.docx"));
+        File file = fileChooser.showSaveDialog(null);
+
+        if (file != null) {
+            try (XWPFDocument document = new XWPFDocument(); FileOutputStream out = new FileOutputStream(file)) {
+                /** * Entête du document */
+                XWPFHeader header = document.createHeader(HeaderFooterType.DEFAULT);
+                XWPFParagraph headerParagraph = header.createParagraph();
+                XWPFRun headerRun = headerParagraph.createRun();
+                //headerRun.setText("Entête");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date exportDate = new Date();
+                headerRun.setText("Entête du document - Date d'exportation : " + dateFormat.format(exportDate));
+
+                /** * Titre du document */
+                XWPFParagraph titleParagraph = document.createParagraph();
+                titleParagraph.setAlignment(ParagraphAlignment.CENTER);
+                XWPFRun titleRun = titleParagraph.createRun();
+                titleRun.setBold(true);
+                titleRun.setFontSize(16);
+                titleRun.setText("Bienvenue dans notre Gestionnaire de Bibliothèque. Nous vous présentons nore sommaire.");
+
+                /** * Ajout d'une page de garde */
+                document.createParagraph().createRun().addBreak();
+                XWPFParagraph coverPageParagraph = document.createParagraph();
+                coverPageParagraph.setAlignment(ParagraphAlignment.CENTER);
+                XWPFRun coverPageRun = coverPageParagraph.createRun();
+                coverPageRun.setBold(true);
+                coverPageRun.setFontSize(16);
+                coverPageRun.setText("Sommaire");
+
+                /** * Sommaire des livres */
+                document.createParagraph().createRun().addBreak();
+                XWPFParagraph tableOfContentParagraph = document.createParagraph();
+                XWPFRun tableOfContentRun = tableOfContentParagraph.createRun();
+                tableOfContentRun.setBold(true);
+                tableOfContentRun.setFontSize(14);
+                tableOfContentRun.setText("La liste des livres de notre Bibliothèque:");
+
+
+                /** * Données des livres de la TableView */
+                ObservableList<Bibliotheque.Livre> livres = tableView.getItems();
+                XWPFTable gridPaneTable = document.createTable();
+                for (Bibliotheque.Livre livre : livres) {
+                    XWPFTableRow row = gridPaneTable.createRow();
+                    XWPFTableCell cell = row.createCell();
+                    /** * Concaténer les données de chaque livre */
+                    String bookData = "Titre: " + livre.getTitre() + "\n" +
+                            "Auteur: " + livre.getAuteur().getNom() + " " + livre.getAuteur().getPrenom() + "\n" +
+                            "Présentation: " + livre.getPresentation() + "\n" +
+                            "Parution: " + livre.getParution() + "\n" +
+                            "Colonne: " + livre.getColonne() + "\n" +
+                            "Rangée: " + livre.getRangee();
+                    cell.setText(bookData);
+                }
+
+                /** * Enregistrer le document */
+                document.write(out);
+                System.out.println("Fichier Word exporté avec succès !");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
      * méthode pour quitter l'application
      */
     public void quitApplication(ActionEvent event){
@@ -821,12 +904,5 @@ public class BibliothequeController {
         //afficheApropos();
     }
 
-    private void afficheApropos(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Les détails de l'application");
-        alert.setHeaderText(null);
-        alert.setContentText("Application de Gestionnaire de la Bibliothèque \n" + "Version: 1.0\n" + "Auturs: Marius, Sofiane, Fonsa, Kylian, Pierre\n" + "Date de Sortie: Mars 2024\n" + "Description: Gestionnaire de la Bibliothèque\n" + "2024 Tout droit reservé");
-        alert.showAndWait();
-    }
 
 }

@@ -30,6 +30,7 @@
                 <Menu mnemonicParsing="false" text="Fichier">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#ImportXMLFile" text="Ouvrir" />
+                        <MenuItem mnemonicParsing="false" onAction="#ExportWordFile" text="Export Word File" />
                         <MenuItem mnemonicParsing="false" text="Quitter" onAction="#quitApplication"/>
                     </items>
                 </Menu>

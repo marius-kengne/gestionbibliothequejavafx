@@ -29,20 +29,6 @@
         <status>disponible</status>
     </livre>
     <livre>
-        <titre>tresor</titre>
-        <auteur>
-            <nom>lola</nom>
-            <prenom>oliver</prenom>
-        </auteur>
-        <presentation>Ce livre est une introduction au schema XSD</presentation>
-        <parution>2000</parution>
-        <colonne>3</colonne>
-        <rangee>3</rangee>
-        <image>https://www.bod.fr/fileadmin/_processed_/2/0/csm_FR-easyCover_Roman-modern-1_d65ba05c25.jpg</image>
-        <resume>bon livre</resume>
-        <status>indisponible</status>
-    </livre>
-    <livre>
         <titre>test</titre>
         <auteur>
             <nom>test</nom>
