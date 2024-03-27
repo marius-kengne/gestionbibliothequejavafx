@@ -909,8 +909,8 @@ public class BibliothequeController {
      * Methode pour afficher la fonctionnalité Export avec le sommaire
      */
     public void ExportWordFile( ActionEvent event){
-        ExportController exportController = new ExportController(tableView);
-        exportController.exportWordDisplay();
+        ExportController exportController = new ExportController(allCurrentLivre);
+        exportController.exportToWord();
     }
 
 }
