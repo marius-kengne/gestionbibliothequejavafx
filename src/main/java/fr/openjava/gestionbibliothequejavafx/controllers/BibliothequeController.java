@@ -814,7 +814,7 @@ public class BibliothequeController {
     /**
      * Méthode pour exporter les données dans un fichier Word.
      */
-    public void ExportWordFile(){
+    public void ExportWordFileOld(){
         if (tableView == null) {
             System.out.println(("Erreur: le tableau des livres est vide."));
         }
@@ -826,7 +826,8 @@ public class BibliothequeController {
         File file = fileChooser.showSaveDialog(null);
 
         if (file != null) {
-            try (XWPFDocument document = new XWPFDocument(); FileOutputStream out = new FileOutputStream(file)) {
+            try (XWPFDocument document = new XWPFDocument();
+                 FileOutputStream out = new FileOutputStream(file)) {
                 /** * Entête du document */
                 XWPFHeader header = document.createHeader(HeaderFooterType.DEFAULT);
                 XWPFParagraph headerParagraph = header.createParagraph();
@@ -904,5 +905,12 @@ public class BibliothequeController {
         //afficheApropos();
     }
 
+    /**
+     * Methode pour afficher la fonctionnalité Export avec le sommaire
+     */
+    public void ExportWordFile( ActionEvent event){
+        ExportController exportController = new ExportController(tableView);
+        exportController.exportWordDisplay();
+    }
 
 }

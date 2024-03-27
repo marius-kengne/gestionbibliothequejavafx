@@ -1,45 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <bibliotheque>
     <livre>
-        <titre>XSD pour les nuls</titre>
+        <titre>Une si longue lettre</titre>
         <auteur>
-            <nom>Dupond</nom>
-            <prenom>Jean</prenom>
+            <nom>Mariama</nom>
+            <prenom>Ba</prenom>
         </auteur>
-        <presentation>Ce livre est une introduction au schema XSD</presentation>
-        <parution>2000</parution>
-        <colonne>5</colonne>
-        <rangee>2</rangee>
-        <image>https://www.bod.fr/fileadmin/_processed_/8/b/csm_FR-0021-KT-PB_b6094c5aec.jpg</image>
-        <resume>mauvais livre</resume>
-        <status>disponible</status>
-    </livre>
-    <livre>
-        <titre>marius</titre>
-        <auteur>
-            <nom>tresor</nom>
-            <prenom>oliver</prenom>
-        </auteur>
-        <presentation>Ce livre est une introduction au schema XSD</presentation>
-        <parution>1925</parution>
-        <colonne>2</colonne>
-        <rangee>3</rangee>
-        <image>https://d19rpgkrjeba2z.cloudfront.net/static/images/business/topic-cover/personal-care.png</image>
-        <resume>moyens livre</resume>
-        <status>disponible</status>
-    </livre>
-    <livre>
-        <titre>test</titre>
-        <auteur>
-            <nom>test</nom>
-            <prenom>test</prenom>
-        </auteur>
-        <presentation>Ce livre est une introduction au schema XSD</presentation>
-        <parution>2024</parution>
+        <presentation>C'est un roman espistolaire</presentation>
+        <parution>1979</parution>
         <colonne>3</colonne>
-        <rangee>3</rangee>
+        <rangee>1</rangee>
+        <image>https://gallica.bnf.fr/ark:/12148/bpt6k3320728b.image</image>
+        <resume>Ramatoulaye</resume>
+        <status>disponible</status>
+    </livre>
+    <livre>
+        <titre>Livre 1	</titre>
+        <auteur>
+            <nom>Livre1</nom>
+            <prenom>Livre1</prenom>
+        </auteur>
+        <presentation>Présentation de livre 1	</presentation>
+        <parution>2000</parution>
+        <colonne>4</colonne>
+        <rangee>1</rangee>
         <image>https://www.bod.fr/fileadmin/_processed_/2/0/csm_FR-easyCover_Roman-modern-1_d65ba05c25.jpg</image>
-        <resume>test de création</resume>
+        <resume>C'est un test.</resume>
         <status>indisponible</status>
     </livre>
 </bibliotheque>
