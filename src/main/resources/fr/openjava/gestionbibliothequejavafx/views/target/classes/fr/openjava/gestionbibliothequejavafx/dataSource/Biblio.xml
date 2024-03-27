@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bibliotheque>
+    <livre>
+        <titre>XSD pour les nuls</titre>
+        <auteur>
+            <nom>Dupond</nom>
+            <prenom>Jean</prenom>
+        </auteur>
+        <presentation>Ce livre est une introduction au schema XSD</presentation>
+        <parution>2000</parution>
+        <colonne>5</colonne>
+        <rangee>2</rangee>
+    </livre>
+    <livre>
+        <titre>marius</titre>
+        <auteur>
+            <nom>tresor</nom>
+            <prenom>oliver</prenom>
+        </auteur>
+        <presentation>Ce livre est une introduction au schema XSD</presentation>
+        <parution>1925</parution>
+        <colonne>2</colonne>
+        <rangee>3</rangee>
+    </livre>
+</bibliotheque>

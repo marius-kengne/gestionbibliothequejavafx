@@ -804,4 +804,29 @@ public class BibliothequeController {
     }
 
 
+    /**
+     * méthode pour quitter l'application
+     */
+    public void quitApplication(ActionEvent event){
+        allCurrentLivre.clear();
+        System.exit(0);
+    }
+
+    /**
+     *  Méthode pour afficher les informations de l'application
+     */
+    @FXML
+    private void aboutAppplication(ActionEvent event){
+        AboutController.display();
+        //afficheApropos();
+    }
+
+    private void afficheApropos(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Les détails de l'application");
+        alert.setHeaderText(null);
+        alert.setContentText("Application de Gestionnaire de la Bibliothèque \n" + "Version: 1.0\n" + "Auturs: Marius, Sofiane, Fonsa, Kylian, Pierre\n" + "Date de Sortie: Mars 2024\n" + "Description: Gestionnaire de la Bibliothèque\n" + "2024 Tout droit reservé");
+        alert.showAndWait();
+    }
+
 }

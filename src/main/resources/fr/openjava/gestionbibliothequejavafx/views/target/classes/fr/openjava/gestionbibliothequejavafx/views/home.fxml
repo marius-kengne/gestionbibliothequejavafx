@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+<?import javafx.scene.control.ListView?>
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.openjava.gestionbibliothequejavafx.controllers.BibliothequeController">
+    <children>
+        <MenuBar VBox.vgrow="NEVER">
+            <menus>
+                <Menu mnemonicParsing="false" text="Fichier">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#ImportXMLFile" text="Ouvrir" />
+                        <MenuItem mnemonicParsing="false" text="Quitter" onAction="#quitApplication"/>
+
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edition">
+                    <items>
+                        <MenuItem onAction="#saveLivre" mnemonicParsing="false" text="Sauvegarder" />
+                        <MenuItem onAction="#saveInOtherLocation" mnemonicParsing="false" text="Sauvegarder Sous..." />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="About">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="info Application" onAction="#aboutAppplication"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <AnchorPane prefHeight="400.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
+            <children>
+                <!-- Tableau de listing des livres -->
+                <Label text="Liste des livres de la bibliothèque" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-background-color: blue" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="10" alignment="CENTER"/>
+                <TableView fx:id="tableView" layoutX="8.0" layoutY="60.0" prefHeight="200.0" prefWidth="784.0">
+                    <columns>
+                        <TableColumn prefWidth="100.0" text="Image" fx:id="actionColumn"/>
+                        <TableColumn prefWidth="100.0" text="Titre" fx:id="titreColumn"/>
+                        <TableColumn prefWidth="150.0" text="Auteur" fx:id="auteurColumn" />
+                        <TableColumn prefWidth="200.0" text="Présentation" fx:id="presentationColumn"/>
+                        <TableColumn prefWidth="100.0" text="Parution" fx:id="parutionColumn" />
+                        <TableColumn prefWidth="100.0" text="Colonne" fx:id="colonneColumn"/>
+                        <TableColumn prefWidth="100.0" text="Rangée" fx:id="rangeeColumn"/>
+                    </columns>
+                </TableView>
+                <VBox prefHeight="20.0" prefWidth="800.0" AnchorPane.topAnchor="270.0"/>
+
+                <!-- Boutons Éditer et Supprimer -->
+                <HBox prefHeight="40.0" prefWidth="800.0" spacing="10.0" alignment="CENTER" AnchorPane.topAnchor="290.0">
+                    <children>
+                        <Button text=" Mettre à jour  " onAction="#updateLivreToXML"/>
+                        <Button text="Supprimer" onAction="#deleteLivre" style="-fx-background-color: red"/>
+                    </children>
+                </HBox>
+                <VBox prefHeight="20.0" prefWidth="800.0" AnchorPane.topAnchor="340.0"/>
+
+                <!-- Formulaire de creation du livre -->
+                <Label text="Ajouter un nouveau Livre" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-background-color: blue" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="360" AnchorPane.rightAnchor="10" alignment="CENTER"/>
+                <GridPane  layoutX="8.0" layoutY="400.0" prefHeight="200.0" prefWidth="600.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+
+                    </rowConstraints>
+                    <children>
+                        <Label text="Titre :" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <TextArea fx:id="titreTextArea" prefWidth="200" GridPane.columnIndex="1" promptText="Entrez le titre" />
+
+                        <Label text="Auteur :" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <TextArea fx:id="auteurTextArea" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Entrez l'auteur" />
+
+                        <Label text="Présentation :" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <TextArea fx:id="presentationTextArea" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="Entrez la présentation" />
+
+                        <Label text="Parution :" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                        <TextArea fx:id="parutionTextArea" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="Entrez la parution" />
+
+                        <Label text="Colonne :" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                        <TextArea fx:id="colonneTextArea" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="4" promptText="Entrez la colonne" />
+
+                        <Label text="Rangée :" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <TextArea fx:id="rangeeTextArea" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="5" promptText="Entrez la rangée" />
+
+                        <Button text="Valider" onAction="#addLivreToTabview" style="-fx-background-color: green" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+
+                    </children>
+                </GridPane>
+            </children>
+        </AnchorPane>
+        <ListView></ListView>
+    </children>
+</VBox>
