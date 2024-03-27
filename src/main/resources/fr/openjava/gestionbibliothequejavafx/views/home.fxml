@@ -123,7 +123,7 @@
                         <!--Label text="Titre 2 :" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.valignment="CENTER" GridPane.rowIndex="6"/-->
                         <ImageView fx:id="imageView" AnchorPane.topAnchor="640" GridPane.halignment="CENTER" fitHeight="100" fitWidth="100" GridPane.columnIndex="6" GridPane.rowIndex="6" />
 
-                        <Button text="Valider" onAction="#addLivreToTabview" style="-fx-background-color: green" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="10" GridPane.valignment="CENTER" />
+                        <Button text="Ajouter le livre" onAction="#addLivreToTabview" style="-fx-background-color: green" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="10" GridPane.valignment="CENTER" />
 
                     </children>
 
