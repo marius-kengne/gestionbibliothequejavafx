@@ -111,6 +111,7 @@
                         <!--TextArea fx:id="resumeTextArea" prefWidth="100" prefHeight="100" GridPane.columnIndex="1" GridPane.rowIndex="7" promptText="Entrez la présentation" /-->
                         <SplitMenuButton fx:id="splitMenuButton" prefWidth="360" prefHeight="100" GridPane.columnIndex="1" GridPane.rowIndex="7" text="">
                             <items>
+                                <MenuItem mnemonicParsing="false" text="" />
                                 <MenuItem mnemonicParsing="false" text="disponible" />
                                 <MenuItem mnemonicParsing="false" text="indisponible" />
                             </items>

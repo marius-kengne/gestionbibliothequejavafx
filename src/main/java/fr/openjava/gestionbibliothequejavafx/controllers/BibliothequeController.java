@@ -419,6 +419,7 @@ public class BibliothequeController {
             }
             livres.add(currentLivre);
             tableView.setItems(livres);
+            clearForm();
         }
 
     }
@@ -448,7 +449,7 @@ public class BibliothequeController {
                     allCurrentLivre.remove(currentLivre);
                     Utilities.showAlertSuccess("Confirmation", "Le livre a été supprimé");
                 }
-
+                clearForm();
                 deleteLivreToXML(currentLivre);
             }
         } else {
@@ -702,7 +703,7 @@ public class BibliothequeController {
             livres.clear();
             livres.addAll(copyAllCurrentLivre);
             tableView.setItems(livres);
-
+            clearForm();
         } catch (JAXBException e) {
             e.printStackTrace();
         }
@@ -911,6 +912,23 @@ public class BibliothequeController {
     public void ExportWordFile( ActionEvent event){
         ExportController exportController = new ExportController(allCurrentLivre);
         exportController.exportToWord();
+    }
+
+    /**
+     * Methode pour vider le contenu des champs du formulaire
+     */
+    public void clearForm(){
+        titreTextArea.clear();
+        auteurTextArea.clear();
+        presentationTextArea.clear();
+        parutionTextArea.clear();
+        colonneTextArea.clear();
+        rangeeTextArea.clear();
+        resumeTextArea.clear();
+        resumeTextArea.clear();
+        splitMenuButton.setText("");
+        imageTextArea.clear();
+        imageView.setImage(null);
     }
 
 }
