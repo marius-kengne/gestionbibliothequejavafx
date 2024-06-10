@@ -47,15 +47,15 @@ public class AboutController {
     public void initialize() {
 
         contributorNames.add("Marius");
-        contributorUrlPhotos.add("https://www.bod.fr/fileadmin/_processed_/2/0/csm_FR-easyCover_Roman-modern-1_d65ba05c25.jpg");
+        contributorUrlPhotos.add("https://cdn.discordapp.com/attachments/1220296723574951957/1222934659965653083/92979836-icone-de-visage-anonyme-de-profil-personne-silhouette-grise-avatar-par-defaut-masculin-photo.jpg?ex=661805a7&is=660590a7&hm=f92190367b9b79fe2d6e9d32854a51a576df56eb23db4c4b1e6f44b602deb8aa&");
         contributorNames.add("Sofiane");
-        contributorUrlPhotos.add("https://www.bod.fr/fileadmin/_processed_/2/0/csm_FR-easyCover_Roman-modern-1_d65ba05c25.jpg");
+        contributorUrlPhotos.add("https://cdn.discordapp.com/attachments/1220296723574951957/1222934659965653083/92979836-icone-de-visage-anonyme-de-profil-personne-silhouette-grise-avatar-par-defaut-masculin-photo.jpg?ex=661805a7&is=660590a7&hm=f92190367b9b79fe2d6e9d32854a51a576df56eb23db4c4b1e6f44b602deb8aa&");
         contributorNames.add("Fonsa");
-        contributorUrlPhotos.add("https://www.bod.fr/fileadmin/_processed_/2/0/csm_FR-easyCover_Roman-modern-1_d65ba05c25.jpg");
-        contributorNames.add("Pièrre");
-        contributorUrlPhotos.add("https://www.bod.fr/fileadmin/_processed_/2/0/csm_FR-easyCover_Roman-modern-1_d65ba05c25.jpg");
+        contributorUrlPhotos.add("https://cdn.discordapp.com/attachments/1167057421450100807/1222933921407303730/20210105_153246.jpg?ex=661804f7&is=66058ff7&hm=52c51c430ebca5ca9b2c5e134d5e8fa230e1cc3a59b1dff1524720c5c8c0dd42&");
+        contributorNames.add("Pierre");
+        contributorUrlPhotos.add("https://cdn.discordapp.com/attachments/1220296723574951957/1222934659965653083/92979836-icone-de-visage-anonyme-de-profil-personne-silhouette-grise-avatar-par-defaut-masculin-photo.jpg?ex=661805a7&is=660590a7&hm=f92190367b9b79fe2d6e9d32854a51a576df56eb23db4c4b1e6f44b602deb8aa&");
         contributorNames.add("Killyan");
-        contributorUrlPhotos.add("https://www.bod.fr/fileadmin/_processed_/2/0/csm_FR-easyCover_Roman-modern-1_d65ba05c25.jpg");
+        contributorUrlPhotos.add("https://cdn.discordapp.com/attachments/1197539327941554277/1222933745691005041/20240328_164135.jpg?ex=661804cd&is=66058fcd&hm=26c814f8b765c83763bd17fae88f2623930368ab0173d59e905f87cd146cf731&");
 
         firstContributor.setImage(new Image(contributorUrlPhotos.get(0)));
         secondContributor.setImage(new Image(contributorUrlPhotos.get(1)));
