@@ -1,80 +1,80 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <bibliotheque>
     <livre>
-        <titre>test</titre>
+        <titre>Les Misérables</titre>
         <auteur>
-            <nom>test</nom>
-            <prenom>test</prenom>
+            <nom>Hugo</nom>
+            <prenom>Victor</prenom>
         </auteur>
-        <presentation>test</presentation>
-        <parution>2000</parution>
-        <colonne>5</colonne>
+        <presentation>Un chef-d'œuvre de la littérature française</presentation>
+        <parution>1862</parution>
+        <colonne>3</colonne>
+        <rangee>7</rangee>
+    </livre>
+    <livre>
+        <titre>To Kill a Mockingbird</titre>
+        <auteur>
+            <nom>Lee</nom>
+            <prenom>Harper</prenom>
+        </auteur>
+        <presentation>Un roman sur la ségrégation raciale dans le sud des États-Unis</presentation>
+        <parution>1960</parution>
+        <colonne>2</colonne>
         <rangee>5</rangee>
     </livre>
     <livre>
-        <titre>test</titre>
+        <titre>1984</titre>
         <auteur>
-            <nom>test</nom>
-            <prenom>test</prenom>
+            <nom>Orwell</nom>
+            <prenom>George</prenom>
         </auteur>
-        <presentation>test</presentation>
-        <parution>2000</parution>
-        <colonne>5</colonne>
-        <rangee>5</rangee>
-    </livre>
-    <livre>
-        <titre>test</titre>
-        <auteur>
-            <nom>test</nom>
-            <prenom>test</prenom>
-        </auteur>
-        <presentation>test</presentation>
-        <parution>2000</parution>
-        <colonne>5</colonne>
-        <rangee>5</rangee>
-    </livre>
-    <livre>
-        <titre>test</titre>
-        <auteur>
-            <nom>test</nom>
-            <prenom>test</prenom>
-        </auteur>
-        <presentation>test</presentation>
-        <parution>2000</parution>
-        <colonne>5</colonne>
-        <rangee>5</rangee>
-    </livre>
-    <livre>
-        <titre>test</titre>
-        <auteur>
-            <nom>test</nom>
-            <prenom>test</prenom>
-        </auteur>
-        <presentation>test</presentation>
-        <parution>2000</parution>
-        <colonne>5</colonne>
-        <rangee>5</rangee>
-    </livre>
-    <livre>
-        <titre>test</titre>
-        <auteur>
-            <nom>test</nom>
-            <prenom>test</prenom>
-        </auteur>
-        <presentation>test</presentation>
-        <parution>2000</parution>
+        <presentation>Un dystopie sur un régime totalitaire</presentation>
+        <parution>1949</parution>
         <colonne>4</colonne>
-        <rangee>6</rangee>
+        <rangee>3</rangee>
     </livre>
     <livre>
-        <titre>test</titre>
+        <titre>Le Petit Prince</titre>
         <auteur>
-            <nom>test</nom>
-            <prenom>test</prenom>
+            <nom>de Saint-Exupéry</nom>
+            <prenom>Antoine</prenom>
         </auteur>
-        <presentation>test</presentation>
-        <parution>2000</parution>
-        <colonne>4</colonne>
+        <presentation>Un conte poétique et philosophique</presentation>
+        <parution>1943</parution>
+        <colonne>6</colonne>
+        <rangee>2</rangee>
+    </livre>
+    <livre>
+        <titre>Moby Dick</titre>
+        <auteur>
+            <nom>Melville</nom>
+            <prenom>Herman</prenom>
+        </auteur>
+        <presentation>Une histoire épique de la chasse à la baleine</presentation>
+        <parution>1851</parution>
+        <colonne>7</colonne>
+        <rangee>1</rangee>
+    </livre>
+    <livre>
+        <titre>Pride and Prejudice</titre>
+        <auteur>
+            <nom>Austen</nom>
+            <prenom>Jane</prenom>
+        </auteur>
+        <presentation>Un roman sur les mœurs de la bourgeoisie anglaise</presentation>
+        <parution>1813</parution>
+        <colonne>5</colonne>
+        <rangee>4</rangee>
+    </livre>
+    <livre>
+        <titre>The Great Gatsby</titre>
+        <auteur>
+            <nom>Fitzgerald</nom>
+            <prenom>F. Scott</prenom>
+        </auteur>
+        <presentation>Une critique de l'American Dream</presentation>
+        <parution>1925</parution>
+        <colonne>1</colonne>
         <rangee>6</rangee>
     </livre>
 </bibliotheque>
