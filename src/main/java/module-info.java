@@ -7,6 +7,7 @@ module fr.openjava.gestionbibliothequejavafx {
     requires java.xml.bind;
     requires plexus.io;
     requires org.apache.poi.ooxml;
+    requires java.sql;
     opens fr.openjava.gestionbibliothequejavafx to javafx.fxml;
     exports fr.openjava.gestionbibliothequejavafx;
     exports fr.openjava.gestionbibliothequejavafx.controllers;

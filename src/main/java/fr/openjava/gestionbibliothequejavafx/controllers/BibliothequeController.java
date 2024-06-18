@@ -109,6 +109,15 @@ public class BibliothequeController {
 
     private String statusCurrentLivre = "";
 
+    private static String mode = "";
+
+    public static void setMode(String selectedMode) {
+        mode = selectedMode;
+    }
+
+    @FXML
+    private Label modeLabel;
+
     public BibliothequeController(){
         System.out.println("################## Lancement");
     }
@@ -119,7 +128,7 @@ public class BibliothequeController {
      * C'est cette méthode qui reflete le listing des livres via l'interface
      */
     public void initialize() {
-
+        modeLabel.setText("Mode: " + mode);
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
         titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
         auteurColumn.setCellValueFactory(cellData -> {
