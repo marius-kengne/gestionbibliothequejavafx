@@ -82,7 +82,6 @@ public class ExportController {
                     bookInfoRun.setText("");bookInfoRun.addBreak();
 
                     bookInfoRun=bookInfoParagraph.createRun();bookInfoRun.setFontSize(14);
-
                     String[]parta={"auteur","Présentation","Parution","Colonne","Rangée"},
                     partb={livre.getAuteur().getNom()+" "+livre.getAuteur().getPrenom(),livre.getPresentation(),""+livre.getParution(),""+livre.getColonne(),""+livre.getRangee()};
                     for(int i=0;i<parta.length;i++){
@@ -90,9 +89,7 @@ public class ExportController {
                         bookInfoRun.setText(parta[i]+":");bookInfoRun.addBreak();
                         bookInfoRun=bookInfoParagraph.createRun();bookInfoRun.setFontSize(14);
                         bookInfoRun.setText(partb[i]);bookInfoRun.addBreak();
-
                     }
-
                     bookInfoRun.addBreak(BreakType.PAGE);
 
                     //XWPFTable bookInfoRun2=document.createTable();
@@ -121,10 +118,8 @@ public class ExportController {
 
                 document.write(out);
                 System.out.println("Fichier Word exporté avec succès !");
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
-            } catch (InvalidFormatException e) {
-                throw new RuntimeException(e);
             }
         }
     }
