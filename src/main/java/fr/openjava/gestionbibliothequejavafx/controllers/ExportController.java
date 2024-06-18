@@ -5,13 +5,19 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xwpf.usermodel.*;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTBookmark;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STMerge;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class ExportController {
     private List<Bibliotheque.Livre> listLivres;
@@ -49,68 +55,97 @@ public class ExportController {
                 runToc.setText("Sommaire");
                 runToc.addBreak();
 
-                // Ajout des titres au sommaire
+                // Ajout des titres au sommaire avec hyperliens
                 for (Bibliotheque.Livre livre : listLivres) {
                     XWPFParagraph bookTitleParagraph = document.createParagraph();
-                    XWPFRun bookTitleRun = bookTitleParagraph.createRun();
-                    bookTitleRun.setFontSize(14); // Configuration de la taille de la police à 14
-                    bookTitleRun.setText((pageNumber+1) + ". " + livre.getTitre());
-                    bookTitleRun.addBreak();
+                    XWPFHyperlinkRun hyperlink = bookTitleParagraph.createHyperlinkRun("#page" + pageNumber);
+                    hyperlink.setFontSize(14); // Configuration de la taille de la police à 14
+                    hyperlink.setText(pageNumber + ". " + livre.getTitre());
+                    hyperlink.setColor("0000FF"); // Couleur bleue pour les hyperliens
+                    hyperlink.setUnderline(UnderlinePatterns.SINGLE); // Soulignement pour les hyperliens
+                    hyperlink.addBreak();
                     pageNumber++;
                 }
                 document.createParagraph().createRun().addBreak(BreakType.PAGE);
 
+                pageNumber = 1;
                 for (Bibliotheque.Livre livre : listLivres) {
                     XWPFParagraph bookInfoParagraph = document.createParagraph();
 
                     bookInfoParagraph.setAlignment(ParagraphAlignment.CENTER);
 
-                    XWPFRun bookInfoRun=bookInfoParagraph.createRun();
+                    XWPFRun bookInfoRun = bookInfoParagraph.createRun();
+
+                    // Ajout du signet pour la page du livre
+//                    bookInfoRun = bookInfoParagraph.createRun();
+//                    bookInfoRun.setText("Page " + pageNumber);
+//                    bookInfoRun.setFontSize(14);
+                    CTP ctp = bookInfoParagraph.getCTP();
+                    CTBookmark bookmark = ctp.addNewBookmarkStart();
+                    bookmark.setId(BigInteger.valueOf(pageNumber));
+                    bookmark.setName("page" + pageNumber);
+                    ctp.addNewBookmarkEnd().setId(BigInteger.valueOf(pageNumber));
+
+                    bookInfoRun = bookInfoParagraph.createRun();
                     bookInfoRun.setText(livre.getTitre());
                     bookInfoRun.setFontSize(25);
                     bookInfoRun.addBreak();
 
-                    bookInfoRun=bookInfoParagraph.createRun();bookInfoRun.setFontSize(14);
-                    bookInfoRun.setText("");bookInfoRun.addBreak();
-
                     bookInfoRun = bookInfoParagraph.createRun();
-                    if(livre.getImage()!=null){bookInfoRun.addPicture((InputStream)livre.getImage().lines(),1,"",300,300);}
-                    else{bookInfoRun.setText("image non valide");}
+                    bookInfoRun.setFontSize(14);
+                    bookInfoRun.setText("");
                     bookInfoRun.addBreak();
 
-                    bookInfoRun=bookInfoParagraph.createRun();bookInfoRun.setFontSize(14);
-                    bookInfoRun.setText("");bookInfoRun.addBreak();
-
-                    bookInfoRun=bookInfoParagraph.createRun();bookInfoRun.setFontSize(14);
-                    String[]parta={"auteur","Présentation","Parution","Colonne","Rangée"},
-                    partb={livre.getAuteur().getNom()+" "+livre.getAuteur().getPrenom(),livre.getPresentation(),""+livre.getParution(),""+livre.getColonne(),""+livre.getRangee()};
-                    for(int i=0;i<parta.length;i++){
-                        bookInfoRun=bookInfoParagraph.createRun();bookInfoRun.setFontSize(20);
-                        bookInfoRun.setText(parta[i]+":");bookInfoRun.addBreak();
-                        bookInfoRun=bookInfoParagraph.createRun();bookInfoRun.setFontSize(14);
-                        bookInfoRun.setText(partb[i]);bookInfoRun.addBreak();
+                    bookInfoRun = bookInfoParagraph.createRun();
+                    if (livre.getImage() != null && !livre.getImage().isEmpty()) {
+                        try (InputStream inputStream = convertImageLinkToInputStream(livre.getImage())) {
+                            bookInfoRun.addPicture(inputStream, XWPFDocument.PICTURE_TYPE_JPEG, livre.getImage(), 300, 300);
+                        } catch (Exception ignored){
+                            bookInfoRun.setText("erreur de chargement de l'image, corrompue ou imcompatible");
+                        }
+                    } else {
+                        bookInfoRun.setText("invalidité du lien de image");
                     }
-                    bookInfoRun.addBreak(BreakType.PAGE);
+                    bookInfoRun.addBreak();
 
-                    //XWPFTable bookInfoRun2=document.createTable();
-                    //bookInfoRun2.setInsideHBorder(XWPFTable.XWPFBorderType.SINGLE,1,0,"ff0000");bookInfoRun2.setInsideVBorder(XWPFTable.XWPFBorderType.SINGLE,1,0,"ffffff");
-                    //bookInfoRun2.setTopBorder(XWPFTable.XWPFBorderType.SINGLE,1,0,"ff0000");bookInfoRun2.setBottomBorder(XWPFTable.XWPFBorderType.SINGLE,1,0,"ff0000");
-                    //bookInfoRun2.setLeftBorder(XWPFTable.XWPFBorderType.SINGLE,1,0,"ff0000");bookInfoRun2.setRightBorder(XWPFTable.XWPFBorderType.SINGLE,1,0,"ff0000");
-                    //XWPFTableRow row1=bookInfoRun2.getRow(0);
-                    //XWPFParagraph paragraph=row1.getCell(0).getParagraphs().get(0);paragraph.setAlignment(ParagraphAlignment.CENTER);XWPFRun run=paragraph.createRun();run.setText("Auteur : ");run.setFontSize(14);
-                    //paragraph=row1.addNewTableCell().getParagraphs().get(0);paragraph.setAlignment(ParagraphAlignment.CENTER);run=paragraph.createRun();run.setText(livre.getAuteur().getNom()+" "+livre.getAuteur().getPrenom());run.setFontSize(14);
-                    //XWPFTableRow row2=bookInfoRun2.createRow();
-                    //paragraph=row2.getCell(0).getParagraphs().get(0);paragraph.setAlignment(ParagraphAlignment.CENTER);run=paragraph.createRun();run.setText("Présentation : ");run.setFontSize(14);
-                    //paragraph=row2.getCell(1).getParagraphs().get(0);paragraph.setAlignment(ParagraphAlignment.CENTER);run=paragraph.createRun();run.setText(livre.getPresentation());run.setFontSize(14);
-                    //XWPFTableRow row3=bookInfoRun2.createRow();
-                    //paragraph=row3.getCell(0).getParagraphs().get(0);paragraph.setAlignment(ParagraphAlignment.CENTER);run=paragraph.createRun();run.setText("Parution : ");run.setFontSize(14);
-                    //paragraph=row3.getCell(1).getParagraphs().get(0);paragraph.setAlignment(ParagraphAlignment.CENTER);run=paragraph.createRun();run.setText(""+livre.getParution());run.setFontSize(14);
-                    //XWPFTableRow row4=bookInfoRun2.createRow();
-                    //paragraph=row4.getCell(0).getParagraphs().get(0);paragraph.setAlignment(ParagraphAlignment.CENTER);run=paragraph.createRun();run.setText("Colonne : ");run.setFontSize(14);
-                    //paragraph=row4.getCell(1).getParagraphs().get(0);paragraph.setAlignment(ParagraphAlignment.CENTER);run=paragraph.createRun();run.setText(""+livre.getColonne());run.setFontSize(14);
-                    //XWPFTableRow row5=bookInfoRun2.createRow();
-                    //paragraph=row5.getCell(0).getParagraphs().get(0);paragraph.setAlignment(ParagraphAlignment.CENTER);run=paragraph.createRun();run.setText("Rangée : ");run.setFontSize(14);
-                    //paragraph=row5.getCell(1).getParagraphs().get(0);paragraph.setAlignment(ParagraphAlignment.CENTER);run=paragraph.createRun();run.setText(""+livre.getRangee());run.setFontSize(14);
+                    bookInfoRun = bookInfoParagraph.createRun();
+                    bookInfoRun.setFontSize(14);
+                    bookInfoRun.setText("");
+                    bookInfoRun.addBreak();
+
+                    bookInfoRun = bookInfoParagraph.createRun();
+                    bookInfoRun.setFontSize(14);
+                    String[] parta = {"auteur", "Présentation", "Parution", "Colonne", "Rangée"};
+                    String[] partb = {livre.getAuteur().getNom() + " " + livre.getAuteur().getPrenom(), livre.getPresentation(), "" + livre.getParution(), "" + livre.getColonne(), "" + livre.getRangee()};
+                    for (int i = 0; i < parta.length; i++) {
+                        bookInfoRun = bookInfoParagraph.createRun();
+                        bookInfoRun.setFontSize(20);
+                        bookInfoRun.setText(parta[i] + ":");
+                        bookInfoRun.addBreak();
+                        bookInfoRun = bookInfoParagraph.createRun();
+                        bookInfoRun.setFontSize(14);
+                        bookInfoRun.setText(partb[i]);
+                        bookInfoRun.addBreak();
+                        bookInfoRun = bookInfoParagraph.createRun();
+                        bookInfoRun.setFontSize(14);
+                        bookInfoRun.setText("");
+                        bookInfoRun.addBreak();
+                    }
+
+                    for(int i=0;i<10;i++){
+                        bookInfoRun = bookInfoParagraph.createRun();
+                        bookInfoRun.setFontSize(14);
+                        bookInfoRun.setText("");
+                        bookInfoRun.addBreak();
+                    }
+
+                    bookInfoRun = bookInfoParagraph.createRun();
+                    bookInfoRun.setText("Page " + (pageNumber+2));
+                    bookInfoRun.setFontSize(14);
+
+                    pageNumber++;
+
+                    bookInfoRun.addBreak(BreakType.PAGE);
 
                 }
 
@@ -124,12 +159,15 @@ public class ExportController {
         }
     }
 
-    private static void createCellWithText(XWPFTableCell cell, String text, int fontSize, ParagraphAlignment alignment) {
-        XWPFParagraph paragraph = cell.getParagraphs().get(0);
-        paragraph.setAlignment(alignment);
-        XWPFRun run = paragraph.createRun();
-        run.setText(text);
-        run.setFontSize(fontSize);
+    public static InputStream convertImageLinkToInputStream(String imageUrl) throws Exception {
+        URL url = new URL(imageUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.connect();
+        if (connection.getResponseCode() != 200) {
+            throw new Exception("Failed to connect to the URL: " + imageUrl);
+        }
+        return connection.getInputStream();
     }
 
     private void PageDeGarde(XWPFDocument document, String title) {

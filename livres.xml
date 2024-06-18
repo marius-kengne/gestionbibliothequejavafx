@@ -10,6 +10,7 @@
         <parution>1862</parution>
         <colonne>3</colonne>
         <rangee>7</rangee>
+        <image>https://cdn.discordapp.com/attachments/1197836120893956197/1252570981520637992/a07deeb8eecc68b43e0f20210d32bc80.jpeg?ex=6672b321&amp;is=667161a1&amp;hm=aa960fd6f8bb89a5d229ea315f18bc80b551d81b94b79472c9c1fff5d0bc0d6e&amp;</image>
     </livre>
     <livre>
         <titre>To Kill a Mockingbird</titre>
@@ -21,6 +22,7 @@
         <parution>1960</parution>
         <colonne>2</colonne>
         <rangee>5</rangee>
+        <image>https://cdn.discordapp.com/attachments/1197836120893956197/1252570981520637992/a07deeb8eecc68b43e0f20210d32bc80.jpeg?ex=6672b321&amp;is=667161a1&amp;hm=aa960fd6f8bb8ga5d229ea315f18bc80b551d81b94b79472c9c1fff5d0bc0d6e&amp;</image>
     </livre>
     <livre>
         <titre>1984</titre>
@@ -32,6 +34,7 @@
         <parution>1949</parution>
         <colonne>4</colonne>
         <rangee>3</rangee>
+        <image>https://cdn.discordapp.com/attachments/1197836120893956197/1252574756985770035/Capture_decran_du_2023-10-27_16-09-38.png?ex=6672b6a5&amp;is=66716525&amp;hm=e5ef24232f5df2490a98bc2e21bee0dcf78ff4dcffd4f1dae709bf242e9c3d4e&amp;</image>
     </livre>
     <livre>
         <titre>Le Petit Prince</titre>
