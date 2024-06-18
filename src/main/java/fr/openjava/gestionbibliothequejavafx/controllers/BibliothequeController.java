@@ -110,16 +110,33 @@ public class BibliothequeController {
     private String statusCurrentLivre = "";
 
     private static String mode = "";
+    private static String role = "";
 
     public static void setMode(String selectedMode) {
         mode = selectedMode;
     }
 
+    public static String getMode() {
+        return mode;
+    }
+
+    public static void setRole(String selectedRole) {
+        role = selectedRole;
+    }
+
+    public static String getRole() {
+        return role;
+    }
+
     @FXML
     private Label modeLabel;
 
+    @FXML
+    private Label roleLabel;
+
     public BibliothequeController(){
         System.out.println("################## Lancement");
+        System.out.println("******************* Role user : " + getRole());
     }
 
     /**
@@ -129,6 +146,7 @@ public class BibliothequeController {
      */
     public void initialize() {
         modeLabel.setText("Mode: " + mode);
+        //roleLabel.setText("Role: " + role);
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
         titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
         auteurColumn.setCellValueFactory(cellData -> {

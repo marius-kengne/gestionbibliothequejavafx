@@ -23,6 +23,8 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
+    private String selectedRole;
+
     @FXML
     protected void onLoginButtonClicked(ActionEvent event) throws IOException {
         String login = usernameField.getText();
@@ -38,6 +40,8 @@ public class LoginController {
             System.out.println("Welcome, " + loggedInUser.getLogin() + "!");
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             currentStage.close();
+            selectedRole = loggedInUser.getRole();
+            BibliothequeController.setRole(selectedRole);
             selectMode();
         } else {
             System.out.println("Login failed.");
