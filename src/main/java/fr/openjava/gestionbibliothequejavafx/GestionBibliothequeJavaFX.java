@@ -55,7 +55,8 @@ public class GestionBibliothequeJavaFX extends Application {
 
     public void loginPage(Stage stage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/login.fxml"));
+       //FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/register.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load(), 400, 350);
         stage.setTitle("Gestionnaire de la Bibliothèque");

@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.paint.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.image.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="20.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.openjava.gestionbibliothequejavafx.controllers.LoginController">
+<VBox prefHeight="20.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.openjava.gestionbibliothequejavafx.controllers.LoginController">
     <children>
         <Label alignment="CENTER" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Connexion" textAlignment="CENTER">
          <font>
@@ -29,12 +26,17 @@
          <VBox.margin>
             <Insets top="20.0" />
          </VBox.margin></PasswordField>
+      <Button mnemonicParsing="false" prefHeight="22.0" prefWidth="270.0" text="Créer Votre Compte">
+         <VBox.margin>
+            <Insets bottom="20.0" left="120.0" top="20.0" />
+         </VBox.margin>
+      </Button>
         <Button onAction="#onLoginButtonClicked" text="Login">
          <VBox.margin>
-            <Insets left="150.0" top="50.0" />
+            <Insets bottom="30.0" left="15.0" top="20.0" />
          </VBox.margin></Button>
     </children>
     <padding>
-        <Insets bottom="20" left="20" right="20" top="20" />
+        <Insets bottom="20.0" left="150.0" right="20.0" top="20.0" />
     </padding>
 </VBox>

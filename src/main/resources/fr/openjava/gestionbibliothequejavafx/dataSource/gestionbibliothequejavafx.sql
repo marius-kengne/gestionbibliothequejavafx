@@ -5,6 +5,8 @@ CREATE TABLE users (
                        role VARCHAR(50) NOT NULL
 );
 
+
+
 CREATE TABLE auteurs (
                          id INT AUTO_INCREMENT PRIMARY KEY,
                          nom VARCHAR(255) NOT NULL,

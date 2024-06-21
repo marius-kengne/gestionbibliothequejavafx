@@ -14,7 +14,7 @@ public class UserDAO {
 
     public User createUser(User user){
 
-        String query = "INSERT INTO users (login, password, role) VALUES (?, ?, ?)";
+        String query = "INSERT INTO users (login, password, role) VALUES (root, ?, ?)";
 
         try (PreparedStatement result = conn.prepareStatement(query)) {
             result.setString(1, user.getLogin());
