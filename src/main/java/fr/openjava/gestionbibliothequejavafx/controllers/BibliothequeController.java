@@ -1,35 +1,39 @@
 package fr.openjava.gestionbibliothequejavafx.controllers;
 
+import fr.openjava.gestionbibliothequejavafx.DAO.BibliothequeDAO;
+import fr.openjava.gestionbibliothequejavafx.GestionBibliothequeJavaFX;
 import fr.openjava.gestionbibliothequejavafx.models.generated.ObjectFactory;
 import fr.openjava.gestionbibliothequejavafx.utils.Utilities;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+
 import fr.openjava.gestionbibliothequejavafx.models.generated.Bibliotheque;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+
 import javafx.stage.Stage;
 
 import javax.xml.bind.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
 import javafx.stage.FileChooser;
-import java.util.Date;
 import org.apache.poi.wp.usermodel.HeaderFooterType;
 import org.apache.poi.xwpf.usermodel.*;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 /**
  * Cette classe de controller permet de gérer toutes les fonctionnalités de notre application
@@ -134,9 +138,62 @@ public class BibliothequeController {
     @FXML
     private Label roleLabel;
 
+
+    @FXML
+    private GridPane editgridpane;
+    @FXML
+    private HBox bteditandsupr;
+    @FXML
+    private Label addnewbook;
+    @FXML
+    private Menu editionmenu;
+
+    @FXML
+    public boolean hide(){
+        boolean stt=true;
+        try {
+            try {
+                editgridpane.setVisible(false);
+                editgridpane.setManaged(false);
+                stt=stt&editgridpane.isVisible()&&editgridpane.isManaged();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            try {
+                bteditandsupr.setVisible(false);
+                bteditandsupr.setManaged(false);
+                stt=stt&bteditandsupr.isVisible()&&bteditandsupr.isManaged();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            try {
+                addnewbook.setVisible(false);
+                addnewbook.setManaged(false);
+                stt=stt&addnewbook.isVisible()&&addnewbook.isManaged();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            try {
+                editionmenu.setVisible(false);
+                stt=stt&editionmenu.isVisible();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } catch (Exception e) {
+            System.out.println("editgridpane:"+editgridpane.isVisible()+" | "+editgridpane.isManaged());
+            System.out.println("bteditandsupr:"+bteditandsupr.isVisible()+" | "+bteditandsupr.isManaged());
+            System.out.println("addnewbook:"+addnewbook.isVisible()+" | "+addnewbook.isManaged());
+            System.out.println("editionmenu:"+editionmenu.isVisible());
+            System.out.println("erreur:"+e);
+        }
+        return stt;
+    }
+
     public BibliothequeController(){
         System.out.println("################## Lancement");
-        System.out.println("******************* Role user : " + getRole());
+        if(getRole().equals("admin")){System.out.println("in admin");} else {
+            System.out.println("not in admin");
+        }
     }
 
     /**
@@ -185,6 +242,8 @@ public class BibliothequeController {
                 handleSelection(status);
             });
         }
+
+        if(!getRole().equals("admin")){System.out.println((!hide())?("les éléments sont masqués"):("les éléments ne sont pas masqués"));}
     }
 
     // Méthode pour gérer la sélection
@@ -280,6 +339,66 @@ public class BibliothequeController {
 
     }
 
+
+
+    public void localconnectsync() throws JAXBException {
+
+        if(getMode().equals("local")){
+
+            BibliothequeDAO bdao = new BibliothequeDAO();
+
+            //addLivreToXML();
+
+            for(Bibliotheque.Livre livres:allCurrentLivre){
+
+                System.out.println("1-------------------------------------------------------");
+
+                Bibliotheque.Livre data = livres;
+
+                for (String livre : data.toString().replace("Infos du Livre : ","").split(",")) {
+                    System.out.println(livre.split("=")[0].replace(" ","")+" => "+livre.split("=")[1]);
+                }
+
+                bdao.save(data,data.getAuteur());
+
+                System.out.println("2-------------------------------------------------------");
+
+            }
+
+        }else if(getMode().equals("connected")){
+
+            addLivreToXML();
+
+        }
+
+        /*
+                if(getMode().equals("local")){
+
+            for(Bibliotheque.Livre livres:allCurrentLivre) {
+                for (String livre : livres.toString().replace("Infos du Livre : ", "").split(",")) {
+                    //bdao.save(livre,livre.getAuteur());
+                    System.out.print(livre + " | ");
+                }
+                System.out.println("");
+            }
+
+            BibliothequeDAO bdao = new BibliothequeDAO();
+            if (tableView.getItems() == null || tableView.getItems().isEmpty()) {
+                System.out.println("Erreur: le tableau des livres est vide.");
+                return;
+            }
+            for (Bibliotheque.Livre livre : tableView.getItems()) {
+                bdao.save(livre,livre.getAuteur());
+            }
+
+        }else if(getMode().equals("connected")){
+
+            addLivreToXML();
+
+        }
+         */
+
+    }
 
     /**
      * Méthode pour importer un fichier contenant les livres dans l'application
@@ -521,9 +640,9 @@ public class BibliothequeController {
             while (iterator.hasNext()) {
                 Bibliotheque.Livre e = iterator.next();
                 if (e.getTitre().equalsIgnoreCase(currentLivre.getTitre())
-                        && e.getAuteur().getNom().equalsIgnoreCase(currentLivre.getAuteur().getNom())
-                        && e.getAuteur().getPrenom().equals(currentLivre.getAuteur().getPrenom())
-                        && e.getParution() == currentLivre.getParution()) {
+                  && e.getAuteur().getNom().equalsIgnoreCase(currentLivre.getAuteur().getNom())
+                  && e.getAuteur().getPrenom().equals(currentLivre.getAuteur().getPrenom())
+                  && e.getParution() == currentLivre.getParution()) {
                     iterator.remove();
                 }else {
                     System.out.println("################## currentLivre : " + e.toString());
@@ -566,9 +685,9 @@ public class BibliothequeController {
                 while (iterator.hasNext()) {
                     Bibliotheque.Livre e = iterator.next();
                     if ((e.getTitre().equalsIgnoreCase(thelivre.getTitre())
-                            && e.getAuteur().getNom().equalsIgnoreCase(thelivre.getAuteur().getNom())
-                            && e.getAuteur().getPrenom().equals(thelivre.getAuteur().getPrenom())
-                            && e.getParution() == thelivre.getParution())) {
+                      && e.getAuteur().getNom().equalsIgnoreCase(thelivre.getAuteur().getNom())
+                      && e.getAuteur().getPrenom().equals(thelivre.getAuteur().getPrenom())
+                      && e.getParution() == thelivre.getParution())) {
 
                         System.out.println("################## le livre existe déjà : " + e.toString());
 
@@ -711,9 +830,9 @@ public class BibliothequeController {
             while (iterator.hasNext()) {
                 Bibliotheque.Livre e = iterator.next();
                 if ((e.getTitre().equalsIgnoreCase(currentLivre.getTitre())
-                        && e.getAuteur().getNom().equalsIgnoreCase(currentLivre.getAuteur().getNom())
-                        && e.getAuteur().getPrenom().equals(currentLivre.getAuteur().getPrenom())
-                        && e.getParution() == currentLivre.getParution())) {
+                  && e.getAuteur().getNom().equalsIgnoreCase(currentLivre.getAuteur().getNom())
+                  && e.getAuteur().getPrenom().equals(currentLivre.getAuteur().getPrenom())
+                  && e.getParution() == currentLivre.getParution())) {
                     copyAllCurrentLivre.add(currentLivre);
                 } else {
                     copyAllCurrentLivre.add(e);
@@ -810,9 +929,9 @@ public class BibliothequeController {
                 while (iterator.hasNext()) {
                     Bibliotheque.Livre e = iterator.next();
                     if ((e.getTitre().equalsIgnoreCase(thelivre.getTitre())
-                            && e.getAuteur().getNom().equalsIgnoreCase(thelivre.getAuteur().getNom())
-                            && e.getAuteur().getPrenom().equals(thelivre.getAuteur().getPrenom())
-                            && e.getParution() == thelivre.getParution())) {
+                      && e.getAuteur().getNom().equalsIgnoreCase(thelivre.getAuteur().getNom())
+                      && e.getAuteur().getPrenom().equals(thelivre.getAuteur().getPrenom())
+                      && e.getParution() == thelivre.getParution())) {
 
                         System.out.println("################## le livre existe déjà : " + e.toString());
                         iterator2.remove();
@@ -899,11 +1018,11 @@ public class BibliothequeController {
                     XWPFTableCell cell = row.createCell();
                     /** * Concaténer les données de chaque livre */
                     String bookData = "Titre: " + livre.getTitre() + "\n" +
-                            "Auteur: " + livre.getAuteur().getNom() + " " + livre.getAuteur().getPrenom() + "\n" +
-                            "Présentation: " + livre.getPresentation() + "\n" +
-                            "Parution: " + livre.getParution() + "\n" +
-                            "Colonne: " + livre.getColonne() + "\n" +
-                            "Rangée: " + livre.getRangee();
+                      "Auteur: " + livre.getAuteur().getNom() + " " + livre.getAuteur().getPrenom() + "\n" +
+                      "Présentation: " + livre.getPresentation() + "\n" +
+                      "Parution: " + livre.getParution() + "\n" +
+                      "Colonne: " + livre.getColonne() + "\n" +
+                      "Rangée: " + livre.getRangee();
                     cell.setText(bookData);
                 }
 

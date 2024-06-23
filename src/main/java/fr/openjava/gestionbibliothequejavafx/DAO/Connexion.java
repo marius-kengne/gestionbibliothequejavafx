@@ -31,8 +31,6 @@ public class Connexion {
         String login = props.getProperty("jdbc.login");
         String password = props.getProperty("jdbc.password");
 
-        System.out.println("### url : "+ url + " ### login : " + login + "### password : "+password);
-
         try {
             conn = DriverManager.getConnection(url, login, password);
             System.out.println("******  connection à la BD réussie *****");

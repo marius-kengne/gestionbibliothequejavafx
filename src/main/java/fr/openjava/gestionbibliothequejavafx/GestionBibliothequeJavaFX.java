@@ -8,12 +8,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.Properties;
+
 
 public class GestionBibliothequeJavaFX extends Application {
     @Override
@@ -62,4 +67,5 @@ public class GestionBibliothequeJavaFX extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
 }

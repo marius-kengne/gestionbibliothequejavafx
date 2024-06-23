@@ -24,16 +24,33 @@ public class BibliothequeDAO {
 
             Bibliotheque.Livre.Auteur currentAuteur = new AuteurDAO().save(auteur);
 
+            String query2 = "SELECT id FROM `auteurs` WHERE `prenom` LIKE ? AND `nom` LIKE ?";
+            int idresult = 0;
+            try (PreparedStatement result2 = conn.prepareStatement(query2)) {
+                result2.setString(1, "%" + currentAuteur.getPrenom() + "%");
+                result2.setString(2, "%" + currentAuteur.getNom() + "%");
+                try (ResultSet rs = result2.executeQuery()) {
+                    if (rs.next()) {
+                        idresult = rs.getInt("id");
+                        System.out.println("Check auteur successfully! ID: " + idresult);
+                    } else {
+                        System.out.println("Check auteur null!");
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Error for the check auteur!\n" + e);
+            }
+
             if (currentAuteur != null){
                 result.setString(1, livre.getTitre());
-                result.setString(2, livre.getPresentation());
+                result.setString(2, ""+idresult);
                 result.setString(3, livre.getPresentation());
                 result.setInt(4, livre.getParution());
                 result.setInt(5, livre.getColonne());
                 result.setInt(6, livre.getRangee());
                 result.setString(7, livre.getImage());
                 result.setString(8, livre.getResume());
-                result.setString(8, livre.getStatus());
+                result.setString(9, livre.getStatus());
 
                 int affectedRows = result.executeUpdate();
 
