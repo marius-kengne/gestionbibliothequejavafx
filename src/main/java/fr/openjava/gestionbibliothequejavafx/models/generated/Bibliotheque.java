@@ -415,12 +415,15 @@ public class Bibliotheque {
         @Override
         public String toString() {
             return "Infos du Livre : " +
-                    "titre='" + titre + '\'' +
-                    ", auteur=" + auteur.getNom() + ' ' +auteur.getPrenom() +
-                    ", presentation='" + presentation + '\'' +
-                    ", parution=" + parution +
-                    ", colonne=" + colonne +
-                    ", rangee=" + rangee;
+                    "image=" + image +
+                    ",titre='" + titre + '\'' +
+                    ",auteur=" + auteur.getNom() + " " +auteur.getPrenom() +
+                    ",presentation='" + presentation + '\'' +
+                    ",parution=" + parution +
+                    ",colonne=" + colonne +
+                    ",rangee=" + rangee+
+                    ",resume=" + resume +
+                    ",status=" + status;
         }
     }
 
