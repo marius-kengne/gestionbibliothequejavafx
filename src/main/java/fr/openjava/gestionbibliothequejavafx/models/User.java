@@ -8,6 +8,16 @@ public class User {
     private String password;
     private String role;
 
+    /*
+    // Constructeur avec arguments
+    public User(String firstName, String lastName, String login, String password, String role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.login = login;
+        this.password = password;
+        this.role = role;
+    }*/
+
     public String getLastName() {return lastName; }
 
     public void setLastName(String lastName) {this.lastName = lastName; }

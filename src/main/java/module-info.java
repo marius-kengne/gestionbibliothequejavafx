@@ -8,6 +8,7 @@ module fr.openjava.gestionbibliothequejavafx {
     requires plexus.io;
     requires org.apache.poi.ooxml;
     requires java.sql;
+    requires java.mail;
     opens fr.openjava.gestionbibliothequejavafx to javafx.fxml;
     exports fr.openjava.gestionbibliothequejavafx;
     exports fr.openjava.gestionbibliothequejavafx.controllers;
