@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -24,6 +25,9 @@ public class LoginController {
     private PasswordField passwordField;
 
     @FXML
+    private Label statusLabel;
+
+    @FXML
     protected void onLoginButtonClicked(ActionEvent event) throws IOException {
         String login = usernameField.getText();
         String password = passwordField.getText();
@@ -35,14 +39,27 @@ public class LoginController {
         UserDAO userDao = new UserDAO();
         User loggedInUser = userDao.login(login, password);
         if (loggedInUser != null) {
-            System.out.println("Welcome, " + loggedInUser.getLogin() + "!");
+            //System.out.println("Welcome, " + loggedInUser.getLogin() + "!");
+            statusLabel.setText("Bienvenue, " + loggedInUser.getLogin() + "!");
+            statusLabel.setStyle("-fx-text-fill: green;");
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             currentStage.close();
             selectMode();
         } else {
-            System.out.println("Login failed.");
+            //System.out.println("Login failed.");
+            statusLabel.setText("Email ou Mot de passe INCORRECT. Veuillez reessayer !");
+            statusLabel.setStyle("-fx-text-fill: red;");
+            return;
         }
 
+    }
+
+    @FXML
+    protected void onRegisterButtonClicked(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/register.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
     }
 
     public void selectMode() throws IOException {

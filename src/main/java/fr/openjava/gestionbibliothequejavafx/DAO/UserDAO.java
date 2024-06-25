@@ -14,17 +14,19 @@ public class UserDAO {
 
     public User createUser(User user){
 
-        String query = "INSERT INTO users (login, password, role) VALUES (root, ?, ?)";
+        String query = "INSERT INTO users (lastName, firstName, login, password, role) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement result = conn.prepareStatement(query)) {
-            result.setString(1, user.getLogin());
-            result.setString(2, user.getPassword());
-            result.setString(3, user.getRole());
+            result.setString(1, user.getLastName());
+            result.setString(2, user.getFirstName());
+            result.setString(3, user.getLogin());
+            result.setString(4, user.getPassword());
+            result.setString(5, user.getRole());
 
             int affectedRows = result.executeUpdate();
 
             if (affectedRows > 0) {
-                System.out.println("User created successfully!");
+                System.out.println("Utilisateur crée avec succes!");
                 return user;
             }
         } catch (SQLException ex) {
@@ -60,10 +62,10 @@ public class UserDAO {
                 user.setLogin(rs.getString("login"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getString("role"));
-                System.out.println("Login successful!");
+                System.out.println("Utisateur connecté avec succès!");
                 return user;
             } else {
-                System.out.println("Invalid login or password.");
+                System.out.println("Email ou mot de passe Invalide!");
             }
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());

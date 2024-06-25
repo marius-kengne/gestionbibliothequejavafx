@@ -15,6 +15,11 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.util.Properties;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
+
+
 public class GestionBibliothequeJavaFX extends Application {
     @Override
     public void start(Stage stage) throws IOException {
@@ -53,12 +58,11 @@ public class GestionBibliothequeJavaFX extends Application {
     }
 
 
+
     public void loginPage(Stage stage) throws IOException {
 
-       //FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/login.fxml"));
-        FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/register.fxml"));
-
-        Scene scene = new Scene(fxmlLoader.load(), 400, 350);
+       FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/login.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 770, 450);
         stage.setTitle("Gestionnaire de la Bibliothèque");
         stage.setScene(scene);
         stage.show();

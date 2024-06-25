@@ -5,6 +5,9 @@ CREATE TABLE users (
                        role VARCHAR(50) NOT NULL
 );
 
+ALTER TABLE users
+ADD COLUMN LastName VARCHAR(255) NOT NULL,
+ADD COLUMN FirstName VARCHAR(255) NOT NULL;
 
 
 CREATE TABLE auteurs (
