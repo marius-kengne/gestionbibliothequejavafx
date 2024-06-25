@@ -58,4 +58,5 @@ public class Utilities {
     public static boolean getProperty(String key) {
         return Boolean.getBoolean(properties.getProperty(key));
     }
+
 }

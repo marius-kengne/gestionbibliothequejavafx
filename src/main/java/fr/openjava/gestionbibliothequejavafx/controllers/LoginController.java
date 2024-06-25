@@ -15,6 +15,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Contrôleur pour la gestion de la connexion des utilisateurs.
+ */
 public class LoginController {
 
     @FXML
@@ -25,12 +28,17 @@ public class LoginController {
 
     private String selectedRole;
 
+    /**
+     * Méthode appelée lorsque le bouton de connexion est cliqué.
+     *
+     * @param event l'événement déclenché par le clic sur le bouton de connexion
+     * @throws IOException si une erreur d'entrée/sortie se produit
+     */
     @FXML
     protected void onLoginButtonClicked(ActionEvent event) throws IOException {
         String login = usernameField.getText();
         String password = passwordField.getText();
 
-        // Authentication logic here (e.g., check username and password)
         System.out.println("Username: " + login);
         System.out.println("Password: " + password);
 
@@ -46,17 +54,21 @@ public class LoginController {
         } else {
             System.out.println("Login failed.");
         }
-
     }
 
+    /**
+     * Sélectionne le mode de travail après une connexion réussie.
+     *
+     * @throws IOException si une erreur d'entrée/sortie se produit
+     */
     public void selectMode() throws IOException {
         System.out.println("########### mode de travail  : " + Utilities.getProperty("mode.connected"));
         FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/mode_selection.fxml"));
         Stage stage = new Stage();
         Scene scene = new Scene(fxmlLoader.load(), 400, 450);
-        stage.setTitle("Selection du Mode de Travail");
+        stage.setTitle("Sélection du Mode de Travail");
         stage.setScene(scene);
         stage.show();
     }
-
 }
+

@@ -112,18 +112,39 @@ public class BibliothequeController {
     private static String mode = "";
     private static String role = "";
 
+    /**
+     * Définit le mode actuel.
+     *
+     * @param selectedMode le mode sélectionné
+     */
     public static void setMode(String selectedMode) {
         mode = selectedMode;
     }
 
+    /**
+     * Retourne le mode actuel.
+     *
+     * @return le mode actuel
+     */
     public static String getMode() {
         return mode;
     }
 
+
+    /**
+     * Définit le rôle actuel.
+     *
+     * @param selectedRole le rôle sélectionné
+     */
     public static void setRole(String selectedRole) {
         role = selectedRole;
     }
 
+    /**
+     * Retourne le rôle actuel.
+     *
+     * @return le rôle actuel
+     */
     public static String getRole() {
         return role;
     }
@@ -134,6 +155,9 @@ public class BibliothequeController {
     @FXML
     private Label roleLabel;
 
+    /**
+     * Constructeur par défaut de BibliothequeController.
+     */
     public BibliothequeController(){
         System.out.println("################## Lancement");
         System.out.println("******************* Role user : " + getRole());
@@ -260,6 +284,7 @@ public class BibliothequeController {
 
     /**
      * Méthode pour enregistrer les livres dans un autres fichier
+     * @throws JAXBException si une erreur survient lors de la manipulation XML
      */
     public void saveInOtherLocation() throws JAXBException {
 
@@ -283,6 +308,8 @@ public class BibliothequeController {
 
     /**
      * Méthode pour importer un fichier contenant les livres dans l'application
+     *
+     * @throws JAXBException si une erreur survient lors de la manipulation XML
      */
     public void ImportXMLFile() throws JAXBException {
 
@@ -328,9 +355,9 @@ public class BibliothequeController {
     }
 
     /**
-     * Méthode pour récupérer les livres d'un fichier XML
-     * @param filePath : url du fichier que l'on veut importer les livres
-     * @return ObservableList<Bibliotheque.Livre> la liste des livres dans une collection
+     * Retourne une liste observable de livres.
+     *
+     * @return la liste des livres dans une collection observable
      */
     public ObservableList<Bibliotheque.Livre> getLivresInXML(String filePath) {
         try {
@@ -840,84 +867,9 @@ public class BibliothequeController {
 
 
     /**
-     * Méthode pour exporter les données dans un fichier Word.
-     */
-    public void ExportWordFileOld(){
-        if (tableView == null) {
-            System.out.println(("Erreur: le tableau des livres est vide."));
-        }
-
-        Stage stage = new Stage();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Veuillez le dossier pour enregistrer votre fichier");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier Word", "*.docx"));
-        File file = fileChooser.showSaveDialog(null);
-
-        if (file != null) {
-            try (XWPFDocument document = new XWPFDocument();
-                 FileOutputStream out = new FileOutputStream(file)) {
-                /** * Entête du document */
-                XWPFHeader header = document.createHeader(HeaderFooterType.DEFAULT);
-                XWPFParagraph headerParagraph = header.createParagraph();
-                XWPFRun headerRun = headerParagraph.createRun();
-                //headerRun.setText("Entête");
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                Date exportDate = new Date();
-                headerRun.setText("Entête du document - Date d'exportation : " + dateFormat.format(exportDate));
-
-                /** * Titre du document */
-                XWPFParagraph titleParagraph = document.createParagraph();
-                titleParagraph.setAlignment(ParagraphAlignment.CENTER);
-                XWPFRun titleRun = titleParagraph.createRun();
-                titleRun.setBold(true);
-                titleRun.setFontSize(16);
-                titleRun.setText("Bienvenue dans notre Gestionnaire de Bibliothèque. Nous vous présentons nore sommaire.");
-
-                /** * Ajout d'une page de garde */
-                document.createParagraph().createRun().addBreak();
-                XWPFParagraph coverPageParagraph = document.createParagraph();
-                coverPageParagraph.setAlignment(ParagraphAlignment.CENTER);
-                XWPFRun coverPageRun = coverPageParagraph.createRun();
-                coverPageRun.setBold(true);
-                coverPageRun.setFontSize(16);
-                coverPageRun.setText("Sommaire");
-
-                /** * Sommaire des livres */
-                document.createParagraph().createRun().addBreak();
-                XWPFParagraph tableOfContentParagraph = document.createParagraph();
-                XWPFRun tableOfContentRun = tableOfContentParagraph.createRun();
-                tableOfContentRun.setBold(true);
-                tableOfContentRun.setFontSize(14);
-                tableOfContentRun.setText("La liste des livres de notre Bibliothèque:");
-
-
-                /** * Données des livres de la TableView */
-                ObservableList<Bibliotheque.Livre> livres = tableView.getItems();
-                XWPFTable gridPaneTable = document.createTable();
-                for (Bibliotheque.Livre livre : livres) {
-                    XWPFTableRow row = gridPaneTable.createRow();
-                    XWPFTableCell cell = row.createCell();
-                    /** * Concaténer les données de chaque livre */
-                    String bookData = "Titre: " + livre.getTitre() + "\n" +
-                            "Auteur: " + livre.getAuteur().getNom() + " " + livre.getAuteur().getPrenom() + "\n" +
-                            "Présentation: " + livre.getPresentation() + "\n" +
-                            "Parution: " + livre.getParution() + "\n" +
-                            "Colonne: " + livre.getColonne() + "\n" +
-                            "Rangée: " + livre.getRangee();
-                    cell.setText(bookData);
-                }
-
-                /** * Enregistrer le document */
-                document.write(out);
-                System.out.println("Fichier Word exporté avec succès !");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
      * méthode pour quitter l'application
+     *
+     * @param event l'événement déclenché
      */
     public void quitApplication(ActionEvent event){
         allCurrentLivre.clear();
@@ -930,11 +882,12 @@ public class BibliothequeController {
     @FXML
     private void aboutAppplication(ActionEvent event){
         AboutController.display();
-        //afficheApropos();
     }
 
     /**
      * Methode pour afficher la fonctionnalité Export avec le sommaire
+     *
+     * @param event l'événement déclenché
      */
     public void ExportWordFile( ActionEvent event){
         ExportController exportController = new ExportController(allCurrentLivre);

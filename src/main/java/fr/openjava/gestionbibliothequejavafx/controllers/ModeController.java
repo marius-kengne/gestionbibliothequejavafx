@@ -10,27 +10,48 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Contrôleur pour la sélection du mode d'utilisation de l'application.
+ */
 public class ModeController {
 
     private String selectedMode;
 
+    /**
+     * Gère la sélection du mode local.
+     *
+     * @param event l'événement de l'action
+     * @throws IOException si une erreur d'entrée/sortie se produit
+     */
     @FXML
     protected void onLocalModeSelected(ActionEvent event) throws IOException {
         selectedMode = "local";
         redirectToHome(event);
     }
 
+    /**
+     * Gère la sélection du mode connecté.
+     *
+     * @param event l'événement de l'action
+     * @throws IOException si une erreur d'entrée/sortie se produit
+     */
     @FXML
     protected void onConnectedModeSelected(ActionEvent event) throws IOException {
         selectedMode = "connected";
         redirectToHome(event);
     }
 
+    /**
+     * Redirige vers la page d'accueil en enregistrant le mode sélectionné.
+     *
+     * @param event l'événement de l'action
+     * @throws IOException si une erreur d'entrée/sortie se produit
+     */
     private void redirectToHome(ActionEvent event) throws IOException {
-        // Save selected mode to a static variable in HomeController for later use
+        // Enregistre le mode sélectionné dans une variable statique de BibliothequeController pour une utilisation ultérieure
         BibliothequeController.setMode(selectedMode);
 
-        // Load home page
+        // Charge la page d'accueil
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/home.fxml"));
 

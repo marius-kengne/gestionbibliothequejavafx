@@ -2,46 +2,39 @@ package fr.openjava.gestionbibliothequejavafx;
 
 import fr.openjava.gestionbibliothequejavafx.DAO.UserDAO;
 import fr.openjava.gestionbibliothequejavafx.models.User;
-import fr.openjava.gestionbibliothequejavafx.utils.Utilities;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.util.Properties;
 
+/**
+ * Classe principale de l'application GestionBibliothequeJavaFX.
+ * Cette classe étend Application et gère le démarrage de l'application ainsi que l'affichage de la page de connexion.
+ */
 public class GestionBibliothequeJavaFX extends Application {
+
+    /**
+     * Méthode principale démarrant l'application en affichant la page de connexion.
+     *
+     * @param stage la fenêtre principale de l'application
+     * @throws IOException si une erreur survient lors du chargement de la page de connexion
+     */
     @Override
     public void start(Stage stage) throws IOException {
-        /*
-        FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/home.fxml"));
-
-        Scene scene = new Scene(fxmlLoader.load(), 800, 850);
-        stage.setTitle("Gestionnaire de la Bibliothèque!");
-        stage.setScene(scene);
-        stage.show();
-         */
-        //selectMode(stage);
         loginPage(stage);
     }
 
+    /**
+     * Méthode principale de lancement de l'application.
+     * Elle instancie un utilisateur de test, essaie de le connecter et affiche un message en fonction du résultat.
+     *
+     * @param args les arguments de la ligne de commande (non utilisés ici)
+     */
     public static void main(String[] args) {
         //launch();
         UserDAO userDao = new UserDAO();
-        /*
-        User newUser = new User();
-        newUser.setLogin("testuser");
-        newUser.setPassword("password123");
-        newUser.setRole("user");
-
-        userDao.createUser(newUser);
-        */
-
         User loggedInUser = userDao.login("testuser", "password123");
         if (loggedInUser != null) {
             System.out.println("Welcome, " + loggedInUser.getLogin() + "!");
@@ -53,10 +46,15 @@ public class GestionBibliothequeJavaFX extends Application {
     }
 
 
+    /**
+     * Affiche la page de connexion en chargeant le fichier FXML correspondant.
+     *
+     * @param stage la fenêtre principale de l'application
+     * @throws IOException si une erreur survient lors du chargement de la page de connexion depuis le fichier FXML
+     */
     public void loginPage(Stage stage) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/login.fxml"));
-
         Scene scene = new Scene(fxmlLoader.load(), 400, 350);
         stage.setTitle("Gestionnaire de la Bibliothèque");
         stage.setScene(scene);

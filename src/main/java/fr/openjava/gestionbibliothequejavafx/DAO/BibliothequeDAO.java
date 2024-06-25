@@ -9,11 +9,24 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
+/**
+ * Classe DAO pour gérer les opérations de base de données liées aux livres.
+ */
 public class BibliothequeDAO {
 
-    private final Connection conn = Connexion.initConnexion();
+    private final Connection conn = Connexion.initConnexion(new Properties());
+    Connection connection = Connexion.initConnexion(new Properties());
 
+
+    /**
+     * Enregistre un livre dans la base de données.
+     *
+     * @param livre le livre à enregistrer
+     * @param auteur l'auteur du livre
+     * @return le livre enregistré, ou null si l'enregistrement a échoué
+     */
     public Bibliotheque.Livre save(Bibliotheque.Livre livre, Bibliotheque.Livre.Auteur auteur){
 
         String query = "INSERT INTO livre (" +
@@ -22,7 +35,7 @@ public class BibliothequeDAO {
 
         try (PreparedStatement result = conn.prepareStatement(query)) {
 
-            Bibliotheque.Livre.Auteur currentAuteur = new AuteurDAO().save(auteur);
+            Bibliotheque.Livre.Auteur currentAuteur = new AuteurDAO(connection).save(auteur);
 
             if (currentAuteur != null){
                 result.setString(1, livre.getTitre());

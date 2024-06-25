@@ -1,3 +1,6 @@
+/**
+ * Module de l'application GestionBibliothequeJavaFX.
+ */
 module fr.openjava.gestionbibliothequejavafx {
     requires javafx.controls;
     requires javafx.fxml;

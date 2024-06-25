@@ -19,12 +19,24 @@ import java.net.URL;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * Contrôleur pour l'exportation des livres vers un fichier Word.
+ */
 public class ExportController {
     private List<Bibliotheque.Livre> listLivres;
+
+    /**
+     * Constructeur de la classe ExportController.
+     *
+     * @param listLivres la liste des livres à exporter
+     */
     public ExportController(List<Bibliotheque.Livre> listLivres){
         this.listLivres = listLivres;
     }
 
+    /**
+     * Exporte la liste des livres vers un fichier Word.
+     */
     public void exportToWord() {
         System.out.println("here");
 
@@ -71,15 +83,10 @@ public class ExportController {
                 pageNumber = 1;
                 for (Bibliotheque.Livre livre : listLivres) {
                     XWPFParagraph bookInfoParagraph = document.createParagraph();
-
                     bookInfoParagraph.setAlignment(ParagraphAlignment.CENTER);
-
                     XWPFRun bookInfoRun = bookInfoParagraph.createRun();
 
                     // Ajout du signet pour la page du livre
-//                    bookInfoRun = bookInfoParagraph.createRun();
-//                    bookInfoRun.setText("Page " + pageNumber);
-//                    bookInfoRun.setFontSize(14);
                     CTP ctp = bookInfoParagraph.getCTP();
                     CTBookmark bookmark = ctp.addNewBookmarkStart();
                     bookmark.setId(BigInteger.valueOf(pageNumber));
@@ -132,7 +139,7 @@ public class ExportController {
                         bookInfoRun.addBreak();
                     }
 
-                    for(int i=0;i<10;i++){
+                    for(int i = 0; i < 10; i++){
                         bookInfoRun = bookInfoParagraph.createRun();
                         bookInfoRun.setFontSize(14);
                         bookInfoRun.setText("");
@@ -140,16 +147,13 @@ public class ExportController {
                     }
 
                     bookInfoRun = bookInfoParagraph.createRun();
-                    bookInfoRun.setText("Page " + (pageNumber+2));
+                    bookInfoRun.setText("Page " + (pageNumber + 2));
                     bookInfoRun.setFontSize(14);
 
                     pageNumber++;
 
                     bookInfoRun.addBreak(BreakType.PAGE);
-
                 }
-
-                //tableau des livre emprunté ou pas
 
                 document.write(out);
                 System.out.println("Fichier Word exporté avec succès !");
@@ -159,6 +163,13 @@ public class ExportController {
         }
     }
 
+    /**
+     * Convertit un lien d'image en flux d'entrée.
+     *
+     * @param imageUrl l'URL de l'image
+     * @return un flux d'entrée pour l'image
+     * @throws Exception si une erreur se produit lors de la conversion
+     */
     public static InputStream convertImageLinkToInputStream(String imageUrl) throws Exception {
         URL url = new URL(imageUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -170,6 +181,12 @@ public class ExportController {
         return connection.getInputStream();
     }
 
+    /**
+     * Crée une page de garde pour le document Word.
+     *
+     * @param document le document Word
+     * @param title le titre de la page de garde
+     */
     private void PageDeGarde(XWPFDocument document, String title) {
         XWPFParagraph coverPage = document.createParagraph();
         coverPage.setAlignment(ParagraphAlignment.CENTER);
@@ -181,3 +198,4 @@ public class ExportController {
         runCoverPage.addBreak(org.apache.poi.xwpf.usermodel.BreakType.PAGE);
     }
 }
+

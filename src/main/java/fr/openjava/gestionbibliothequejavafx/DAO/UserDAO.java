@@ -8,10 +8,26 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
+/**
+ * Classe d'accès aux données pour l'entité User, permettant de gérer les opérations
+ * de création d'utilisateur et de connexion.
+ */
 public class UserDAO {
 
-    private final Connection conn = Connexion.initConnexion();
+    private final Connection conn = Connexion.initConnexion(new Properties());
 
+    private final Connection con;
+
+    // Ajout d'un constructeur pour permettre l'injection de connexion
+    public UserDAO() {
+        this.con = conn;
+    }
+    /**
+     * Crée un nouvel utilisateur dans la base de données.
+     *
+     * @param user l'utilisateur à créer
+     * @return l'utilisateur créé si l'opération réussit, sinon null
+     */
     public User createUser(User user){
 
         String query = "INSERT INTO users (login, password, role) VALUES (?, ?, ?)";
@@ -45,6 +61,13 @@ public class UserDAO {
     }
 
 
+    /**
+     * Vérifie les informations de connexion d'un utilisateur dans la base de données.
+     *
+     * @param login    le nom d'utilisateur
+     * @param password le mot de passe
+     * @return l'utilisateur correspondant aux informations de connexion si elles sont valides, sinon null
+     */
     public User login(String login, String password) {
 
         String sql = "SELECT * FROM users WHERE login = ? AND password = ?";

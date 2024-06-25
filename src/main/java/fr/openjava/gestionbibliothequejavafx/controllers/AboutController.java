@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Contrôleur pour la fenêtre "À propos" de l'application.
+ */
 public class AboutController {
 
     @FXML
@@ -40,12 +43,21 @@ public class AboutController {
     @FXML
     private Label versionLabel;
 
+    /**
+     * Liste des noms des contributeurs.
+     */
     public List<String> contributorNames = new ArrayList<>();
 
+    /**
+     * Liste des URL des photos des contributeurs.
+     */
     public List<String> contributorUrlPhotos = new ArrayList<>();
 
+    /**
+     * Initialise le contrôleur.
+     * Configure les noms et les photos des contributeurs.
+     */
     public void initialize() {
-
         contributorNames.add("Marius");
         contributorUrlPhotos.add("https://cdn.discordapp.com/attachments/1220296723574951957/1222934659965653083/92979836-icone-de-visage-anonyme-de-profil-personne-silhouette-grise-avatar-par-defaut-masculin-photo.jpg?ex=661805a7&is=660590a7&hm=f92190367b9b79fe2d6e9d32854a51a576df56eb23db4c4b1e6f44b602deb8aa&");
         contributorNames.add("Sofiane");
@@ -71,6 +83,9 @@ public class AboutController {
         versionLabel.setText("version : v1.2");
     }
 
+    /**
+     * Affiche la fenêtre "À propos".
+     */
     public static void display() {
         Stage aboutStage = new Stage();
         Parent root = null;
@@ -79,10 +94,8 @@ public class AboutController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        aboutStage.setTitle("About");
+        aboutStage.setTitle("À propos");
         aboutStage.setScene(new Scene(root, 600, 350));
         aboutStage.show();
     }
-
-
 }
