@@ -20,7 +20,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Configure MySQL connection
+      - name: Configure MySQL connection server
         run: |
           echo "jdbc.driver.class=com.mysql.cj.jdbc.Driver" > conf.properties
           echo "jdbc.url=${{ secrets.JDBC_URL }}" >> conf.properties
