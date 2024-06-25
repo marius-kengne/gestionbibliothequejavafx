@@ -2,9 +2,20 @@ package fr.openjava.gestionbibliothequejavafx.models;
 
 public class User {
 
+    private String lastName;
+    private String firstName;
     private String login;
     private String password;
     private String role;
+    private boolean isAdmin;
+
+    public String getLastName() {return lastName; }
+
+    public void setLastName(String lastName) {this.lastName = lastName; }
+
+    public String getFirstName() { return firstName; }
+
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
     public String getLogin() {
         return login;
@@ -30,10 +41,20 @@ public class User {
         this.role = role;
     }
 
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                "login='" + login + '\'' +
+                "lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
                 '}';

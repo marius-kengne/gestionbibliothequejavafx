@@ -30,31 +30,26 @@ public class UserDAO {
      */
     public User createUser(User user){
 
-        String query = "INSERT INTO users (login, password, role) VALUES (?, ?, ?)";
+        String query = "INSERT INTO users (lastName, firstName, login, password, role, isAdmin) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement result = conn.prepareStatement(query)) {
-            result.setString(1, user.getLogin());
-            result.setString(2, user.getPassword());
-            result.setString(3, user.getRole());
+            result.setString(1, user.getLastName());
+            result.setString(2, user.getFirstName());
+            result.setString(3, user.getLogin());
+            result.setString(4, user.getPassword());
+            result.setString(5, user.getRole());
+            result.setBoolean(6, user.isAdmin());
 
             int affectedRows = result.executeUpdate();
 
             if (affectedRows > 0) {
-                System.out.println("User created successfully!");
+                System.out.println("Utilisateur crée avec succes!");
                 return user;
             }
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                System.out.println("SQLException: " + ex.getMessage());
-            }
         }
 
         return null;
@@ -83,23 +78,16 @@ public class UserDAO {
                 user.setLogin(rs.getString("login"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getString("role"));
-                System.out.println("Login successful!");
+                user.setAdmin(rs.getBoolean("isAdmin"));
+                System.out.println("Utisateur connecté avec succès!");
                 return user;
             } else {
-                System.out.println("Invalid login or password.");
+                System.out.println("Email ou mot de passe Invalide!");
             }
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                System.out.println("SQLException: " + ex.getMessage());
-            }
         }
 
         return null;

@@ -9,10 +9,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+
 /**
  * Classe principale de l'application GestionBibliothequeJavaFX.
  * Cette classe étend Application et gère le démarrage de l'application ainsi que l'affichage de la page de connexion.
  */
+
 public class GestionBibliothequeJavaFX extends Application {
 
     /**
@@ -52,10 +54,11 @@ public class GestionBibliothequeJavaFX extends Application {
      * @param stage la fenêtre principale de l'application
      * @throws IOException si une erreur survient lors du chargement de la page de connexion depuis le fichier FXML
      */
+
     public void loginPage(Stage stage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 400, 350);
+       FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/login.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 770, 450);
         stage.setTitle("Gestionnaire de la Bibliothèque");
         stage.setScene(scene);
         stage.show();

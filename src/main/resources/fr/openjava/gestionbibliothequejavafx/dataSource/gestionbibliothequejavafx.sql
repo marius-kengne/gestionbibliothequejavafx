@@ -5,6 +5,11 @@ CREATE TABLE users (
                        role VARCHAR(50) NOT NULL
 );
 
+ALTER TABLE users
+ADD COLUMN LastName VARCHAR(255) NOT NULL,
+ADD COLUMN FirstName VARCHAR(255) NOT NULL;
+ADD COLUMN isAdmin BOOL NOT NULL DEFAULT 0;
+
 CREATE TABLE auteurs (
                          id INT AUTO_INCREMENT PRIMARY KEY,
                          nom VARCHAR(255) NOT NULL,

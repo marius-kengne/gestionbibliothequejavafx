@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -35,6 +36,9 @@ public class LoginController {
      * @throws IOException si une erreur d'entrée/sortie se produit
      */
     @FXML
+    private Label statusLabel;
+
+    @FXML
     protected void onLoginButtonClicked(ActionEvent event) throws IOException {
         String login = usernameField.getText();
         String password = passwordField.getText();
@@ -45,16 +49,22 @@ public class LoginController {
         UserDAO userDao = new UserDAO();
         User loggedInUser = userDao.login(login, password);
         if (loggedInUser != null) {
-            System.out.println("Welcome, " + loggedInUser.getLogin() + "!");
+            //System.out.println("Welcome, " + loggedInUser.getLogin() + "!");
+            statusLabel.setText("Bienvenue, " + loggedInUser.getLogin() + "!");
+            statusLabel.setStyle("-fx-text-fill: green;");
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             currentStage.close();
             selectedRole = loggedInUser.getRole();
             BibliothequeController.setRole(selectedRole);
             selectMode();
         } else {
-            System.out.println("Login failed.");
+            //System.out.println("Login failed.");
+            statusLabel.setText("Email ou Mot de passe INCORRECT. Veuillez reessayer !");
+            statusLabel.setStyle("-fx-text-fill: red;");
+            return;
         }
     }
+
 
     /**
      * Sélectionne le mode de travail après une connexion réussie.
@@ -70,5 +80,16 @@ public class LoginController {
         stage.setScene(scene);
         stage.show();
     }
+
+
+    @FXML
+    protected void onRegisterButtonClicked(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/register.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+    }
+
+
 }
 
