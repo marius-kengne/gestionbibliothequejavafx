@@ -14,14 +14,15 @@ import java.util.Properties;
  */
 public class UserDAO {
 
-    private final Connection conn = Connexion.initConnexion(new Properties());
+    //private final Connection conn = Connexion.initConnexion(new Properties());
 
-    private final Connection con;
+    private final Connection conn;
 
     // Ajout d'un constructeur pour permettre l'injection de connexion
-    public UserDAO() {
-        this.con = conn;
+    public UserDAO(Connection conn) {
+        this.conn = conn;
     }
+
     /**
      * Crée un nouvel utilisateur dans la base de données.
      *
@@ -91,6 +92,37 @@ public class UserDAO {
         }
 
         return null;
+    }
+
+
+
+    /**
+     * Supprime un utilisateur de la base de données en fonction de son login.
+     *
+     * @param login le login de l'utilisateur à supprimer
+     * @return true si l'utilisateur est supprimé avec succès, sinon false
+     */
+    public boolean deleteUser(String login) {
+        String sql = "DELETE FROM users WHERE login = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, login);
+
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                System.out.println("Utilisateur supprimé avec succès!");
+                return true;
+            } else {
+                System.out.println("Aucun utilisateur trouvé avec ce login.");
+            }
+        } catch (SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+
+        return false;
     }
 
 }

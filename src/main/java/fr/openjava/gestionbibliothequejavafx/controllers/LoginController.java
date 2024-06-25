@@ -1,5 +1,6 @@
 package fr.openjava.gestionbibliothequejavafx.controllers;
 
+import fr.openjava.gestionbibliothequejavafx.DAO.Connexion;
 import fr.openjava.gestionbibliothequejavafx.DAO.UserDAO;
 import fr.openjava.gestionbibliothequejavafx.GestionBibliothequeJavaFX;
 import fr.openjava.gestionbibliothequejavafx.models.User;
@@ -15,6 +16,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.util.Properties;
 
 /**
  * Contrôleur pour la gestion de la connexion des utilisateurs.
@@ -28,6 +31,7 @@ public class LoginController {
     private PasswordField passwordField;
 
     private String selectedRole;
+    private final Connection connexion = Connexion.initConnexion(new Properties());
 
     /**
      * Méthode appelée lorsque le bouton de connexion est cliqué.
@@ -46,7 +50,7 @@ public class LoginController {
         System.out.println("Username: " + login);
         System.out.println("Password: " + password);
 
-        UserDAO userDao = new UserDAO();
+        UserDAO userDao = new UserDAO(connexion);
         User loggedInUser = userDao.login(login, password);
         if (loggedInUser != null) {
             //System.out.println("Welcome, " + loggedInUser.getLogin() + "!");

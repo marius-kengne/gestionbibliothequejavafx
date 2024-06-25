@@ -1,5 +1,6 @@
 package fr.openjava.gestionbibliothequejavafx.controllers;
 
+import fr.openjava.gestionbibliothequejavafx.DAO.Connexion;
 import fr.openjava.gestionbibliothequejavafx.DAO.UserDAO;
 import fr.openjava.gestionbibliothequejavafx.GestionBibliothequeJavaFX;
 import fr.openjava.gestionbibliothequejavafx.models.User;
@@ -17,6 +18,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.util.Properties;
 
 
 public class RegisterController {
@@ -37,9 +40,11 @@ public class RegisterController {
     private Label statusLabel;
 
     private UserDAO userDAO;
+    private final Connection connexion = Connexion.initConnexion(new Properties());
+
 
     public RegisterController() {
-        userDAO = new UserDAO();
+        userDAO = new UserDAO(connexion);
     }
 
     @FXML

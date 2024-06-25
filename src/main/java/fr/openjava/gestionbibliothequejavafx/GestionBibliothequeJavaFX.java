@@ -1,5 +1,6 @@
 package fr.openjava.gestionbibliothequejavafx;
 
+import fr.openjava.gestionbibliothequejavafx.DAO.Connexion;
 import fr.openjava.gestionbibliothequejavafx.DAO.UserDAO;
 import fr.openjava.gestionbibliothequejavafx.models.User;
 import javafx.application.Application;
@@ -8,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.util.Properties;
 
 
 /**
@@ -36,7 +39,9 @@ public class GestionBibliothequeJavaFX extends Application {
      */
     public static void main(String[] args) {
         //launch();
-        UserDAO userDao = new UserDAO();
+        Connection connexion = Connexion.initConnexion(new Properties());
+
+        UserDAO userDao = new UserDAO(connexion);
         User loggedInUser = userDao.login("testuser", "password123");
         if (loggedInUser != null) {
             System.out.println("Welcome, " + loggedInUser.getLogin() + "!");
