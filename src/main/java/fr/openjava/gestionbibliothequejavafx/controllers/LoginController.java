@@ -38,20 +38,33 @@ public class LoginController {
 
         UserDAO userDao = new UserDAO();
         User loggedInUser = userDao.login(login, password);
-        if (loggedInUser != null) {
-            //System.out.println("Welcome, " + loggedInUser.getLogin() + "!");
+
+        // Vérifier si les champs sont vides
+        if (login.isEmpty() || password.isEmpty()) {
+            statusLabel.setText("Veuillez renseigner tous les champs !");
+            statusLabel.setStyle("-fx-text-fill: red;");
+            return;
+        } else if (loggedInUser != null) {
             statusLabel.setText("Bienvenue, " + loggedInUser.getLogin() + "!");
             statusLabel.setStyle("-fx-text-fill: green;");
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             currentStage.close();
             selectMode();
-        } else {
-            //System.out.println("Login failed.");
+        } else{
             statusLabel.setText("Email ou Mot de passe INCORRECT. Veuillez reessayer !");
             statusLabel.setStyle("-fx-text-fill: red;");
             return;
         }
 
+
+    }
+
+    @FXML
+    protected void onForgotPasswordButtonClicked(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/forgot_password.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
     }
 
     @FXML
@@ -61,6 +74,7 @@ public class LoginController {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
     }
+
 
     public void selectMode() throws IOException {
         System.out.println("########### mode de travail  : " + Utilities.getProperty("mode.connected"));
