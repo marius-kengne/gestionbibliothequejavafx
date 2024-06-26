@@ -20,13 +20,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Configure MySQL connection server
-        run: |
-          echo "jdbc.driver.class=com.mysql.cj.jdbc.Driver" > conf.properties
-          echo "jdbc.url=${{ secrets.JDBC_URL }}" >> conf.properties
-          echo "jdbc.login=${{ secrets.JDBC_LOGIN }}" >> conf.properties
-          echo "jdbc.password=${{ secrets.JDBC_PASSWORD }}" >> conf.properties
-
       - name: Build with Maven
         run: mvn clean install
 
@@ -53,10 +46,10 @@ jobs:
         run: mvn sonar:sonar
 
       - name: Generate SBOM
-        run: mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
+        run: mvn verify
 
       - name: Upload SBOM
         uses: actions/upload-artifact@v2
         with:
           name: sbom
-          path: target/*.bom.xml
+          path: target/*.bom.json

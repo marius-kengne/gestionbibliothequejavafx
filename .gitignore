@@ -36,3 +36,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+src/test/java/fr/openjava/gestionbibliothequejavafx/DAO/AuteurDAOTest.java
+src/test/java/fr/openjava/gestionbibliothequejavafx/DAO/ConnexionTest.java
+src/test/java/fr/openjava/gestionbibliothequejavafx/DAO/UserDAOTest.java

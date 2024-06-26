@@ -1,15 +1,10 @@
 package fr.openjava.gestionbibliothequejavafx.DAO;
 
-import fr.openjava.gestionbibliothequejavafx.models.User;
 import fr.openjava.gestionbibliothequejavafx.models.generated.Bibliotheque;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Properties;
 
 /**
  * Classe DAO pour gérer les opérations de base de données liées aux livres.

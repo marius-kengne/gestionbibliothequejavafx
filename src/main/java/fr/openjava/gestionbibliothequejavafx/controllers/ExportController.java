@@ -3,11 +3,9 @@ package fr.openjava.gestionbibliothequejavafx.controllers;
 import fr.openjava.gestionbibliothequejavafx.models.generated.Bibliotheque;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTBookmark;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STMerge;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,7 +15,6 @@ import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Contrôleur pour l'exportation des livres vers un fichier Word.

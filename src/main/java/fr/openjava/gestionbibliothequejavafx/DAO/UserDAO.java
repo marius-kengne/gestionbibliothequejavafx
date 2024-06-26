@@ -2,11 +2,7 @@ package fr.openjava.gestionbibliothequejavafx.DAO;
 
 import fr.openjava.gestionbibliothequejavafx.models.User;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.*;
-import java.util.Properties;
 
 /**
  * Classe d'accès aux données pour l'entité User, permettant de gérer les opérations

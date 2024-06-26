@@ -8,7 +8,7 @@
 
 package fr.openjava.gestionbibliothequejavafx.models.generated;
 
-import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
