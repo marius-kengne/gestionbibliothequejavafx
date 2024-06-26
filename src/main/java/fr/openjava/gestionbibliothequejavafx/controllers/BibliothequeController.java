@@ -5,7 +5,6 @@ import fr.openjava.gestionbibliothequejavafx.DAO.Connexion;
 import fr.openjava.gestionbibliothequejavafx.models.generated.ObjectFactory;
 import fr.openjava.gestionbibliothequejavafx.utils.Utilities;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import fr.openjava.gestionbibliothequejavafx.models.generated.Bibliotheque;
@@ -28,7 +27,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -107,7 +105,7 @@ public class BibliothequeController {
 
     @FXML
     private TextArea resumeTextArea;
-    
+    private static final String ACTION_MESSAGE = "Erreur lors du chargement de la vue";
 
     @FXML
     private SplitMenuButton splitMenuButton;
@@ -175,31 +173,30 @@ public class BibliothequeController {
                 editgridpane.setManaged(false);
                 stt=stt&editgridpane.isVisible()&&editgridpane.isManaged();
             } catch (Exception e) {
-                logger.log(Level.SEVERE, "Erreur lors du chargement de la vue ", e);
+                logger.log(Level.SEVERE, ACTION_MESSAGE, e);
             }
             try {
                 bteditandsupr.setVisible(false);
                 bteditandsupr.setManaged(false);
                 stt=stt&bteditandsupr.isVisible()&&bteditandsupr.isManaged();
             } catch (Exception e) {
-                logger.log(Level.SEVERE, "Erreur lors du chargement de la vue ", e);
+                logger.log(Level.SEVERE, ACTION_MESSAGE, e);
             }
             try {
                 addnewbook.setVisible(false);
                 addnewbook.setManaged(false);
                 stt=stt&addnewbook.isVisible()&&addnewbook.isManaged();
             } catch (Exception e) {
-                logger.log(Level.SEVERE, "Erreur lors du chargement de la vue ", e);
+                logger.log(Level.SEVERE, ACTION_MESSAGE, e);
             }
             try {
                 editionmenu.setVisible(false);
                 stt=stt&editionmenu.isVisible();
             } catch (Exception e) {
-                logger.log(Level.SEVERE, "Erreur lors du chargement de la vue ", e);
+                logger.log(Level.SEVERE, ACTION_MESSAGE, e);
             }
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "editionmenu ", editionmenu.isVisible());
-            logger.log(Level.SEVERE, "Erreur  ", e);
+            logger.info(e.getMessage());
         }
         return stt;
     }
@@ -208,8 +205,7 @@ public class BibliothequeController {
      * Constructeur par défaut de BibliothequeController.
      */
     public BibliothequeController(){
-        System.out.println("################## Lancement");
-        if(getRole().equals("admin")){System.out.println("in admin");} else {
+        if(getRole().equals("admin")){logger.info("in admin");} else {
             logger.log(Level.SEVERE, "not in admin ");
         }
     }
@@ -250,13 +246,12 @@ public class BibliothequeController {
             item.setOnAction(event -> {
                 String status = ((MenuItem) event.getSource()).getText();
                 splitMenuButton.setText(status);
-                System.out.println("Sélection : " + status);
                 statusCurrentLivre = status;
                 handleSelection(status);
             });
         }
 
-        if(!getRole().equals("admin")){System.out.println((!hide())?("les éléments sont masqués"):("les éléments ne sont pas masqués"));}
+        if(!getRole().equals("admin")){logger.info((!hide())?("les éléments sont masqués"):("les éléments ne sont pas masqués"));}
     }
 
     // Méthode pour gérer la sélection
@@ -329,7 +324,6 @@ public class BibliothequeController {
 
     /**
      * Méthode pour enregistrer les livres dans un autres fichier
-     * @throws JAXBException si une erreur survient lors de la manipulation XML
      */
     public void saveInOtherLocation() {
 
@@ -356,8 +350,6 @@ public class BibliothequeController {
 
     /**
      * Méthode pour importer un fichier contenant les livres dans l'application
-     *
-     * @throws JAXBException si une erreur survient lors de la manipulation XML
      */
     public void ImportXMLFile() {
 
@@ -417,7 +409,9 @@ public class BibliothequeController {
                 rangeeColumn.setCellValueFactory(new PropertyValueFactory<>("rangee"));
                 resumeColumn.setCellValueFactory(new PropertyValueFactory<>("resume"));
                 statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-            } catch (Exception e) {System.out.println("erreur d'initiation de la structure du tableau:\n"+e);}
+            } catch (Exception e) {
+                logger.info("erreur d'initiation de la structure du tableau:\n"+e);
+            }
 
             
             String query = "SELECT * FROM `livres`";
@@ -448,11 +442,13 @@ public class BibliothequeController {
                                         nom = rs2.getString("nom");
                                         prenom = rs2.getString("prenom");
                                     } else {
-                                        System.out.println("Check auteur null!");
+                                        logger.info("Check auteur null!");
                                     }
                                 }
                             }
-                            catch (Exception f) {System.out.println("erreur de la query de récupération du nom et prénom de l'auteur!\n" + f);}
+                            catch (Exception f) {
+                                logger.info("erreur de la query de récupération du nom et prénom de l'auteur!\n" + f);
+                            }
 
                             try {
 
@@ -685,13 +681,6 @@ public class BibliothequeController {
                 currentBibliotheque = new ObjectFactory().createBibliotheque();
             }
 
-            System.out.println("################## avant : ");
-            for (Bibliotheque.Livre e : currentBibliotheque.getLivre()){
-                System.out.println("################## currentLivre : " + e.toString());
-            }
-
-            // supprimer le livre à la liste des livres s'il existe
-            System.out.println("################## après : ");
             Iterator<Bibliotheque.Livre> iterator = currentBibliotheque.getLivre().iterator();
             while (iterator.hasNext()) {
                 Bibliotheque.Livre e = iterator.next();
@@ -701,7 +690,7 @@ public class BibliothequeController {
                         && e.getParution() == currentLivre.getParution()) {
                     iterator.remove();
                 }else {
-                    System.out.println("################## currentLivre : " + e.toString());
+                    logger.info("################## currentLivre : " + e.toString());
                 }
             }
 
@@ -744,8 +733,6 @@ public class BibliothequeController {
                             && e.getAuteur().getNom().equalsIgnoreCase(thelivre.getAuteur().getNom())
                             && e.getAuteur().getPrenom().equals(thelivre.getAuteur().getPrenom())
                             && e.getParution() == thelivre.getParution())) {
-
-                        System.out.println("################## le livre existe déjà : " + e.toString());
 
                         iterator2.remove();
                         livres.remove(iterator2);
@@ -989,7 +976,6 @@ public class BibliothequeController {
                             && e.getAuteur().getPrenom().equals(thelivre.getAuteur().getPrenom())
                             && e.getParution() == thelivre.getParution())) {
 
-                        System.out.println("################## le livre existe déjà : " + e.toString());
                         iterator2.remove();
                         livres.remove(iterator2);
 
@@ -1019,7 +1005,7 @@ public class BibliothequeController {
      */
     public void ExportWordFileOld(){
         if (tableView == null) {
-            System.out.println(("Erreur: le tableau des livres est vide."));
+            logger.info("Erreur: le tableau des livres est vide.");
         }
 
         Stage stage = new Stage();
@@ -1139,15 +1125,13 @@ public class BibliothequeController {
         if(getMode().equals("local")){
 
             for(Bibliotheque.Livre livres:allCurrentLivre){
-                Bibliotheque.Livre data=livres;
+                Bibliotheque.Livre data = livres;
                 boolean valid=true;
-                Connection conn = Connexion.initConnexion(props);
                 String query = "SELECT * FROM `livres`";
                 Object[] idresult = new Object[10];
-                try(PreparedStatement result = conn.prepareStatement(query)) {
+                try(PreparedStatement result = connexion.prepareStatement(query)) {
                     try (ResultSet rs=result.executeQuery()) {
                         Object[]verif= new Object[9];int i=0;
-                        System.out.println("Livre à ajouter :\n"+data.toString().replace("Infos du Livre : ",""));
                         for(String livre:data.toString().replace("Infos du Livre : ","").split(",")){
                             verif[i]=livre.split("=")[1];i++;
                         }
