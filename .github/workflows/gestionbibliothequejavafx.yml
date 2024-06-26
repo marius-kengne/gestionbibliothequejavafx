@@ -2,9 +2,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ test-ci ]
+    branches: [ development ]
   pull_request:
-    branches: [ test-ci ]
+    branches: [ development ]
 
 jobs:
   build:
@@ -45,7 +45,8 @@ jobs:
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn sonar:sonar
+        run: mvn -B verify sonar:sonar -Dsonar.projectKey=marius-kengne_gestionbibliothequejavafx -Dsonar.organization=marius-kengne -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+
 
       - name: Generate SBOM
         run: mvn verify
