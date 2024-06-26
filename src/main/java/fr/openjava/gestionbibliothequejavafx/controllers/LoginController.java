@@ -41,7 +41,7 @@ public class LoginController {
      * @param event l'événement déclenché par le clic sur le bouton de connexion
      * @throws IOException si une erreur d'entrée/sortie se produit
      */
-    protected void onLoginButtonClicked(ActionEvent event) throws IOException {
+    public void onLoginButtonClicked(ActionEvent event) throws IOException {
         String login = usernameField.getText();
         String password = passwordField.getText();
 
