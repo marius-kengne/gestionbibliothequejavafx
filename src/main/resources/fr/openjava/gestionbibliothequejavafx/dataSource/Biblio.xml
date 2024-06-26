@@ -1,37 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- fichier livre.xml -->
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <bibliotheque>
-<livre>
-  <titre>XSD pour les nuls</titre>
-  <auteur>
-    <nom>Dupond</nom>
-    <prenom>Jean</prenom>
-  </auteur>
-  <presentation>Ce livre est une introduction au schema XSD</presentation>
-  <parution>2000</parution>
-  <colonne>5</colonne>
-  <rangee>2</rangee>
-</livre>
-<livre>
-  <titre>HarryPotter</titre>
-  <auteur>
-    <nom>Rowling</nom>
-    <prenom>JK</prenom>
-  </auteur>
-  <presentation>Ce livre est une introduction au schema XSD</presentation>
-  <parution>1996</parution>
-  <colonne>5</colonne>
-  <rangee>2</rangee>
-</livre>
-<livre>
-  <titre>Eragon</titre>
-  <auteur>
-    <nom>Paolini</nom>
-    <prenom>Christopher</prenom>
-  </auteur>
-  <presentation>Ce livre est une introduction au schema XSD</presentation>
-  <parution>2001</parution>
-  <colonne>5</colonne>
-  <rangee>2</rangee>
-</livre>
+    <livre>
+        <titre>marius</titre>
+        <auteur>
+            <nom>marie</nom>
+            <prenom>detien</prenom>
+        </auteur>
+        <presentation>maths</presentation>
+        <parution>2021</parution>
+        <colonne>2</colonne>
+        <rangee>1</rangee>
+        <resume>test bienvenu</resume>
+        <status>indisponible</status>
+    </livre>
 </bibliotheque>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="40.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.openjava.gestionbibliothequejavafx.controllers.AboutController">
+    <children>
+        <HBox prefHeight="33.0" prefWidth="600.0">
+            <children>
+                <VBox />
+                <Label fx:id="label1" alignment="CENTER_RIGHT" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="21.0" prefWidth="251.0" text="Informations de l'application">
+                    <font>
+                        <Font name="Arial Bold" size="18.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets bottom="20.0" left="190.0" right="20.0" top="20.0" />
+                    </HBox.margin>
+                </Label>
+
+            </children>
+        </HBox>
+        <Label fx:id="versionLabel" alignment="CENTER_RIGHT" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="21.0" prefWidth="251.0" style="-fx-color-label-visible: red">
+            <font>
+                <Font name="Arial Bold" size="14.0" />
+            </font>
+            <VBox.margin>
+                <Insets left="110.0" top="10.0" />
+            </VBox.margin>
+        </Label>
+        <Label fx:id="label11" alignment="CENTER_RIGHT" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="21.0" prefWidth="251.0" text="Top Contributeurs">
+            <font>
+                <Font name="Arial Bold" size="14.0" />
+            </font>
+            <VBox.margin>
+                <Insets bottom="15.0" left="130.0" top="30.0" />
+            </VBox.margin>
+        </Label>
+        <HBox prefHeight="100.0" prefWidth="200.0">
+            <children>
+                <VBox prefHeight="100.0" prefWidth="100.0">
+                    <children>
+                        <ImageView fx:id="firstContributor" fitHeight="70.0" fitWidth="70.0">
+                            <image>
+
+                            </image>
+                        </ImageView>
+                        <Label fx:id="firstContributorName" alignment="CENTER_RIGHT" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="16.0" prefWidth="60.0" wrapText="true">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                    <padding>
+                        <Insets left="10.0" right="10.0" />
+                    </padding>
+                </VBox>
+                <VBox prefHeight="146.0" prefWidth="100.0">
+                    <children>
+                        <ImageView fx:id="secondContributor" fitHeight="70.0" fitWidth="70.0">
+                            <image>
+
+                            </image>
+                        </ImageView>
+                        <Label fx:id="secondContributorName" alignment="CENTER_RIGHT" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="16.0" prefWidth="62.0">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                    <HBox.margin>
+                        <Insets />
+                    </HBox.margin>
+                    <padding>
+                        <Insets left="10.0" right="10.0" />
+                    </padding>
+                </VBox>
+                <VBox prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <ImageView fx:id="thirdContributor" fitHeight="70.0" fitWidth="70.0">
+                            <image>
+
+                            </image>
+                        </ImageView>
+                        <Label fx:id="thirdContributorName" alignment="CENTER_RIGHT" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="16.0" prefWidth="54.0">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                    <padding>
+                        <Insets left="10.0" right="10.0" />
+                    </padding>
+                </VBox>
+                <VBox prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <ImageView fx:id="fourContributor" fitHeight="70.0" fitWidth="70.0">
+                            <image>
+
+                            </image>
+                        </ImageView>
+                        <Label fx:id="fourContributorName" alignment="CENTER_RIGHT" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="16.0" prefWidth="58.0">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                    <padding>
+                        <Insets left="10.0" right="10.0" />
+                    </padding>
+                </VBox>
+                <VBox prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <ImageView fx:id="fiveContributor" fitHeight="70.0" fitWidth="70.0">
+                            <image>
+
+                            </image>
+                        </ImageView>
+                        <Label fx:id="fiveContributorName" alignment="CENTER_RIGHT" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="16.0" prefWidth="62.0">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                    <padding>
+                        <Insets left="10.0" right="10.0" />
+                    </padding>
+                </VBox>
+            </children>
+            <VBox.margin>
+                <Insets left="50.0" right="50.0" top="10.0" />
+            </VBox.margin>
+        </HBox>
+        <Label fx:id="label1111" alignment="CENTER_RIGHT" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="21.0" prefWidth="251.0" text="Copyright © 2024, esiee-it. All rights reserved" VBox.vgrow="NEVER">
+            <font>
+                <Font name="Arial Bold" size="10.0" />
+            </font>
+            <VBox.margin>
+                <Insets bottom="20.0" left="340.0" top="50.0" />
+            </VBox.margin>
+        </Label>
+    </children>
+</VBox>

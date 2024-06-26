@@ -4,6 +4,7 @@ target/
 !**/src/test/**/target/
 .gitlab-ci.yml
 README.md
+livres.xml
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
@@ -37,3 +38,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+src/test/java/fr/openjava/gestionbibliothequejavafx/DAO/AuteurDAOTest.java
+src/test/java/fr/openjava/gestionbibliothequejavafx/DAO/ConnexionTest.java
+src/test/java/fr/openjava/gestionbibliothequejavafx/DAO/UserDAOTest.java

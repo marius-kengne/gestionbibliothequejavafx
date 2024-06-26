@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bibliotheque>
+    <livre>
+        <titre>Les Misérables</titre>
+        <auteur>
+            <nom>Hugo</nom>
+            <prenom>Victor</prenom>
+        </auteur>
+        <presentation>Un chef-d'œuvre de la littérature française</presentation>
+        <parution>1862</parution>
+        <colonne>3</colonne>
+        <rangee>7</rangee>
+        <image>https://cdn.discordapp.com/attachments/1197836120893956197/1252570981520637992/a07deeb8eecc68b43e0f20210d32bc80.jpeg?ex=6672b321&amp;is=667161a1&amp;hm=aa960fd6f8bb89a5d229ea315f18bc80b551d81b94b79472c9c1fff5d0bc0d6e&amp;</image>
+    </livre>
+    <livre>
+        <titre>To Kill a Mockingbird</titre>
+        <auteur>
+            <nom>Lee</nom>
+            <prenom>Harper</prenom>
+        </auteur>
+        <presentation>Un roman sur la ségrégation raciale dans le sud des États-Unis</presentation>
+        <parution>1960</parution>
+        <colonne>2</colonne>
+        <rangee>5</rangee>
+        <image>https://cdn.discordapp.com/attachments/1197836120893956197/1252570981520637992/a07deeb8eecc68b43e0f20210d32bc80.jpeg?ex=6672b321&amp;is=667161a1&amp;hm=aa960fd6f8bb8ga5d229ea315f18bc80b551d81b94b79472c9c1fff5d0bc0d6e&amp;</image>
+    </livre>
+    <livre>
+        <titre>1984</titre>
+        <auteur>
+            <nom>Orwell</nom>
+            <prenom>George</prenom>
+        </auteur>
+        <presentation>Un dystopie sur un régime totalitaire</presentation>
+        <parution>1949</parution>
+        <colonne>4</colonne>
+        <rangee>3</rangee>
+        <image>https://cdn.discordapp.com/attachments/1197836120893956197/1252574756985770035/Capture_decran_du_2023-10-27_16-09-38.png?ex=6672b6a5&amp;is=66716525&amp;hm=e5ef24232f5df2490a98bc2e21bee0dcf78ff4dcffd4f1dae709bf242e9c3d4e&amp;</image>
+    </livre>
+    <livre>
+        <titre>Le Petit Prince</titre>
+        <auteur>
+            <nom>de Saint-Exupéry</nom>
+            <prenom>Antoine</prenom>
+        </auteur>
+        <presentation>Un conte poétique et philosophique</presentation>
+        <parution>1943</parution>
+        <colonne>6</colonne>
+        <rangee>2</rangee>
+    </livre>
+    <livre>
+        <titre>Moby Dick</titre>
+        <auteur>
+            <nom>Melville</nom>
+            <prenom>Herman</prenom>
+        </auteur>
+        <presentation>Une histoire épique de la chasse à la baleine</presentation>
+        <parution>1851</parution>
+        <colonne>7</colonne>
+        <rangee>1</rangee>
+    </livre>
+    <livre>
+        <titre>Pride and Prejudice</titre>
+        <auteur>
+            <nom>Austen</nom>
+            <prenom>Jane</prenom>
+        </auteur>
+        <presentation>Un roman sur les mœurs de la bourgeoisie anglaise</presentation>
+        <parution>1813</parution>
+        <colonne>5</colonne>
+        <rangee>4</rangee>
+    </livre>
+    <livre>
+        <titre>The Great Gatsby</titre>
+        <auteur>
+            <nom>Fitzgerald</nom>
+            <prenom>F. Scott</prenom>
+        </auteur>
+        <presentation>Une critique de l'American Dream</presentation>
+        <parution>1925</parution>
+        <colonne>1</colonne>
+        <rangee>6</rangee>
+    </livre>
+</bibliotheque>
