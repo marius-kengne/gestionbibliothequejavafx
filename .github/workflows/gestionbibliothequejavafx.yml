@@ -45,3 +45,18 @@ jobs:
         with:
           name: javadoc
           path: target/site/apidocs
+
+      - name: SonarQube Scan
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn sonar:sonar
+
+      - name: Generate SBOM
+        run: mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v2
+        with:
+          name: sbom
+          path: target/*.bom.xml
