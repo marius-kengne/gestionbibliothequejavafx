@@ -6,11 +6,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe DAO pour gérer les opérations de base de données liées aux auteurs.
  */
 public class AuteurDAO {
+
+    private static final Logger logger = Logger.getLogger(AuteurDAO.class.getName());
 
     private static final String INSERT_AUTEUR_SQL = "INSERT INTO auteurs (nom, prenom) VALUES (?, ?)";
     private static final String SELECT_AUTEUR_SQL = "SELECT * FROM auteurs WHERE nom = ? AND prenom = ?";
@@ -40,11 +44,11 @@ public class AuteurDAO {
             int affectedRows = result.executeUpdate();
 
             if (affectedRows > 0) {
-                System.out.println("Auteur créé avec succès!");
+                logger.info("Auteur créé avec succès!");
                 return auteur;
             }
         } catch (SQLException ex) {
-            System.err.println("Erreur lors de la création de l'auteur: " + ex.getMessage());
+            logger.log(Level.SEVERE, "Erreur lors de la création de l'auteur: ", ex.getMessage());
         }
 
         return null;
@@ -67,14 +71,14 @@ public class AuteurDAO {
                     Auteur auteur = new Auteur();
                     auteur.setNom(rs.getString("nom"));
                     auteur.setPrenom(rs.getString("prenom"));
-                    System.out.println("Auteur trouvé avec succès!");
+                    logger.info("Auteur trouvé avec succès!");
                     return auteur;
                 } else {
-                    System.out.println("Auteur inexistant.");
+                    logger.info("Auteur inexistant.");
                 }
             }
         } catch (SQLException ex) {
-            System.err.println("Erreur lors de la recherche de l'auteur: " + ex.getMessage());
+            logger.log(Level.SEVERE, "Erreur lors de la recherche de l'auteur: ", ex.getMessage());
         }
 
         return null;
@@ -94,14 +98,13 @@ public class AuteurDAO {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    System.out.println("Auteur trouvé avec succès!");
                     return rs.getInt("id");
                 } else {
-                    System.out.println("Auteur inexistant.");
+                    logger.info("Auteur inexistant");
                 }
             }
         } catch (SQLException ex) {
-            System.err.println("Erreur lors de la recherche de l'auteur: " + ex.getMessage());
+            logger.log(Level.SEVERE, "Erreur lors de la recherche de l'auteur: ", ex.getMessage());
         }
 
         return null;

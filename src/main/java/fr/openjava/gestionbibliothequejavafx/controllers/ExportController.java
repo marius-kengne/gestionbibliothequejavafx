@@ -15,12 +15,15 @@ import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Contrôleur pour l'exportation des livres vers un fichier Word.
  */
 public class ExportController {
     private List<Bibliotheque.Livre> listLivres;
+    private static final Logger logger = Logger.getLogger(ExportController.class.getName());
 
     /**
      * Constructeur de la classe ExportController.
@@ -35,10 +38,9 @@ public class ExportController {
      * Exporte la liste des livres vers un fichier Word.
      */
     public void exportToWord() {
-        System.out.println("here");
 
         if (listLivres == null || listLivres.isEmpty()) {
-            System.out.println("Erreur: le tableau des livres est vide.");
+            logger.info("Erreur: le tableau des livres est vide.");
             return;
         }
 
@@ -153,9 +155,9 @@ public class ExportController {
                 }
 
                 document.write(out);
-                System.out.println("Fichier Word exporté avec succès !");
+                logger.info("Fichier Word exporté avec succès !");
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Erreur lors du chargement de la vue " + e);
             }
         }
     }

@@ -53,10 +53,7 @@ public class ModeController {
      */
     private void redirectToHome(ActionEvent event) {
         try {
-            // Enregistre le mode sélectionné dans une variable statique de BibliothequeController pour une utilisation ultérieure
             BibliothequeController.setMode(selectedMode);
-
-            // Charge la page d'accueil
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/home.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 800, 850);

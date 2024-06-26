@@ -1,20 +1,11 @@
 package fr.openjava.gestionbibliothequejavafx;
 
-import fr.openjava.gestionbibliothequejavafx.DAO.Connexion;
-import fr.openjava.gestionbibliothequejavafx.DAO.UserDAO;
-import fr.openjava.gestionbibliothequejavafx.models.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.util.Properties;
 
 
 /**
@@ -42,7 +33,6 @@ public class GestionBibliothequeJavaFX extends Application {
      * @param args les arguments de la ligne de commande (non utilisés ici)
      */
     public static void main(String[] args) {
-        //launch();
         Application.launch(GestionBibliothequeJavaFX.class);
     }
 
@@ -55,7 +45,6 @@ public class GestionBibliothequeJavaFX extends Application {
      */
 
     public void loginPage(Stage stage) throws IOException {
-
        FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 770, 450);
         stage.setTitle("Gestionnaire de la Bibliothèque");

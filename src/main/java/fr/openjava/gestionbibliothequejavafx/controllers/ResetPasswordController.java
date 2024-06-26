@@ -27,15 +27,15 @@ public class ResetPasswordController {
     @FXML
     private Label statusLabel;
 
-    private UserDAO userDAO;
-    private final Connection connexion = Connexion.initConnexion(new Properties());
+    private final UserDAO userDAO;
 
     public ResetPasswordController() {
+        Connection connexion = Connexion.initConnexion(new Properties());
         userDAO = new UserDAO(connexion);
     }
 
     @FXML
-    protected void onResetPasswordButtonClicked(ActionEvent event) {
+    protected void onResetPasswordButtonClicked() {
         String email = emailField.getText();
         String newPassword = newPasswordField.getText();
 

@@ -4,7 +4,6 @@ import fr.openjava.gestionbibliothequejavafx.DAO.Connexion;
 import fr.openjava.gestionbibliothequejavafx.DAO.UserDAO;
 import fr.openjava.gestionbibliothequejavafx.GestionBibliothequeJavaFX;
 import fr.openjava.gestionbibliothequejavafx.models.User;
-import fr.openjava.gestionbibliothequejavafx.utils.Utilities;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

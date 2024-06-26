@@ -1031,7 +1031,7 @@ public class BibliothequeController {
         if (file != null) {
             try (XWPFDocument document = new XWPFDocument();
                  FileOutputStream out = new FileOutputStream(file)) {
-                /** * Entête du document */
+
                 XWPFHeader header = document.createHeader(HeaderFooterType.DEFAULT);
                 XWPFParagraph headerParagraph = header.createParagraph();
                 XWPFRun headerRun = headerParagraph.createRun();
@@ -1040,7 +1040,6 @@ public class BibliothequeController {
                 Date exportDate = new Date();
                 headerRun.setText("Entête du document - Date d'exportation : " + dateFormat.format(exportDate));
 
-                /** * Titre du document */
                 XWPFParagraph titleParagraph = document.createParagraph();
                 titleParagraph.setAlignment(ParagraphAlignment.CENTER);
                 XWPFRun titleRun = titleParagraph.createRun();
@@ -1048,7 +1047,6 @@ public class BibliothequeController {
                 titleRun.setFontSize(16);
                 titleRun.setText("Bienvenue dans notre Gestionnaire de Bibliothèque. Nous vous présentons nore sommaire.");
 
-                /** * Ajout d'une page de garde */
                 document.createParagraph().createRun().addBreak();
                 XWPFParagraph coverPageParagraph = document.createParagraph();
                 coverPageParagraph.setAlignment(ParagraphAlignment.CENTER);
@@ -1057,7 +1055,6 @@ public class BibliothequeController {
                 coverPageRun.setFontSize(16);
                 coverPageRun.setText("Sommaire");
 
-                /** * Sommaire des livres */
                 document.createParagraph().createRun().addBreak();
                 XWPFParagraph tableOfContentParagraph = document.createParagraph();
                 XWPFRun tableOfContentRun = tableOfContentParagraph.createRun();
@@ -1066,7 +1063,6 @@ public class BibliothequeController {
                 tableOfContentRun.setText("La liste des livres de notre Bibliothèque:");
 
 
-                /** * Données des livres de la TableView */
                 ObservableList<Bibliotheque.Livre> livres = tableView.getItems();
                 XWPFTable gridPaneTable = document.createTable();
                 for (Bibliotheque.Livre livre : livres) {
@@ -1082,9 +1078,8 @@ public class BibliothequeController {
                     cell.setText(bookData);
                 }
 
-                /** * Enregistrer le document */
                 document.write(out);
-                System.out.println("Fichier Word exporté avec succès !");
+                logger.info("Fichier Word exporté avec succès !");
             } catch (IOException e) {
                 logger.log(Level.SEVERE, "Erreur :", e);
             }
@@ -1094,10 +1089,8 @@ public class BibliothequeController {
     /**
      >>>>>>> 6114c6de1078b930d89b9b52760e139140c3bc37
      * méthode pour quitter l'application
-     *
-     * @param event l'événement déclenché
      */
-    public void quitApplication(ActionEvent event){
+    public void quitApplication(){
         allCurrentLivre.clear();
         System.exit(0);
     }
@@ -1106,16 +1099,14 @@ public class BibliothequeController {
      *  Méthode pour afficher les informations de l'application
      */
     @FXML
-    private void aboutAppplication(ActionEvent event){
+    private void aboutAppplication(){
         AboutController.display();
     }
 
     /**
      * Methode pour afficher la fonctionnalité Export avec le sommaire
-     *
-     * @param event l'événement déclenché
      */
-    public void ExportWordFile( ActionEvent event){
+    public void ExportWordFile(){
         ExportController exportController = new ExportController(allCurrentLivre);
         exportController.exportToWord();
     }
@@ -1140,8 +1131,6 @@ public class BibliothequeController {
 
     /**
      * Methode pour gérer les enregistrement en mode Local
-     * @throws JAXBException
-     * @throws SQLException
      */
     public void localconnectsync() {
 
@@ -1193,7 +1182,6 @@ public class BibliothequeController {
                         }
                     }
                 }catch(Exception e){
-                    System.out.println("echec de la vérification de la lise des éléments:\n->"+e);
                     logger.info("echec de la vérification de la lise des éléments:\n->"+e);
                 }
             }
@@ -1244,7 +1232,8 @@ public class BibliothequeController {
                 try(PreparedStatement result = conn.prepareStatement(query)) {
                     try (ResultSet rs=result.executeQuery()) {
                         Object[]verif= new Object[9];int i=0;
-                        System.out.println("Livre à ajouter :\n"+data.toString().replace("Infos du Livre : ",""));
+
+                        logger.info("Livre à ajouter :\n"+data.toString().replace("Infos du Livre : ",""));
                         for(String livre:data.toString().replace("Infos du Livre : ","").split(",")){verif[i]=livre.split("=")[1];i++;}
                         while(true){
                             if (rs.next()) {
@@ -1267,11 +1256,14 @@ public class BibliothequeController {
                                                 verif[7].equals(idresult[8])&&
                                                 verif[8].equals(idresult[9])
                                 ){valid=false;}
-                            }else{System.out.println("vérification du livre terminé!");break;}
+                            }else{break;
+                            }
                         }
-                        if(valid){bdao.save(data,data.getAuteur());}else{System.out.println("livre déjà existant!");}
+                        if(valid){bdao.save(data,data.getAuteur());}else{
+                            logger.info("livre déjà existant!");
+                        }
                     }
-                }catch(Exception e){System.out.println("echec de la vérification de la lise des éléments:\n->"+e);}
+                }catch(Exception e){logger.info("echec de la vérification de la lise des éléments:\n->"+e);}
             }
 
             try {
