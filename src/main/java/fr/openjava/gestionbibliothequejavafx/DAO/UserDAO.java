@@ -125,4 +125,31 @@ public class UserDAO {
         return false;
     }
 
+
+
+    /**
+     * Modifie le mot de passe d'un utilisateur de la base de données en fonction de son login et son nouveau de passe.
+     *
+     * @param login le login de l'utilisateur
+     * @param newPassword nouveau mot de passe de l'utilisateur
+     * @return true si l'utilisateur est supprimé avec succès, sinon false
+     */
+    public boolean updatePassword(String login, String newPassword) {
+        String sql = "UPDATE users SET password = ? WHERE login = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, newPassword);
+            pstmt.setString(2, login);
+
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+
+        return false;
+    }
+
 }

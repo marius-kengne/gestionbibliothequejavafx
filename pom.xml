@@ -15,6 +15,7 @@
         <sonar.projectKey>marius-kengne_gestionbibliothequejavafx</sonar.projectKey>
         <sonar.organization>marius-kengne</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.login>${env.SONAR_TOKEN}</sonar.login>
     </properties>
 
     <dependencies>
@@ -66,6 +67,12 @@
             <version>8.0.33</version>
         </dependency>
         <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
             <version>3.7.0</version>
@@ -114,6 +121,13 @@
             <artifactId>powermock-api-mockito2</artifactId>
             <version>2.0.9</version>
             <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.cyclonedx</groupId>
+            <artifactId>cyclonedx-maven-plugin</artifactId>
+            <version>2.7.9</version>
         </dependency>
     </dependencies>
 
@@ -179,6 +193,20 @@
                 </executions>
             </plugin>
 
+
+            <plugin>
+                <groupId>org.cyclonedx</groupId>
+                <artifactId>cyclonedx-maven-plugin</artifactId>
+                <version>2.7.9</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>makeAggregateBom</goal>
+                        </goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>

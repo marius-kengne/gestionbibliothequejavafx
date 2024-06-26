@@ -95,5 +95,12 @@ public class LoginController {
     }
 
 
-}
+    @FXML
+    protected void onForgotPasswordButtonClicked(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/forgot_password.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+    }
 
+}
