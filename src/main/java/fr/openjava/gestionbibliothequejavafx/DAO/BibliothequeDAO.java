@@ -4,6 +4,7 @@ import fr.openjava.gestionbibliothequejavafx.models.generated.Bibliotheque;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -13,7 +14,10 @@ public class BibliothequeDAO {
 
     private final Connection conn;
 
-    // Ajout d'un constructeur pour permettre l'injection de connexion
+    /**
+     * Ajout d'un constructeur pour permettre l'injection de connexion
+     * @param conn objet connection pour l'interaction avec la BD
+      */
     public BibliothequeDAO(Connection conn) {
         this.conn = conn;
     }
@@ -34,9 +38,27 @@ public class BibliothequeDAO {
 
             Bibliotheque.Livre.Auteur currentAuteur = new AuteurDAO(conn).save(auteur);
 
+            String query2 = "SELECT id FROM `auteurs` WHERE `prenom` LIKE ? AND `nom` LIKE ?";
+            int idresult = 0;
+            try (PreparedStatement result2 = conn.prepareStatement(query2)) {
+                result2.setString(1, "%" + currentAuteur.getPrenom() + "%");
+                result2.setString(2, "%" + currentAuteur.getNom() + "%");
+                try (ResultSet rs = result2.executeQuery()) {
+                    if (rs.next()) {
+                        idresult = rs.getInt("id");
+                        System.out.println("Check auteur successfully! ID: " + idresult);
+                    } else {
+                        System.out.println("Check auteur null!");
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Error for the check auteur!\n" + e);
+            }
+
             if (currentAuteur != null){
                 result.setString(1, livre.getTitre());
-                result.setString(2, livre.getAuteur().getNom() + " " +livre.getAuteur().getPrenom());
+                //result.setString(2, livre.getAuteur().getNom() + " " +livre.getAuteur().getPrenom());
+                result.setString(2, ""+idresult);
                 result.setString(3, livre.getPresentation());
                 result.setInt(4, livre.getParution());
                 result.setInt(5, livre.getColonne());

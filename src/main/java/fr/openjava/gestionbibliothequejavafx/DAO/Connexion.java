@@ -15,7 +15,7 @@ public class Connexion {
     /**
      * Initialise une connexion à la base de données en utilisant les paramètres
      * de configuration définis dans le fichier 'conf.properties'.
-     *
+     * @param props fichier de configuration
      * @return une connexion à la base de données, ou null si la connexion échoue
      */
     public static Connection initConnexion(Properties props){
@@ -37,8 +37,6 @@ public class Connexion {
         String url = props.getProperty("jdbc.url");
         String login = props.getProperty("jdbc.login");
         String password = props.getProperty("jdbc.password");
-
-        System.out.println("### url : "+ url + " ### login : " + login + "### password : "+password);
 
         try {
             conn = DriverManager.getConnection(url, login, password);

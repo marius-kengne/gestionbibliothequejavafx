@@ -17,7 +17,6 @@ import java.util.Properties;
  * Classe principale de l'application GestionBibliothequeJavaFX.
  * Cette classe étend Application et gère le démarrage de l'application ainsi que l'affichage de la page de connexion.
  */
-
 public class GestionBibliothequeJavaFX extends Application {
 
     /**
@@ -68,4 +67,5 @@ public class GestionBibliothequeJavaFX extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
 }

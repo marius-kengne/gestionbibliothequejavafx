@@ -33,16 +33,14 @@ public class LoginController {
     private String selectedRole;
     private final Connection connexion = Connexion.initConnexion(new Properties());
 
+    @FXML
+    private Label statusLabel;
     /**
      * Méthode appelée lorsque le bouton de connexion est cliqué.
      *
      * @param event l'événement déclenché par le clic sur le bouton de connexion
      * @throws IOException si une erreur d'entrée/sortie se produit
      */
-    @FXML
-    private Label statusLabel;
-
-    @FXML
     protected void onLoginButtonClicked(ActionEvent event) throws IOException {
         String login = usernameField.getText();
         String password = passwordField.getText();
@@ -86,6 +84,11 @@ public class LoginController {
     }
 
 
+    /**
+     * Gestion du click sur le bouton création de compte
+     * @param event
+     * @throws IOException
+     */
     @FXML
     protected void onRegisterButtonClicked(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/register.fxml"));
@@ -95,6 +98,11 @@ public class LoginController {
     }
 
 
+    /**
+     * Gestion du click sur le bouton réinitialisation de mot de passe
+     * @param event gerer les évènements
+     * @throws IOException
+     */
     @FXML
     protected void onForgotPasswordButtonClicked(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(GestionBibliothequeJavaFX.class.getResource("views/forgot_password.fxml"));

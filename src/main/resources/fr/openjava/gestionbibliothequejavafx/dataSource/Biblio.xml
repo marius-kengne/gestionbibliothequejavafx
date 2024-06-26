@@ -1,59 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <bibliotheque>
     <livre>
-        <titre>XSD pour les nuls</titre>
-        <auteur>
-            <nom>Dupond</nom>
-            <prenom>Jean</prenom>
-        </auteur>
-        <presentation>Ce livre est une introduction au schema XSD</presentation>
-        <parution>2000</parution>
-        <colonne>5</colonne>
-        <rangee>2</rangee>
-        <image>https://www.bod.fr/fileadmin/_processed_/8/b/csm_FR-0021-KT-PB_b6094c5aec.jpg</image>
-        <resume>mauvais livre</resume>
-        <status>disponible</status>
-    </livre>
-    <livre>
         <titre>marius</titre>
         <auteur>
-            <nom>tresor</nom>
-            <prenom>oliver</prenom>
+            <nom>marie</nom>
+            <prenom>detien</prenom>
         </auteur>
-        <presentation>Ce livre est une introduction au schema XSD</presentation>
-        <parution>1925</parution>
+        <presentation>maths</presentation>
+        <parution>2021</parution>
         <colonne>2</colonne>
-        <rangee>3</rangee>
-        <image>https://d19rpgkrjeba2z.cloudfront.net/static/images/business/topic-cover/personal-care.png</image>
-        <resume>moyens livre</resume>
-        <status>disponible</status>
-    </livre>
-    <livre>
-        <titre>tresor</titre>
-        <auteur>
-            <nom>lola</nom>
-            <prenom>oliver</prenom>
-        </auteur>
-        <presentation>Ce livre est une introduction au schema XSD</presentation>
-        <parution>2000</parution>
-        <colonne>3</colonne>
-        <rangee>3</rangee>
-        <image>https://www.bod.fr/fileadmin/_processed_/2/0/csm_FR-easyCover_Roman-modern-1_d65ba05c25.jpg</image>
-        <resume>bon livre</resume>
-        <status>indisponible</status>
-    </livre>
-    <livre>
-        <titre>INTO THE BADLAND</titre>
-        <auteur>
-            <nom>test</nom>
-            <prenom>test</prenom>
-        </auteur>
-        <presentation>Serie de fou</presentation>
-        <parution>2024</parution>
-        <colonne>3</colonne>
-        <rangee>3</rangee>
-        <image>https://www.bod.fr/fileadmin/_processed_/2/0/csm_FR-easyCover_Roman-modern-1_d65ba05c25.jpg</image>
-        <resume>test de création</resume>
+        <rangee>1</rangee>
+        <resume>test bienvenu</resume>
         <status>indisponible</status>
     </livre>
 </bibliotheque>

@@ -1,35 +1,41 @@
 package fr.openjava.gestionbibliothequejavafx.controllers;
 
+import fr.openjava.gestionbibliothequejavafx.DAO.BibliothequeDAO;
+import fr.openjava.gestionbibliothequejavafx.DAO.Connexion;
+import fr.openjava.gestionbibliothequejavafx.GestionBibliothequeJavaFX;
 import fr.openjava.gestionbibliothequejavafx.models.generated.ObjectFactory;
 import fr.openjava.gestionbibliothequejavafx.utils.Utilities;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+
 import fr.openjava.gestionbibliothequejavafx.models.generated.Bibliotheque;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+
 import javafx.stage.Stage;
 
 import javax.xml.bind.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
 import javafx.stage.FileChooser;
-import java.util.Date;
 import org.apache.poi.wp.usermodel.HeaderFooterType;
 import org.apache.poi.xwpf.usermodel.*;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 /**
  * Cette classe de controller permet de gérer toutes les fonctionnalités de notre application
@@ -111,7 +117,7 @@ public class BibliothequeController {
 
     private static String mode = "";
     private static String role = "";
-
+    private final Connection connexion = Connexion.initConnexion(new Properties());
     /**
      * Définit le mode actuel.
      *
@@ -155,12 +161,65 @@ public class BibliothequeController {
     @FXML
     private Label roleLabel;
 
+
+    @FXML
+    private GridPane editgridpane;
+    @FXML
+    private HBox bteditandsupr;
+    @FXML
+    private Label addnewbook;
+    @FXML
+    private Menu editionmenu;
+
+    @FXML
+    public boolean hide(){
+        boolean stt=true;
+        try {
+            try {
+                editgridpane.setVisible(false);
+                editgridpane.setManaged(false);
+                stt=stt&editgridpane.isVisible()&&editgridpane.isManaged();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            try {
+                bteditandsupr.setVisible(false);
+                bteditandsupr.setManaged(false);
+                stt=stt&bteditandsupr.isVisible()&&bteditandsupr.isManaged();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            try {
+                addnewbook.setVisible(false);
+                addnewbook.setManaged(false);
+                stt=stt&addnewbook.isVisible()&&addnewbook.isManaged();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            try {
+                editionmenu.setVisible(false);
+                stt=stt&editionmenu.isVisible();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } catch (Exception e) {
+            System.out.println("editgridpane:"+editgridpane.isVisible()+" | "+editgridpane.isManaged());
+            System.out.println("bteditandsupr:"+bteditandsupr.isVisible()+" | "+bteditandsupr.isManaged());
+            System.out.println("addnewbook:"+addnewbook.isVisible()+" | "+addnewbook.isManaged());
+            System.out.println("editionmenu:"+editionmenu.isVisible());
+            System.out.println("erreur:"+e);
+        }
+        return stt;
+    }
+
     /**
      * Constructeur par défaut de BibliothequeController.
      */
     public BibliothequeController(){
         System.out.println("################## Lancement");
-        System.out.println("******************* Role user : " + getRole());
+        if(getRole().equals("admin")){System.out.println("in admin");} else {
+            System.out.println("not in admin");
+        }
     }
 
     /**
@@ -209,6 +268,8 @@ public class BibliothequeController {
                 handleSelection(status);
             });
         }
+
+        if(!getRole().equals("admin")){System.out.println((!hide())?("les éléments sont masqués"):("les éléments ne sont pas masqués"));}
     }
 
     // Méthode pour gérer la sélection
@@ -307,6 +368,69 @@ public class BibliothequeController {
 
 
     /**
+     * Methode pour gérer les enregistrement en mode Local
+     * @throws JAXBException
+     */
+    public void localconnectsync() throws JAXBException {
+
+        if(getMode().equals("local")){
+
+            BibliothequeDAO bdao = new BibliothequeDAO(connexion);
+
+            //addLivreToXML();
+
+            for(Bibliotheque.Livre livres:allCurrentLivre){
+
+                System.out.println("1-------------------------------------------------------");
+
+                Bibliotheque.Livre data = livres;
+
+                for (String livre : data.toString().replace("Infos du Livre : ","").split(",")) {
+                    System.out.println(livre.split("=")[0].replace(" ","")+" => "+livre.split("=")[1]);
+                }
+
+                bdao.save(data,data.getAuteur());
+
+                System.out.println("2-------------------------------------------------------");
+
+            }
+
+        }else if(getMode().equals("connected")){
+
+            addLivreToXML();
+
+        }
+
+        /*
+                if(getMode().equals("local")){
+
+            for(Bibliotheque.Livre livres:allCurrentLivre) {
+                for (String livre : livres.toString().replace("Infos du Livre : ", "").split(",")) {
+                    //bdao.save(livre,livre.getAuteur());
+                    System.out.print(livre + " | ");
+                }
+                System.out.println("");
+            }
+
+            BibliothequeDAO bdao = new BibliothequeDAO();
+            if (tableView.getItems() == null || tableView.getItems().isEmpty()) {
+                System.out.println("Erreur: le tableau des livres est vide.");
+                return;
+            }
+            for (Bibliotheque.Livre livre : tableView.getItems()) {
+                bdao.save(livre,livre.getAuteur());
+            }
+
+        }else if(getMode().equals("connected")){
+
+            addLivreToXML();
+
+        }
+         */
+
+    }
+
+    /**
      * Méthode pour importer un fichier contenant les livres dans l'application
      *
      * @throws JAXBException si une erreur survient lors de la manipulation XML
@@ -342,6 +466,7 @@ public class BibliothequeController {
                 livres.addAll(bibliotheque.getLivre());
                 allCurrentLivre.clear();
                 allCurrentLivre.addAll(livres);
+                System.out.println("################### import livre  :  " +allCurrentLivre);
                 tableView.setItems(livres);
                 Utilities.showAlertSuccess("Confirmation", "Fichier importer avec success");
             } catch (JAXBException e) {
@@ -356,7 +481,7 @@ public class BibliothequeController {
 
     /**
      * Retourne une liste observable de livres.
-     *
+     * @param filePath fichier xml
      * @return la liste des livres dans une collection observable
      */
     public ObservableList<Bibliotheque.Livre> getLivresInXML(String filePath) {
@@ -548,9 +673,9 @@ public class BibliothequeController {
             while (iterator.hasNext()) {
                 Bibliotheque.Livre e = iterator.next();
                 if (e.getTitre().equalsIgnoreCase(currentLivre.getTitre())
-                        && e.getAuteur().getNom().equalsIgnoreCase(currentLivre.getAuteur().getNom())
-                        && e.getAuteur().getPrenom().equals(currentLivre.getAuteur().getPrenom())
-                        && e.getParution() == currentLivre.getParution()) {
+                  && e.getAuteur().getNom().equalsIgnoreCase(currentLivre.getAuteur().getNom())
+                  && e.getAuteur().getPrenom().equals(currentLivre.getAuteur().getPrenom())
+                  && e.getParution() == currentLivre.getParution()) {
                     iterator.remove();
                 }else {
                     System.out.println("################## currentLivre : " + e.toString());
@@ -593,9 +718,9 @@ public class BibliothequeController {
                 while (iterator.hasNext()) {
                     Bibliotheque.Livre e = iterator.next();
                     if ((e.getTitre().equalsIgnoreCase(thelivre.getTitre())
-                            && e.getAuteur().getNom().equalsIgnoreCase(thelivre.getAuteur().getNom())
-                            && e.getAuteur().getPrenom().equals(thelivre.getAuteur().getPrenom())
-                            && e.getParution() == thelivre.getParution())) {
+                      && e.getAuteur().getNom().equalsIgnoreCase(thelivre.getAuteur().getNom())
+                      && e.getAuteur().getPrenom().equals(thelivre.getAuteur().getPrenom())
+                      && e.getParution() == thelivre.getParution())) {
 
                         System.out.println("################## le livre existe déjà : " + e.toString());
 
@@ -702,7 +827,7 @@ public class BibliothequeController {
 
             // Créer un nouvel objet Livre et l'ajouter dans le tableau
 
-            if (! imageTextArea.getText().isEmpty()){
+            if (imageTextArea.getText() != null && ! imageTextArea.getText().isEmpty()){
                 currentLivre.setImage(imageTextArea.getText());
             }
             currentLivre.setTitre(titre);
@@ -738,9 +863,9 @@ public class BibliothequeController {
             while (iterator.hasNext()) {
                 Bibliotheque.Livre e = iterator.next();
                 if ((e.getTitre().equalsIgnoreCase(currentLivre.getTitre())
-                        && e.getAuteur().getNom().equalsIgnoreCase(currentLivre.getAuteur().getNom())
-                        && e.getAuteur().getPrenom().equals(currentLivre.getAuteur().getPrenom())
-                        && e.getParution() == currentLivre.getParution())) {
+                  && e.getAuteur().getNom().equalsIgnoreCase(currentLivre.getAuteur().getNom())
+                  && e.getAuteur().getPrenom().equals(currentLivre.getAuteur().getPrenom())
+                  && e.getParution() == currentLivre.getParution())) {
                     copyAllCurrentLivre.add(currentLivre);
                 } else {
                     copyAllCurrentLivre.add(e);
@@ -837,9 +962,9 @@ public class BibliothequeController {
                 while (iterator.hasNext()) {
                     Bibliotheque.Livre e = iterator.next();
                     if ((e.getTitre().equalsIgnoreCase(thelivre.getTitre())
-                            && e.getAuteur().getNom().equalsIgnoreCase(thelivre.getAuteur().getNom())
-                            && e.getAuteur().getPrenom().equals(thelivre.getAuteur().getPrenom())
-                            && e.getParution() == thelivre.getParution())) {
+                      && e.getAuteur().getNom().equalsIgnoreCase(thelivre.getAuteur().getNom())
+                      && e.getAuteur().getPrenom().equals(thelivre.getAuteur().getPrenom())
+                      && e.getParution() == thelivre.getParution())) {
 
                         System.out.println("################## le livre existe déjà : " + e.toString());
                         iterator2.remove();
@@ -867,6 +992,84 @@ public class BibliothequeController {
 
 
     /**
+     * Méthode pour exporter les données dans un fichier Word.
+     */
+    public void ExportWordFileOld(){
+        if (tableView == null) {
+            System.out.println(("Erreur: le tableau des livres est vide."));
+        }
+
+        Stage stage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Veuillez le dossier pour enregistrer votre fichier");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier Word", "*.docx"));
+        File file = fileChooser.showSaveDialog(null);
+
+        if (file != null) {
+            try (XWPFDocument document = new XWPFDocument();
+                 FileOutputStream out = new FileOutputStream(file)) {
+                /** * Entête du document */
+                XWPFHeader header = document.createHeader(HeaderFooterType.DEFAULT);
+                XWPFParagraph headerParagraph = header.createParagraph();
+                XWPFRun headerRun = headerParagraph.createRun();
+                //headerRun.setText("Entête");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date exportDate = new Date();
+                headerRun.setText("Entête du document - Date d'exportation : " + dateFormat.format(exportDate));
+
+                /** * Titre du document */
+                XWPFParagraph titleParagraph = document.createParagraph();
+                titleParagraph.setAlignment(ParagraphAlignment.CENTER);
+                XWPFRun titleRun = titleParagraph.createRun();
+                titleRun.setBold(true);
+                titleRun.setFontSize(16);
+                titleRun.setText("Bienvenue dans notre Gestionnaire de Bibliothèque. Nous vous présentons nore sommaire.");
+
+                /** * Ajout d'une page de garde */
+                document.createParagraph().createRun().addBreak();
+                XWPFParagraph coverPageParagraph = document.createParagraph();
+                coverPageParagraph.setAlignment(ParagraphAlignment.CENTER);
+                XWPFRun coverPageRun = coverPageParagraph.createRun();
+                coverPageRun.setBold(true);
+                coverPageRun.setFontSize(16);
+                coverPageRun.setText("Sommaire");
+
+                /** * Sommaire des livres */
+                document.createParagraph().createRun().addBreak();
+                XWPFParagraph tableOfContentParagraph = document.createParagraph();
+                XWPFRun tableOfContentRun = tableOfContentParagraph.createRun();
+                tableOfContentRun.setBold(true);
+                tableOfContentRun.setFontSize(14);
+                tableOfContentRun.setText("La liste des livres de notre Bibliothèque:");
+
+
+                /** * Données des livres de la TableView */
+                ObservableList<Bibliotheque.Livre> livres = tableView.getItems();
+                XWPFTable gridPaneTable = document.createTable();
+                for (Bibliotheque.Livre livre : livres) {
+                    XWPFTableRow row = gridPaneTable.createRow();
+                    XWPFTableCell cell = row.createCell();
+                    /** * Concaténer les données de chaque livre */
+                    String bookData = "Titre: " + livre.getTitre() + "\n" +
+                      "Auteur: " + livre.getAuteur().getNom() + " " + livre.getAuteur().getPrenom() + "\n" +
+                      "Présentation: " + livre.getPresentation() + "\n" +
+                      "Parution: " + livre.getParution() + "\n" +
+                      "Colonne: " + livre.getColonne() + "\n" +
+                      "Rangée: " + livre.getRangee();
+                    cell.setText(bookData);
+                }
+
+                /** * Enregistrer le document */
+                document.write(out);
+                System.out.println("Fichier Word exporté avec succès !");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+>>>>>>> 6114c6de1078b930d89b9b52760e139140c3bc37
      * méthode pour quitter l'application
      *
      * @param event l'événement déclenché

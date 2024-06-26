@@ -14,6 +14,11 @@ public class AuteurDAO {
 
     private final Connection conn;
 
+    /**
+     * Constructeur de la classe AuteurDAO.
+     *
+     * @param conn la connexion à la base de données
+     */
     public AuteurDAO(Connection conn) {
         this.conn = conn;
     }
