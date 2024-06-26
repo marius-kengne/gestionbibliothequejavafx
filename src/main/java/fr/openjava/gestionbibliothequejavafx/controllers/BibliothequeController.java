@@ -1122,168 +1122,80 @@ public class BibliothequeController {
 
         BibliothequeDAO bdao = new BibliothequeDAO(connexion);
 
-        if(getMode().equals("local")){
+        for(Bibliotheque.Livre livres:allCurrentLivre){
+            Bibliotheque.Livre data=livres;
+            boolean valid=true;
+            String query = "SELECT * FROM `livres`";
+            Object[] idresult = new Object[10];
+            try(PreparedStatement result = connexion.prepareStatement(query)) {
+                try (ResultSet rs=result.executeQuery()) {
+                    Object[]verif= new Object[9];int i=0;
 
-            for(Bibliotheque.Livre livres:allCurrentLivre){
-                Bibliotheque.Livre data = livres;
-                boolean valid=true;
-                String query = "SELECT * FROM `livres`";
-                Object[] idresult = new Object[10];
-                try(PreparedStatement result = connexion.prepareStatement(query)) {
-                    try (ResultSet rs=result.executeQuery()) {
-                        Object[]verif= new Object[9];int i=0;
-                        for(String livre:data.toString().replace("Infos du Livre : ","").split(",")){
-                            verif[i]=livre.split("=")[1];i++;
-                        }
-                        while(true){
-                            if (rs.next()) {
-                                idresult[0]=rs.getInt("id");
-                                idresult[1]=rs.getString("titre");
-                                idresult[2]=rs.getInt("auteur_id");
-                                idresult[3]=rs.getString("presentation");
-                                idresult[4]=rs.getInt("parution");
-                                idresult[5]=rs.getInt("colonne");
-                                idresult[6]=rs.getInt("rangee");
-                                idresult[7]=rs.getString("image");
-                                idresult[8]=rs.getString("resume");
-                                idresult[9]=rs.getString("status");
-                                if(
-                                        verif[1].equals("'"+idresult[1]+"'")&&
-                                                verif[3].equals("'"+idresult[3]+"'")&&
-                                                (("'"+verif[4]+"'").equals("'"+idresult[4]+"'"))&&
-                                                (("'"+verif[5]+"'").equals("'"+idresult[5]+"'"))&&
-                                                (("'"+verif[6]+"'").equals("'"+idresult[6]+"'"))&&
-                                                verif[7].equals(idresult[8])&&
-                                                verif[8].equals(idresult[9])
-                                ){valid=false;}
-                            }else{
-                                logger.info("vérification du livre terminé!");
-                                break;
-                            }
-                        }
-                        if(valid){bdao.save(data,data.getAuteur());}else{
-                            logger.info("livre déjà existant!");
+                    logger.info("Livre à ajouter :\n"+data.toString().replace("Infos du Livre : ",""));
+                    for(String livre:data.toString().replace("Infos du Livre : ","").split(",")){verif[i]=livre.split("=")[1];i++;}
+                    while(true){
+                        if (rs.next()) {
+                            idresult[0]=rs.getInt("id");
+                            idresult[1]=rs.getString("titre");
+                            idresult[2]=rs.getInt("auteur_id");
+                            idresult[3]=rs.getString("presentation");
+                            idresult[4]=rs.getInt("parution");
+                            idresult[5]=rs.getInt("colonne");
+                            idresult[6]=rs.getInt("rangee");
+                            idresult[7]=rs.getString("image");
+                            idresult[8]=rs.getString("resume");
+                            idresult[9]=rs.getString("status");
+                            valid=!(
+                                    verif[1].equals("'"+idresult[1]+"'")&&verif[3].equals("'"+idresult[3]+"'")&&
+                                            (("'"+verif[4]+"'").equals("'"+idresult[4]+"'"))&&(("'"+verif[5]+"'").equals("'"+idresult[5]+"'"))&&(("'"+verif[6]+"'").equals("'"+idresult[6]+"'"))&&
+                                            verif[7].equals(idresult[8])&&verif[8].equals(idresult[9])
+                            );
+                        }else{break;
                         }
                     }
-                }catch(Exception e){
-                    logger.info("echec de la vérification de la lise des éléments:\n->"+e);
+                    if(valid){bdao.save(data,data.getAuteur());}else{
+                        logger.info("livre déjà existant!");
+                    }
                 }
+            }catch(Exception e){
+                logger.info("echec de la vérification de la lise des éléments:\n->"+e);
             }
-
-            try {
-                JAXBContext jaxbContext = JAXBContext.newInstance(Bibliotheque.class);
-                Marshaller marshaller = jaxbContext.createMarshaller();
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                File file = new File(Utilities.XML_FILE_PATH);
-                Bibliotheque bibliotheque;
-                if (file.exists()) {
-                    bibliotheque = (Bibliotheque) jaxbContext.createUnmarshaller().unmarshal(file);
-                } else {
-                    bibliotheque = new ObjectFactory().createBibliotheque();
-                }
-                List<Bibliotheque.Livre> livresExistant = bibliotheque.getLivre();
-                List<Bibliotheque.Livre> livresNonDupliques = new ArrayList<>();
-                for (Bibliotheque.Livre nouveauLivre : allCurrentLivre) {
-                    boolean duplique = false;
-                    for (Bibliotheque.Livre livreExistant : livresExistant) {
-                        if (livreExistant.getTitre().equalsIgnoreCase(nouveauLivre.getTitre()) &&
-                                livreExistant.getAuteur().getNom().equalsIgnoreCase(nouveauLivre.getAuteur().getNom()) &&
-                                livreExistant.getAuteur().getPrenom().equalsIgnoreCase(nouveauLivre.getAuteur().getPrenom()) &&
-                                livreExistant.getParution() == nouveauLivre.getParution()) {
-                            duplique = true;
-                            break;
-                        }
-                    }
-                    if (!duplique) {
-                        livresNonDupliques.add(nouveauLivre);
-                    }
-                }
-                livresExistant.addAll(livresNonDupliques);
-                marshaller.marshal(bibliotheque, file);
-                Utilities.showAlertSuccess("Confirmation", "Le livre a bien été enregistré");
-
-            } catch (JAXBException e) {logger.log(Level.SEVERE, "Erreur :", e);}
-
         }
-        if(getMode().equals("connected")){
 
-            for(Bibliotheque.Livre livres:allCurrentLivre){
-                Bibliotheque.Livre data=livres;
-                boolean valid=true;
-                Connection conn = Connexion.initConnexion(props);
-                String query = "SELECT * FROM `livres`";
-                Object[] idresult = new Object[10];
-                try(PreparedStatement result = conn.prepareStatement(query)) {
-                    try (ResultSet rs=result.executeQuery()) {
-                        Object[]verif= new Object[9];int i=0;
-
-                        logger.info("Livre à ajouter :\n"+data.toString().replace("Infos du Livre : ",""));
-                        for(String livre:data.toString().replace("Infos du Livre : ","").split(",")){verif[i]=livre.split("=")[1];i++;}
-                        while(true){
-                            if (rs.next()) {
-                                idresult[0]=rs.getInt("id");
-                                idresult[1]=rs.getString("titre");
-                                idresult[2]=rs.getInt("auteur_id");
-                                idresult[3]=rs.getString("presentation");
-                                idresult[4]=rs.getInt("parution");
-                                idresult[5]=rs.getInt("colonne");
-                                idresult[6]=rs.getInt("rangee");
-                                idresult[7]=rs.getString("image");
-                                idresult[8]=rs.getString("resume");
-                                idresult[9]=rs.getString("status");
-                                if(
-                                        verif[1].equals("'"+idresult[1]+"'")&&
-                                                verif[3].equals("'"+idresult[3]+"'")&&
-                                                (("'"+verif[4]+"'").equals("'"+idresult[4]+"'"))&&
-                                                (("'"+verif[5]+"'").equals("'"+idresult[5]+"'"))&&
-                                                (("'"+verif[6]+"'").equals("'"+idresult[6]+"'"))&&
-                                                verif[7].equals(idresult[8])&&
-                                                verif[8].equals(idresult[9])
-                                ){valid=false;}
-                            }else{break;
-                            }
-                        }
-                        if(valid){bdao.save(data,data.getAuteur());}else{
-                            logger.info("livre déjà existant!");
-                        }
-                    }
-                }catch(Exception e){logger.info("echec de la vérification de la lise des éléments:\n->"+e);}
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(Bibliotheque.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            File file = new File(Utilities.XML_FILE_PATH);
+            Bibliotheque bibliotheque;
+            if (file.exists()) {
+                bibliotheque = (Bibliotheque) jaxbContext.createUnmarshaller().unmarshal(file);
+            } else {
+                bibliotheque = new ObjectFactory().createBibliotheque();
             }
-
-            try {
-                JAXBContext jaxbContext = JAXBContext.newInstance(Bibliotheque.class);
-                Marshaller marshaller = jaxbContext.createMarshaller();
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                File file = new File(Utilities.XML_FILE_PATH);
-                Bibliotheque bibliotheque;
-                if (file.exists()) {
-                    bibliotheque = (Bibliotheque) jaxbContext.createUnmarshaller().unmarshal(file);
-                } else {
-                    bibliotheque = new ObjectFactory().createBibliotheque();
-                }
-                List<Bibliotheque.Livre> livresExistant = bibliotheque.getLivre();
-                List<Bibliotheque.Livre> livresNonDupliques = new ArrayList<>();
-                for (Bibliotheque.Livre nouveauLivre : allCurrentLivre) {
-                    boolean duplique = false;
-                    for (Bibliotheque.Livre livreExistant : livresExistant) {
-                        if (livreExistant.getTitre().equalsIgnoreCase(nouveauLivre.getTitre()) &&
-                                livreExistant.getAuteur().getNom().equalsIgnoreCase(nouveauLivre.getAuteur().getNom()) &&
-                                livreExistant.getAuteur().getPrenom().equalsIgnoreCase(nouveauLivre.getAuteur().getPrenom()) &&
-                                livreExistant.getParution() == nouveauLivre.getParution()) {
-                            duplique = true;
-                            break;
-                        }
-                    }
-                    if (!duplique) {
-                        livresNonDupliques.add(nouveauLivre);
+            List<Bibliotheque.Livre> livresExistant = bibliotheque.getLivre();
+            List<Bibliotheque.Livre> livresNonDupliques = new ArrayList<>();
+            for (Bibliotheque.Livre nouveauLivre : allCurrentLivre) {
+                boolean duplique = false;
+                for (Bibliotheque.Livre livreExistant : livresExistant) {
+                    if (livreExistant.getTitre().equalsIgnoreCase(nouveauLivre.getTitre()) &&
+                            livreExistant.getAuteur().getNom().equalsIgnoreCase(nouveauLivre.getAuteur().getNom()) &&
+                            livreExistant.getAuteur().getPrenom().equalsIgnoreCase(nouveauLivre.getAuteur().getPrenom()) &&
+                            livreExistant.getParution() == nouveauLivre.getParution()) {
+                        duplique = true;
+                        break;
                     }
                 }
-                livresExistant.addAll(livresNonDupliques);
-                marshaller.marshal(bibliotheque, file);
-                Utilities.showAlertSuccess("Confirmation", "Le livre a bien été enregistré");
+                if (!duplique) {
+                    livresNonDupliques.add(nouveauLivre);
+                }
+            }
+            livresExistant.addAll(livresNonDupliques);
+            marshaller.marshal(bibliotheque, file);
+            Utilities.showAlertSuccess("Confirmation", "Le livre a bien été enregistré");
 
-            } catch (JAXBException e) {logger.log(Level.SEVERE, "Erreur :", e);}
-
+        } catch (JAXBException e) {
+            logger.log(Level.SEVERE, "Erreur : {0}", e);
         }
 
     }

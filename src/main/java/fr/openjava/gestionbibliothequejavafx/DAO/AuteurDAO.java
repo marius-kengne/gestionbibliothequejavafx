@@ -48,7 +48,7 @@ public class AuteurDAO {
                 return auteur;
             }
         } catch (SQLException ex) {
-            logger.log(Level.SEVERE, "Erreur lors de la création de l'auteur: ", ex.getMessage());
+            logger.log(Level.SEVERE, "Erreur lors de la création de l'auteur: {0}", ex.toString());
         }
 
         return null;
@@ -78,7 +78,7 @@ public class AuteurDAO {
                 }
             }
         } catch (SQLException ex) {
-            logger.log(Level.SEVERE, "Erreur lors de la recherche de l'auteur: ", ex.getMessage());
+            logger.log(Level.SEVERE, "Erreur lors de la recherche de l'auteur: {0}", ex.getMessage());
         }
 
         return null;
@@ -104,7 +104,7 @@ public class AuteurDAO {
                 }
             }
         } catch (SQLException ex) {
-            logger.log(Level.SEVERE, "Erreur lors de la recherche de l'auteur: ", ex.getMessage());
+            logger.log(Level.SEVERE, "Erreur lors de la recherche de l'auteur: {0}", ex.getMessage());
         }
 
         return null;
