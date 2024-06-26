@@ -1,6 +1,6 @@
 package fr.openjava.gestionbibliothequejavafx.DAO;
 
-import fr.openjava.gestionbibliothequejavafx.models.generated.Bibliotheque;
+import fr.openjava.gestionbibliothequejavafx.models.generated.Bibliotheque.Livre.Auteur;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +11,9 @@ import java.sql.SQLException;
  * Classe DAO pour gérer les opérations de base de données liées aux auteurs.
  */
 public class AuteurDAO {
+
+    private static final String INSERT_AUTEUR_SQL = "INSERT INTO auteurs (nom, prenom) VALUES (?, ?)";
+    private static final String SELECT_AUTEUR_SQL = "SELECT * FROM auteurs WHERE nom = ? AND prenom = ?";
 
     private final Connection conn;
 
@@ -29,24 +32,19 @@ public class AuteurDAO {
      * @param auteur l'auteur à enregistrer
      * @return l'auteur enregistré, ou null si l'enregistrement a échoué
      */
-    public Bibliotheque.Livre.Auteur save(Bibliotheque.Livre.Auteur auteur){
-
-        String query = "INSERT INTO auteurs (nom, prenom) VALUES (?, ?)";
-
-        try (PreparedStatement result = conn.prepareStatement(query)) {
+    public Auteur save(Auteur auteur) {
+        try (PreparedStatement result = conn.prepareStatement(INSERT_AUTEUR_SQL)) {
             result.setString(1, auteur.getNom());
             result.setString(2, auteur.getPrenom());
 
             int affectedRows = result.executeUpdate();
 
             if (affectedRows > 0) {
-                System.out.println("User created successfully!");
+                System.out.println("Auteur créé avec succès!");
                 return auteur;
             }
         } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+            System.err.println("Erreur lors de la création de l'auteur: " + ex.getMessage());
         }
 
         return null;
@@ -55,33 +53,28 @@ public class AuteurDAO {
     /**
      * Récupère un auteur par son nom et son prénom.
      *
-     * @param nom le nom de l'auteur
+     * @param nom    le nom de l'auteur
      * @param prenom le prénom de l'auteur
      * @return l'auteur trouvé, ou null si aucun auteur correspondant n'a été trouvé
      */
-    public Bibliotheque.Livre.Auteur getAuteur(String nom, String prenom) {
-
-        String sql = "SELECT * FROM auteurs WHERE nom = ? AND prenom = ?";
-
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    public Auteur getAuteur(String nom, String prenom) {
+        try (PreparedStatement pstmt = conn.prepareStatement(SELECT_AUTEUR_SQL)) {
             pstmt.setString(1, nom);
             pstmt.setString(2, prenom);
 
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                Bibliotheque.Livre.Auteur auteur = new Bibliotheque.Livre.Auteur();
-                auteur.setNom(rs.getString("nom"));
-                auteur.setPrenom(rs.getString("prenom"));
-                System.out.println("Login successful!");
-                return auteur;
-            } else {
-                System.out.println("Invalid login or password.");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    Auteur auteur = new Auteur();
+                    auteur.setNom(rs.getString("nom"));
+                    auteur.setPrenom(rs.getString("prenom"));
+                    System.out.println("Auteur trouvé avec succès!");
+                    return auteur;
+                } else {
+                    System.out.println("Auteur inexistant.");
+                }
             }
         } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+            System.err.println("Erreur lors de la recherche de l'auteur: " + ex.getMessage());
         }
 
         return null;
@@ -90,30 +83,25 @@ public class AuteurDAO {
     /**
      * Récupère l'ID d'un auteur par son nom et son prénom.
      *
-     * @param nom le nom de l'auteur
+     * @param nom    le nom de l'auteur
      * @param prenom le prénom de l'auteur
      * @return l'ID de l'auteur, ou null si aucun auteur correspondant n'a été trouvé
      */
     public Integer getId(String nom, String prenom) {
-
-        String sql = "SELECT * FROM auteurs WHERE nom = ? AND prenom = ?";
-
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(SELECT_AUTEUR_SQL)) {
             pstmt.setString(1, nom);
             pstmt.setString(2, prenom);
 
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                System.out.println("auteur trouvé avec success!");
-                return rs.getInt("id");
-            } else {
-                System.out.println("auteur inexistant.");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    System.out.println("Auteur trouvé avec succès!");
+                    return rs.getInt("id");
+                } else {
+                    System.out.println("Auteur inexistant.");
+                }
             }
         } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+            System.err.println("Erreur lors de la recherche de l'auteur: " + ex.getMessage());
         }
 
         return null;

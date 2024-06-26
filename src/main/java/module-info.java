@@ -12,6 +12,7 @@ module fr.openjava.gestionbibliothequejavafx {
     requires org.apache.poi.ooxml;
     requires java.sql;
     requires java.mail;
+    requires org.slf4j;
     opens fr.openjava.gestionbibliothequejavafx to javafx.fxml;
     exports fr.openjava.gestionbibliothequejavafx;
     exports fr.openjava.gestionbibliothequejavafx.controllers;

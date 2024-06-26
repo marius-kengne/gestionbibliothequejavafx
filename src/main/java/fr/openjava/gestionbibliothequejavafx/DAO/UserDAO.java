@@ -2,7 +2,10 @@ package fr.openjava.gestionbibliothequejavafx.DAO;
 
 import fr.openjava.gestionbibliothequejavafx.models.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Classe d'accès aux données pour l'entité User, permettant de gérer les opérations
@@ -10,26 +13,19 @@ import java.sql.*;
  */
 public class UserDAO {
 
-    //private final Connection conn = Connexion.initConnexion(new Properties());
+    private static final String INSERT_USER_SQL = "INSERT INTO users (lastName, firstName, login, password, role, isAdmin) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_USER_SQL = "SELECT login, password, role, isAdmin FROM users WHERE login = ? AND password = ?";
+    private static final String DELETE_USER_SQL = "DELETE FROM users WHERE login = ?";
+    private static final String UPDATE_PASSWORD_SQL = "UPDATE users SET password = ? WHERE login = ?";
 
     private final Connection conn;
 
-    // Ajout d'un constructeur pour permettre l'injection de connexion
     public UserDAO(Connection conn) {
         this.conn = conn;
     }
 
-    /**
-     * Crée un nouvel utilisateur dans la base de données.
-     *
-     * @param user l'utilisateur à créer
-     * @return l'utilisateur créé si l'opération réussit, sinon null
-     */
-    public User createUser(User user){
-
-        String query = "INSERT INTO users (lastName, firstName, login, password, role, isAdmin) VALUES (?, ?, ?, ?, ?, ?)";
-
-        try (PreparedStatement result = conn.prepareStatement(query)) {
+    public User createUser(User user) {
+        try (PreparedStatement result = conn.prepareStatement(INSERT_USER_SQL)) {
             result.setString(1, user.getLastName());
             result.setString(2, user.getFirstName());
             result.setString(3, user.getLogin());
@@ -40,68 +36,43 @@ public class UserDAO {
             int affectedRows = result.executeUpdate();
 
             if (affectedRows > 0) {
-                System.out.println("Utilisateur crée avec succes!");
+                System.out.println("Utilisateur créé avec succès!");
                 return user;
             }
         } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+            System.err.println("Erreur lors de la création de l'utilisateur: " + ex.getMessage());
         }
 
         return null;
     }
 
-
-    /**
-     * Vérifie les informations de connexion d'un utilisateur dans la base de données.
-     *
-     * @param login    le nom d'utilisateur
-     * @param password le mot de passe
-     * @return l'utilisateur correspondant aux informations de connexion si elles sont valides, sinon null
-     */
     public User login(String login, String password) {
-
-        String sql = "SELECT * FROM users WHERE login = ? AND password = ?";
-
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(SELECT_USER_SQL)) {
             pstmt.setString(1, login);
             pstmt.setString(2, password);
 
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                User user = new User();
-                user.setLogin(rs.getString("login"));
-                user.setPassword(rs.getString("password"));
-                user.setRole(rs.getString("role"));
-                user.setAdmin(rs.getBoolean("isAdmin"));
-                System.out.println("Utisateur connecté avec succès!");
-                return user;
-            } else {
-                System.out.println("Email ou mot de passe Invalide!");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setLogin(rs.getString("login"));
+                    user.setPassword(rs.getString("password"));
+                    user.setRole(rs.getString("role"));
+                    user.setAdmin(rs.getBoolean("isAdmin"));
+                    System.out.println("Utilisateur connecté avec succès!");
+                    return user;
+                } else {
+                    System.out.println("Email ou mot de passe invalide!");
+                }
             }
         } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+            System.err.println("Erreur lors de la connexion de l'utilisateur: " + ex.getMessage());
         }
 
         return null;
     }
 
-
-
-    /**
-     * Supprime un utilisateur de la base de données en fonction de son login.
-     *
-     * @param login le login de l'utilisateur à supprimer
-     * @return true si l'utilisateur est supprimé avec succès, sinon false
-     */
     public boolean deleteUser(String login) {
-        String sql = "DELETE FROM users WHERE login = ?";
-
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(DELETE_USER_SQL)) {
             pstmt.setString(1, login);
 
             int affectedRows = pstmt.executeUpdate();
@@ -113,39 +84,23 @@ public class UserDAO {
                 System.out.println("Aucun utilisateur trouvé avec ce login.");
             }
         } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+            System.err.println("Erreur lors de la suppression de l'utilisateur: " + ex.getMessage());
         }
 
         return false;
     }
 
-
-
-    /**
-     * Modifie le mot de passe d'un utilisateur de la base de données en fonction de son login et son nouveau de passe.
-     *
-     * @param login le login de l'utilisateur
-     * @param newPassword nouveau mot de passe de l'utilisateur
-     * @return true si l'utilisateur est supprimé avec succès, sinon false
-     */
     public boolean updatePassword(String login, String newPassword) {
-        String sql = "UPDATE users SET password = ? WHERE login = ?";
-
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(UPDATE_PASSWORD_SQL)) {
             pstmt.setString(1, newPassword);
             pstmt.setString(2, login);
 
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+            System.err.println("Erreur lors de la mise à jour du mot de passe: " + ex.getMessage());
         }
 
         return false;
     }
-
 }

@@ -1,6 +1,8 @@
 package fr.openjava.gestionbibliothequejavafx.DAO;
 
 import fr.openjava.gestionbibliothequejavafx.models.generated.Bibliotheque;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +15,7 @@ import java.sql.SQLException;
 public class BibliothequeDAO {
 
     private final Connection conn;
-
+    private static final Logger logger = LoggerFactory.getLogger(BibliothequeDAO.class);
     /**
      * Ajout d'un constructeur pour permettre l'injection de connexion
      * @param conn objet connection pour l'interaction avec la BD
@@ -78,13 +80,12 @@ public class BibliothequeDAO {
             }
 
         } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+            logger.error("Erreur SQL: {}", ex.getMessage());
+            logger.error("SQLState: {}", ex.getSQLState());
+            logger.error("VendorError: {}", ex.getErrorCode());
         }
 
         return null;
     }
-
 
 }
