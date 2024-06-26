@@ -15,8 +15,7 @@
         <sonar.projectKey>marius-kengne_gestionbibliothequejavafx</sonar.projectKey>
         <sonar.organization>marius-kengne</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <!--suppress UnresolvedMavenProperty -->
-        <sonar.login>${env.SONAR_LOGIN}</sonar.login>
+        <sonar.login>${env.SONAR_TOKEN}</sonar.login>
         <sonar.branch.name>test-ci</sonar.branch.name>
     </properties>
 
