@@ -15,7 +15,8 @@
         <sonar.projectKey>marius-kengne_gestionbibliothequejavafx</sonar.projectKey>
         <sonar.organization>marius-kengne</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.login>${env.SONAR_TOKEN}</sonar.login>
+        <!--suppress UnresolvedMavenProperty -->
+        <sonar.login>${env.SONAR_LOGIN}</sonar.login>
         <sonar.branch.name>test-ci</sonar.branch.name>
     </properties>
 
@@ -194,6 +195,24 @@
                 </executions>
             </plugin>
 
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-sbom</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>list</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.build.directory}/sbom.json</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.cyclonedx</groupId>
