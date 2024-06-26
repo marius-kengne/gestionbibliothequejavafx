@@ -83,9 +83,11 @@ public class BibliothequeDAO {
             logger.error("Erreur SQL: {}", ex.getMessage());
             logger.error("SQLState: {}", ex.getSQLState());
             logger.error("VendorError: {}", ex.getErrorCode());
+
         }
 
         return null;
     }
+
 
 }

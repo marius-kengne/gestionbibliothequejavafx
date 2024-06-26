@@ -6,7 +6,11 @@ import fr.openjava.gestionbibliothequejavafx.models.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -17,6 +21,7 @@ import java.util.Properties;
  * Classe principale de l'application GestionBibliothequeJavaFX.
  * Cette classe étend Application et gère le démarrage de l'application ainsi que l'affichage de la page de connexion.
  */
+
 public class GestionBibliothequeJavaFX extends Application {
 
     /**
@@ -38,16 +43,6 @@ public class GestionBibliothequeJavaFX extends Application {
      */
     public static void main(String[] args) {
         //launch();
-        Connection connexion = Connexion.initConnexion(new Properties());
-
-        UserDAO userDao = new UserDAO(connexion);
-        User loggedInUser = userDao.login("testuser", "password123");
-        if (loggedInUser != null) {
-            System.out.println("Welcome, " + loggedInUser.getLogin() + "!");
-        } else {
-            System.out.println("Login failed.");
-        }
-
         Application.launch(GestionBibliothequeJavaFX.class);
     }
 
