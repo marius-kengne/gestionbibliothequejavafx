@@ -2,7 +2,6 @@ package fr.openjava.gestionbibliothequejavafx.controllers;
 
 import fr.openjava.gestionbibliothequejavafx.DAO.BibliothequeDAO;
 import fr.openjava.gestionbibliothequejavafx.DAO.Connexion;
-import fr.openjava.gestionbibliothequejavafx.GestionBibliothequeJavaFX;
 import fr.openjava.gestionbibliothequejavafx.models.generated.ObjectFactory;
 import fr.openjava.gestionbibliothequejavafx.utils.Utilities;
 import javafx.beans.property.SimpleStringProperty;
@@ -26,7 +25,6 @@ import javax.xml.bind.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,6 +37,7 @@ import org.apache.poi.wp.usermodel.HeaderFooterType;
 import org.apache.poi.xwpf.usermodel.*;
 
 import java.time.LocalDate;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -50,7 +49,7 @@ public class BibliothequeController {
 
     @FXML
     private TableView<Bibliotheque.Livre> tableView = null;
-    private Properties props = new Properties();
+    private final Properties props = new Properties();
     private static final Logger logger = Logger.getLogger(BibliothequeController.class.getName());
     @FXML
     private TableColumn<Bibliotheque.Livre, String> titreColumn;
@@ -81,7 +80,7 @@ public class BibliothequeController {
 
     private ObservableList<Bibliotheque.Livre> livres = FXCollections.observableArrayList();
 
-    private List<Bibliotheque.Livre> allCurrentLivre = new ArrayList<Bibliotheque.Livre>();
+    private List<Bibliotheque.Livre> allCurrentLivre = new ArrayList<>();
     @FXML
     private TextArea titreTextArea;
 
@@ -108,12 +107,7 @@ public class BibliothequeController {
 
     @FXML
     private TextArea resumeTextArea;
-
-    @FXML
-    private TextArea statusTextArea;
-
-    @FXML
-    private CheckBox disponibleCheckBox;
+    
 
     @FXML
     private SplitMenuButton splitMenuButton;
@@ -162,11 +156,7 @@ public class BibliothequeController {
 
     @FXML
     private Label modeLabel;
-
-    @FXML
-    private Label roleLabel;
-
-
+    
     @FXML
     private GridPane editgridpane;
     @FXML
@@ -185,34 +175,31 @@ public class BibliothequeController {
                 editgridpane.setManaged(false);
                 stt=stt&editgridpane.isVisible()&&editgridpane.isManaged();
             } catch (Exception e) {
-                System.out.println(e);
+                logger.log(Level.SEVERE, "Erreur lors du chargement de la vue ", e);
             }
             try {
                 bteditandsupr.setVisible(false);
                 bteditandsupr.setManaged(false);
                 stt=stt&bteditandsupr.isVisible()&&bteditandsupr.isManaged();
             } catch (Exception e) {
-                System.out.println(e);
+                logger.log(Level.SEVERE, "Erreur lors du chargement de la vue ", e);
             }
             try {
                 addnewbook.setVisible(false);
                 addnewbook.setManaged(false);
                 stt=stt&addnewbook.isVisible()&&addnewbook.isManaged();
             } catch (Exception e) {
-                System.out.println(e);
+                logger.log(Level.SEVERE, "Erreur lors du chargement de la vue ", e);
             }
             try {
                 editionmenu.setVisible(false);
                 stt=stt&editionmenu.isVisible();
             } catch (Exception e) {
-                System.out.println(e);
+                logger.log(Level.SEVERE, "Erreur lors du chargement de la vue ", e);
             }
         } catch (Exception e) {
-            System.out.println("editgridpane:"+editgridpane.isVisible()+" | "+editgridpane.isManaged());
-            System.out.println("bteditandsupr:"+bteditandsupr.isVisible()+" | "+bteditandsupr.isManaged());
-            System.out.println("addnewbook:"+addnewbook.isVisible()+" | "+addnewbook.isManaged());
-            System.out.println("editionmenu:"+editionmenu.isVisible());
-            System.out.println("erreur:"+e);
+            logger.log(Level.SEVERE, "editionmenu ", editionmenu.isVisible());
+            logger.log(Level.SEVERE, "Erreur  ", e);
         }
         return stt;
     }
@@ -223,7 +210,7 @@ public class BibliothequeController {
     public BibliothequeController(){
         System.out.println("################## Lancement");
         if(getRole().equals("admin")){System.out.println("in admin");} else {
-            System.out.println("not in admin");
+            logger.log(Level.SEVERE, "not in admin ");
         }
     }
 
@@ -234,7 +221,6 @@ public class BibliothequeController {
      */
     public void initialize() {
         modeLabel.setText("Mode: " + mode);
-        //roleLabel.setText("Role: " + role);
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
         titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
         auteurColumn.setCellValueFactory(cellData -> {
@@ -250,7 +236,6 @@ public class BibliothequeController {
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         editLivreListener();
-        //chargerDonneesDuXML();
         setImageUrl();
 
         imageTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -263,13 +248,10 @@ public class BibliothequeController {
 
         for (MenuItem item : splitMenuButton.getItems()) {
             item.setOnAction(event -> {
-                // Obtenez le texte de l'élément sélectionné
                 String status = ((MenuItem) event.getSource()).getText();
                 splitMenuButton.setText(status);
-                // Faites quelque chose avec le texte sélectionné, par exemple :
                 System.out.println("Sélection : " + status);
                 statusCurrentLivre = status;
-                // Ou déclenchez une méthode pour gérer la sélection
                 handleSelection(status);
             });
         }
@@ -279,13 +261,10 @@ public class BibliothequeController {
 
     // Méthode pour gérer la sélection
     private void handleSelection(String selectedText) {
-        // Ajoutez votre logique pour traiter la sélection ici
         if (selectedText.equals("disponible")) {
-            // Faites quelque chose si "disponible" est sélectionné
-            System.out.println("Article disponible");
+            logger.info("Article disponible");
         } else if (selectedText.equals("indisponible")) {
-            // Faites quelque chose si "indisponible" est sélectionné
-            System.out.println("Article indisponible");
+            logger.info("Article indisponible");
         }
     }
 
@@ -300,7 +279,7 @@ public class BibliothequeController {
             livres.addAll(bibliotheque.getLivre());
             tableView.setItems(livres);
         } catch (JAXBException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "not in admin ", e);
         }
     }
 
@@ -352,7 +331,7 @@ public class BibliothequeController {
      * Méthode pour enregistrer les livres dans un autres fichier
      * @throws JAXBException si une erreur survient lors de la manipulation XML
      */
-    public void saveInOtherLocation() throws JAXBException {
+    public void saveInOtherLocation() {
 
         Stage stage = new Stage();
         FileChooser fileChooser = new FileChooser();
@@ -366,7 +345,7 @@ public class BibliothequeController {
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
             createXMLFileWithLivre(file.getAbsolutePath());
-            System.out.println("Fichier enregistré à : " + file.getAbsolutePath());
+            logger.log(Level.SEVERE, "Fichier enregistré à : ", file.getAbsolutePath());
         }
 
     }
@@ -380,11 +359,10 @@ public class BibliothequeController {
      *
      * @throws JAXBException si une erreur survient lors de la manipulation XML
      */
-    public void ImportXMLFile() throws JAXBException {
+    public void ImportXMLFile() {
 
         if(getMode().equals("local")){
 
-            Stage stage = new Stage();
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Choisir le fichier que vous souhaitez ouvrir");
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers XML", "*.xml"));
@@ -415,7 +393,7 @@ public class BibliothequeController {
                     tableView.setItems(livres);
                     Utilities.showAlertSuccess("Confirmation", "Fichier importer avec success");
                 } catch (JAXBException e) {
-                    e.printStackTrace();
+                    logger.log(Level.SEVERE, "erreur : ", e);
                 }
 
                 editLivreListener();
@@ -441,11 +419,11 @@ public class BibliothequeController {
                 statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
             } catch (Exception e) {System.out.println("erreur d'initiation de la structure du tableau:\n"+e);}
 
-            Connection conn = Connexion.initConnexion(props);
+            
             String query = "SELECT * FROM `livres`";
             Object[] idresult = new Object[10];
 
-            try(PreparedStatement result = conn.prepareStatement(query)) {
+            try(PreparedStatement result = connexion.prepareStatement(query)) {
                 try (ResultSet rs=result.executeQuery()) {
                     livres.clear();
                     allCurrentLivre.clear();
@@ -461,10 +439,9 @@ public class BibliothequeController {
                             idresult[6]=rs.getInt("rangee");
                             idresult[8]=rs.getString("resume");
                             idresult[9]=rs.getString("status");
-
-                            Connection conn2 = Connexion.initConnexion(props);
+                            
                             String query2 = "SELECT * FROM `auteurs` WHERE `id` LIKE ?",nom="",prenom="";
-                            try (PreparedStatement result2 = conn2.prepareStatement(query2)) {
+                            try (PreparedStatement result2 = connexion.prepareStatement(query2)) {
                                 result2.setInt(1, Integer.parseInt(""+idresult[2]));
                                 try (ResultSet rs2 = result2.executeQuery()) {
                                     if (rs2.next()) {
@@ -497,29 +474,33 @@ public class BibliothequeController {
                                 if (!livres2.isEmpty()) {
                                     Bibliotheque.Livre livreAjoute2 = livres2.get(0);
                                     tableauDeLivres2.add(livreAjoute2);
-                                    System.out.println(livreAjoute2);
+                                    logger.info(livreAjoute2.toString());
                                     livres.add(livres2.get(0));
                                     allCurrentLivre.add(livres2.get(0));
                                     tableView.setItems(livres);
                                 }
                                 else {
-                                    System.out.println("La liste des livres est vide.");
+                                    logger.info("La liste des livres est vide.");
                                 }
 
-                            }catch (Exception f) {System.out.println("erreur d'ajout des livres dans le tableaux:\n"+f);}
+                            }catch (Exception f) {
+                                logger.info("erreur d'ajout des livres dans le tableaux:\n"+f);
+                            }
 
                             editLivreListener();
                             setImageUrl();
 
                         }else{
-                            System.out.println("ajout des livres terminé!");
+                            logger.info("ajout des livres terminé!");
                             Utilities.showAlertSuccess("Confirmation", "Fichier importer avec success");
                             break;
                         }
                     }
                 }
             }
-            catch(Exception e){System.out.println("echec de l'ajout de la liste des livres:\n->"+e);}
+            catch(Exception e){
+                logger.info("echec de l'ajout de la liste des livres:\n->"+e);
+            }
 
         }
     }
@@ -538,11 +519,8 @@ public class BibliothequeController {
             // Charger le fichier XML et obtenir la liste des livres
             File file = new File(filePath);
             Bibliotheque bibliotheque = (Bibliotheque) unmarshaller.unmarshal(file);
-
-            // Retourner la liste des livres
             return FXCollections.observableArrayList(bibliotheque.getLivre());
         } catch (JAXBException e) {
-            e.printStackTrace();
             return FXCollections.observableArrayList();
         }
     }
@@ -731,7 +709,7 @@ public class BibliothequeController {
             Utilities.showAlertSuccess("Confirmation", "Le livre a bien été supprimé");
 
         } catch (JAXBException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Erreur :", e);
         }
     }
 
@@ -785,7 +763,7 @@ public class BibliothequeController {
             marshaller.marshal(bibliotheque, file);
             Utilities.showAlertSuccess("Confirmation", "Le livre a bien été enregistré");
         } catch (JAXBException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Erreur :", e);
         }
     }
 
@@ -929,7 +907,7 @@ public class BibliothequeController {
             tableView.setItems(livres);
             clearForm();
         } catch (JAXBException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Erreur :", e);
         }
     }
 
@@ -1030,7 +1008,7 @@ public class BibliothequeController {
             Utilities.showAlertSuccess("Confirmation", "Le fichier a bien été enregistré");
 
         } catch (JAXBException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Erreur :", e);
         }
 
     }
@@ -1108,7 +1086,7 @@ public class BibliothequeController {
                 document.write(out);
                 System.out.println("Fichier Word exporté avec succès !");
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Erreur :", e);
             }
         }
     }
@@ -1165,7 +1143,7 @@ public class BibliothequeController {
      * @throws JAXBException
      * @throws SQLException
      */
-    public void localconnectsync() throws JAXBException, SQLException {
+    public void localconnectsync() {
 
         BibliothequeDAO bdao = new BibliothequeDAO(connexion);
 
@@ -1205,11 +1183,19 @@ public class BibliothequeController {
                                                 verif[7].equals(idresult[8])&&
                                                 verif[8].equals(idresult[9])
                                 ){valid=false;}
-                            }else{System.out.println("vérification du livre terminé!");break;}
+                            }else{
+                                logger.info("vérification du livre terminé!");
+                                break;
+                            }
                         }
-                        if(valid){bdao.save(data,data.getAuteur());}else{System.out.println("livre déjà existant!");}
+                        if(valid){bdao.save(data,data.getAuteur());}else{
+                            logger.info("livre déjà existant!");
+                        }
                     }
-                }catch(Exception e){System.out.println("echec de la vérification de la lise des éléments:\n->"+e);}
+                }catch(Exception e){
+                    System.out.println("echec de la vérification de la lise des éléments:\n->"+e);
+                    logger.info("echec de la vérification de la lise des éléments:\n->"+e);
+                }
             }
 
             try {
@@ -1244,7 +1230,7 @@ public class BibliothequeController {
                 marshaller.marshal(bibliotheque, file);
                 Utilities.showAlertSuccess("Confirmation", "Le livre a bien été enregistré");
 
-            } catch (JAXBException e) {e.printStackTrace();}
+            } catch (JAXBException e) {logger.log(Level.SEVERE, "Erreur :", e);}
 
         }
         if(getMode().equals("connected")){
@@ -1320,7 +1306,7 @@ public class BibliothequeController {
                 marshaller.marshal(bibliotheque, file);
                 Utilities.showAlertSuccess("Confirmation", "Le livre a bien été enregistré");
 
-            } catch (JAXBException e) {e.printStackTrace();}
+            } catch (JAXBException e) {logger.log(Level.SEVERE, "Erreur :", e);}
 
         }
 
