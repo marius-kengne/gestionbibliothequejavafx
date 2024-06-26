@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <bibliotheque>
     <livre>
-        <titre>marius</titre>
+        <titre>test test</titre>
         <auteur>
-            <nom>marie</nom>
-            <prenom>detien</prenom>
+            <nom>test</nom>
+            <prenom>dylan</prenom>
         </auteur>
-        <presentation>maths</presentation>
-        <parution>2021</parution>
+        <presentation>dylan kamtoum</presentation>
+        <parution>2024</parution>
         <colonne>2</colonne>
-        <rangee>1</rangee>
-        <resume>test bienvenu</resume>
+        <rangee>2</rangee>
+        <resume>best seller</resume>
         <status>indisponible</status>
     </livre>
 </bibliotheque>
