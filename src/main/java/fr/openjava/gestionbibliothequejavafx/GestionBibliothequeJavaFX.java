@@ -46,13 +46,9 @@ public class GestionBibliothequeJavaFX extends Application {
 
         userDao.createUser(newUser);
         */
-
         User loggedInUser = userDao.login("testuser", "password123");
-        if (loggedInUser != null) {
-            System.out.println("Welcome, " + loggedInUser.getLogin() + "!");
-        } else {
-            System.out.println("Login failed.");
-        }
+        if (loggedInUser != null) {System.out.println("Welcome, " + loggedInUser.getLogin() + "!");}
+        else {System.out.println("Login failed.");}
 
         Application.launch(GestionBibliothequeJavaFX.class);
     }

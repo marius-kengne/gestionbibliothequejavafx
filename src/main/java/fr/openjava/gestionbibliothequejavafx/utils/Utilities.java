@@ -12,6 +12,7 @@ public class Utilities {
     private static final String CONFIG_FILE = "config.properties";
     private static Properties properties = new Properties();
     public static String XML_FILE_PATH = "src/main/resources/fr/openjava/gestionbibliothequejavafx/dataSource/Biblio.xml";
+    public static String XML_BUFFER_FILE_PATH = "buffer.xml";
     public static String URL_DEFAULT = "https://d19rpgkrjeba2z.cloudfront.net/static/images/business/topic-cover/personal-care.png";
 
     static {

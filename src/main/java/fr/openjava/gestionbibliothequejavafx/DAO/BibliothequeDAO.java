@@ -1,10 +1,7 @@
 package fr.openjava.gestionbibliothequejavafx.DAO;
 
-import fr.openjava.gestionbibliothequejavafx.models.User;
 import fr.openjava.gestionbibliothequejavafx.models.generated.Bibliotheque;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -66,18 +63,14 @@ public class BibliothequeDAO {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                System.out.println("SQLException: " + ex.getMessage());
-            }
         }
 
         return null;
     }
 
+    public Bibliotheque.Livre close() throws SQLException {
+        conn.close();
+        return null;
+    }
 
 }

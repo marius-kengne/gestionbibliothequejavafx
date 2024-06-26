@@ -1,6 +1,8 @@
 package fr.openjava.gestionbibliothequejavafx.controllers;
 
+import fr.openjava.gestionbibliothequejavafx.DAO.AuteurDAO;
 import fr.openjava.gestionbibliothequejavafx.DAO.BibliothequeDAO;
+import fr.openjava.gestionbibliothequejavafx.DAO.Connexion;
 import fr.openjava.gestionbibliothequejavafx.GestionBibliothequeJavaFX;
 import fr.openjava.gestionbibliothequejavafx.models.generated.ObjectFactory;
 import fr.openjava.gestionbibliothequejavafx.utils.Utilities;
@@ -24,8 +26,13 @@ import javafx.stage.Stage;
 import javax.xml.bind.*;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -191,9 +198,7 @@ public class BibliothequeController {
 
     public BibliothequeController(){
         System.out.println("################## Lancement");
-        if(getRole().equals("admin")){System.out.println("in admin");} else {
-            System.out.println("not in admin");
-        }
+        System.out.println((getRole().equals("admin"))?("in admin"):("not in admin"));
     }
 
     /**
@@ -236,26 +241,11 @@ public class BibliothequeController {
                 String status = ((MenuItem) event.getSource()).getText();
                 splitMenuButton.setText(status);
                 // Faites quelque chose avec le texte sélectionné, par exemple :
-                System.out.println("Sélection : " + status);
                 statusCurrentLivre = status;
-                // Ou déclenchez une méthode pour gérer la sélection
-                handleSelection(status);
             });
         }
 
         if(!getRole().equals("admin")){System.out.println((!hide())?("les éléments sont masqués"):("les éléments ne sont pas masqués"));}
-    }
-
-    // Méthode pour gérer la sélection
-    private void handleSelection(String selectedText) {
-        // Ajoutez votre logique pour traiter la sélection ici
-        if (selectedText.equals("disponible")) {
-            // Faites quelque chose si "disponible" est sélectionné
-            System.out.println("Article disponible");
-        } else if (selectedText.equals("indisponible")) {
-            // Faites quelque chose si "indisponible" est sélectionné
-            System.out.println("Article indisponible");
-        }
     }
 
     /**
@@ -341,62 +331,165 @@ public class BibliothequeController {
 
 
 
-    public void localconnectsync() throws JAXBException {
+    public void localconnectsync() throws JAXBException, SQLException {
+
+        BibliothequeDAO bdao = new BibliothequeDAO();
 
         if(getMode().equals("local")){
 
-            BibliothequeDAO bdao = new BibliothequeDAO();
+            for(Bibliotheque.Livre livres:allCurrentLivre){
+                Bibliotheque.Livre data=livres;
+                boolean valid=true;
+                Connection conn = Connexion.initConnexion();
+                String query = "SELECT * FROM `livre`";
+                Object[] idresult = new Object[10];
+                try(PreparedStatement result = conn.prepareStatement(query)) {
+                    try (ResultSet rs=result.executeQuery()) {
+                        Object[]verif= new Object[9];int i=0;
+                        System.out.println("Livre à ajouter :\n"+data.toString().replace("Infos du Livre : ",""));
+                        for(String livre:data.toString().replace("Infos du Livre : ","").split(",")){
+                            verif[i]=livre.split("=")[1];i++;
+                        }
+                        while(true){
+                            if (rs.next()) {
+                                idresult[0]=rs.getInt("id");
+                                idresult[1]=rs.getString("titre");
+                                idresult[2]=rs.getInt("auteur_id");
+                                idresult[3]=rs.getString("presentation");
+                                idresult[4]=rs.getInt("parution");
+                                idresult[5]=rs.getInt("colonne");
+                                idresult[6]=rs.getInt("rangee");
+                                idresult[7]=rs.getString("image");
+                                idresult[8]=rs.getString("resume");
+                                idresult[9]=rs.getString("status");
+                                if(
+                                  verif[1].equals("'"+idresult[1]+"'")&&
+                                  verif[3].equals("'"+idresult[3]+"'")&&
+                                  (("'"+verif[4]+"'").equals("'"+idresult[4]+"'"))&&
+                                  (("'"+verif[5]+"'").equals("'"+idresult[5]+"'"))&&
+                                  (("'"+verif[6]+"'").equals("'"+idresult[6]+"'"))&&
+                                  verif[7].equals(idresult[8])&&
+                                  verif[8].equals(idresult[9])
+                                ){valid=false;}
+                            }else{System.out.println("vérification du livre terminé!");break;}
+                        }
+                        if(valid){bdao.save(data,data.getAuteur());}else{System.out.println("livre déjà existant!");}
+                    }
+                }catch(Exception e){System.out.println("echec de la vérification de la lise des éléments:\n->"+e);}
+            }
 
-            //addLivreToXML();
+            try {
+                JAXBContext jaxbContext = JAXBContext.newInstance(Bibliotheque.class);
+                Marshaller marshaller = jaxbContext.createMarshaller();
+                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                File file = new File(Utilities.XML_FILE_PATH);
+                Bibliotheque bibliotheque;
+                if (file.exists()) {
+                    bibliotheque = (Bibliotheque) jaxbContext.createUnmarshaller().unmarshal(file);
+                } else {
+                    bibliotheque = new ObjectFactory().createBibliotheque();
+                }
+                List<Bibliotheque.Livre> livresExistant = bibliotheque.getLivre();
+                List<Bibliotheque.Livre> livresNonDupliques = new ArrayList<>();
+                for (Bibliotheque.Livre nouveauLivre : allCurrentLivre) {
+                    boolean duplique = false;
+                    for (Bibliotheque.Livre livreExistant : livresExistant) {
+                        if (livreExistant.getTitre().equalsIgnoreCase(nouveauLivre.getTitre()) &&
+                          livreExistant.getAuteur().getNom().equalsIgnoreCase(nouveauLivre.getAuteur().getNom()) &&
+                          livreExistant.getAuteur().getPrenom().equalsIgnoreCase(nouveauLivre.getAuteur().getPrenom()) &&
+                          livreExistant.getParution() == nouveauLivre.getParution()) {
+                            duplique = true;
+                            break;
+                        }
+                    }
+                    if (!duplique) {
+                        livresNonDupliques.add(nouveauLivre);
+                    }
+                }
+                livresExistant.addAll(livresNonDupliques);
+                marshaller.marshal(bibliotheque, file);
+                Utilities.showAlertSuccess("Confirmation", "Le livre a bien été enregistré");
+
+            } catch (JAXBException e) {e.printStackTrace();}
+
+        }
+        if(getMode().equals("connected")){
 
             for(Bibliotheque.Livre livres:allCurrentLivre){
+                Bibliotheque.Livre data=livres;
+                boolean valid=true;
+                Connection conn = Connexion.initConnexion();
+                String query = "SELECT * FROM `livre`";
+                Object[] idresult = new Object[10];
+                try(PreparedStatement result = conn.prepareStatement(query)) {
+                    try (ResultSet rs=result.executeQuery()) {
+                        Object[]verif= new Object[9];int i=0;
+                        System.out.println("Livre à ajouter :\n"+data.toString().replace("Infos du Livre : ",""));
+                        for(String livre:data.toString().replace("Infos du Livre : ","").split(",")){verif[i]=livre.split("=")[1];i++;}
+                        while(true){
+                            if (rs.next()) {
+                                idresult[0]=rs.getInt("id");
+                                idresult[1]=rs.getString("titre");
+                                idresult[2]=rs.getInt("auteur_id");
+                                idresult[3]=rs.getString("presentation");
+                                idresult[4]=rs.getInt("parution");
+                                idresult[5]=rs.getInt("colonne");
+                                idresult[6]=rs.getInt("rangee");
+                                idresult[7]=rs.getString("image");
+                                idresult[8]=rs.getString("resume");
+                                idresult[9]=rs.getString("status");
+                                if(
+                                    verif[1].equals("'"+idresult[1]+"'")&&
+                                    verif[3].equals("'"+idresult[3]+"'")&&
+                                    (("'"+verif[4]+"'").equals("'"+idresult[4]+"'"))&&
+                                    (("'"+verif[5]+"'").equals("'"+idresult[5]+"'"))&&
+                                    (("'"+verif[6]+"'").equals("'"+idresult[6]+"'"))&&
+                                    verif[7].equals(idresult[8])&&
+                                    verif[8].equals(idresult[9])
+                                ){valid=false;}
+                            }else{System.out.println("vérification du livre terminé!");break;}
+                        }
+                        if(valid){bdao.save(data,data.getAuteur());}else{System.out.println("livre déjà existant!");}
+                    }
+                }catch(Exception e){System.out.println("echec de la vérification de la lise des éléments:\n->"+e);}
+            }
 
-                System.out.println("1-------------------------------------------------------");
-
-                Bibliotheque.Livre data = livres;
-
-                for (String livre : data.toString().replace("Infos du Livre : ","").split(",")) {
-                    System.out.println(livre.split("=")[0].replace(" ","")+" => "+livre.split("=")[1]);
+            try {
+                JAXBContext jaxbContext = JAXBContext.newInstance(Bibliotheque.class);
+                Marshaller marshaller = jaxbContext.createMarshaller();
+                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                File file = new File(Utilities.XML_FILE_PATH);
+                Bibliotheque bibliotheque;
+                if (file.exists()) {
+                    bibliotheque = (Bibliotheque) jaxbContext.createUnmarshaller().unmarshal(file);
+                } else {
+                    bibliotheque = new ObjectFactory().createBibliotheque();
                 }
-
-                bdao.save(data,data.getAuteur());
-
-                System.out.println("2-------------------------------------------------------");
-
-            }
-
-        }else if(getMode().equals("connected")){
-
-            addLivreToXML();
-
-        }
-
-        /*
-                if(getMode().equals("local")){
-
-            for(Bibliotheque.Livre livres:allCurrentLivre) {
-                for (String livre : livres.toString().replace("Infos du Livre : ", "").split(",")) {
-                    //bdao.save(livre,livre.getAuteur());
-                    System.out.print(livre + " | ");
+                List<Bibliotheque.Livre> livresExistant = bibliotheque.getLivre();
+                List<Bibliotheque.Livre> livresNonDupliques = new ArrayList<>();
+                for (Bibliotheque.Livre nouveauLivre : allCurrentLivre) {
+                    boolean duplique = false;
+                    for (Bibliotheque.Livre livreExistant : livresExistant) {
+                        if (livreExistant.getTitre().equalsIgnoreCase(nouveauLivre.getTitre()) &&
+                          livreExistant.getAuteur().getNom().equalsIgnoreCase(nouveauLivre.getAuteur().getNom()) &&
+                          livreExistant.getAuteur().getPrenom().equalsIgnoreCase(nouveauLivre.getAuteur().getPrenom()) &&
+                          livreExistant.getParution() == nouveauLivre.getParution()) {
+                            duplique = true;
+                            break;
+                        }
+                    }
+                    if (!duplique) {
+                        livresNonDupliques.add(nouveauLivre);
+                    }
                 }
-                System.out.println("");
-            }
+                livresExistant.addAll(livresNonDupliques);
+                marshaller.marshal(bibliotheque, file);
+                Utilities.showAlertSuccess("Confirmation", "Le livre a bien été enregistré");
 
-            BibliothequeDAO bdao = new BibliothequeDAO();
-            if (tableView.getItems() == null || tableView.getItems().isEmpty()) {
-                System.out.println("Erreur: le tableau des livres est vide.");
-                return;
-            }
-            for (Bibliotheque.Livre livre : tableView.getItems()) {
-                bdao.save(livre,livre.getAuteur());
-            }
+            } catch (JAXBException e) {e.printStackTrace();}
 
-        }else if(getMode().equals("connected")){
-
-            addLivreToXML();
-
-        }
-         */
+        }// a modifié
+        bdao.close();
 
     }
 
@@ -405,45 +498,146 @@ public class BibliothequeController {
      */
     public void ImportXMLFile() throws JAXBException {
 
-        Stage stage = new Stage();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choisir le fichier que vous souhaitez ouvrir");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers XML", "*.xml"));
-        File file = fileChooser.showOpenDialog(tableView.getScene().getWindow());
+        if(getMode().equals("local")){
 
-        if (file != null) {
-            imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
-            titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
-            auteurColumn.setCellValueFactory(cellData -> {
-                Bibliotheque.Livre livre = cellData.getValue();
-                Bibliotheque.Livre.Auteur auteur = livre.getAuteur();
-                return new SimpleStringProperty(auteur.getNom() + " " + auteur.getPrenom());
-            });
-            presentationColumn.setCellValueFactory(new PropertyValueFactory<>("presentation"));
-            parutionColumn.setCellValueFactory(new PropertyValueFactory<>("parution"));
-            colonneColumn.setCellValueFactory(new PropertyValueFactory<>("colonne"));
-            rangeeColumn.setCellValueFactory(new PropertyValueFactory<>("rangee"));
-            resumeColumn.setCellValueFactory(new PropertyValueFactory<>("resume"));
-            statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+            Stage stage = new Stage();
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Choisir le fichier que vous souhaitez ouvrir");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers XML", "*.xml"));
+            File file = fileChooser.showOpenDialog(tableView.getScene().getWindow());
+            if (file != null) {
+                imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
+                titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
+                auteurColumn.setCellValueFactory(cellData -> {
+                    Bibliotheque.Livre livre = cellData.getValue();
+                    Bibliotheque.Livre.Auteur auteur = livre.getAuteur();
+                    return new SimpleStringProperty(auteur.getNom() + " " + auteur.getPrenom());
+                });
+                presentationColumn.setCellValueFactory(new PropertyValueFactory<>("presentation"));
+                parutionColumn.setCellValueFactory(new PropertyValueFactory<>("parution"));
+                colonneColumn.setCellValueFactory(new PropertyValueFactory<>("colonne"));
+                rangeeColumn.setCellValueFactory(new PropertyValueFactory<>("rangee"));
+                resumeColumn.setCellValueFactory(new PropertyValueFactory<>("resume"));
+                statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-            try {
-                JAXBContext jaxbContext = JAXBContext.newInstance(Bibliotheque.class);
-                Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-                Bibliotheque bibliotheque = (Bibliotheque) unmarshaller.unmarshal(new File(file.getAbsolutePath()));
-                livres.clear();
-                livres.addAll(bibliotheque.getLivre());
-                allCurrentLivre.clear();
-                allCurrentLivre.addAll(livres);
-                tableView.setItems(livres);
-                Utilities.showAlertSuccess("Confirmation", "Fichier importer avec success");
-            } catch (JAXBException e) {
-                e.printStackTrace();
+                try {
+                    JAXBContext jaxbContext = JAXBContext.newInstance(Bibliotheque.class);
+                    Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+                    Bibliotheque bibliotheque = (Bibliotheque) unmarshaller.unmarshal(new File(file.getAbsolutePath()));
+                    livres.clear();
+                    livres.addAll(bibliotheque.getLivre());
+                    allCurrentLivre.clear();
+                    allCurrentLivre.addAll(livres);
+                    tableView.setItems(livres);
+                    Utilities.showAlertSuccess("Confirmation", "Fichier importer avec success");
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+
+                editLivreListener();
+                setImageUrl();
             }
 
-            editLivreListener();
-            setImageUrl();
         }
+        if(getMode().equals("connected")){
 
+            try {
+                imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
+                titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
+                auteurColumn.setCellValueFactory(cellData -> {
+                    Bibliotheque.Livre livre = cellData.getValue();
+                    Bibliotheque.Livre.Auteur auteur = livre.getAuteur();
+                    return new SimpleStringProperty(auteur.getNom() + " " + auteur.getPrenom());
+                });
+                presentationColumn.setCellValueFactory(new PropertyValueFactory<>("presentation"));
+                parutionColumn.setCellValueFactory(new PropertyValueFactory<>("parution"));
+                colonneColumn.setCellValueFactory(new PropertyValueFactory<>("colonne"));
+                rangeeColumn.setCellValueFactory(new PropertyValueFactory<>("rangee"));
+                resumeColumn.setCellValueFactory(new PropertyValueFactory<>("resume"));
+                statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+            } catch (Exception e) {System.out.println("erreur d'initiation de la structure du tableau:\n"+e);}
+
+            Connection conn = Connexion.initConnexion();
+            String query = "SELECT * FROM `livre`";
+            Object[] idresult = new Object[10];
+
+            try(PreparedStatement result = conn.prepareStatement(query)) {
+                try (ResultSet rs=result.executeQuery()) {
+                    livres.clear();
+                    allCurrentLivre.clear();
+                    while(true){
+                        if (rs.next()) {
+                            idresult[0]=rs.getInt("id");
+                            idresult[7]=rs.getString("image");
+                            idresult[1]=rs.getString("titre");
+                            idresult[2]=rs.getInt("auteur_id");
+                            idresult[3]=rs.getString("presentation");
+                            idresult[4]=rs.getInt("parution");
+                            idresult[5]=rs.getInt("colonne");
+                            idresult[6]=rs.getInt("rangee");
+                            idresult[8]=rs.getString("resume");
+                            idresult[9]=rs.getString("status");
+
+                            Connection conn2 = Connexion.initConnexion();
+                            String query2 = "SELECT * FROM `auteurs` WHERE `id` LIKE ?",nom="",prenom="";
+                            try (PreparedStatement result2 = conn2.prepareStatement(query2)) {
+                                result2.setInt(1, Integer.parseInt(""+idresult[2]));
+                                try (ResultSet rs2 = result2.executeQuery()) {
+                                    if (rs2.next()) {
+                                        nom = rs2.getString("nom");
+                                        prenom = rs2.getString("prenom");
+                                    } else {
+                                        System.out.println("Check auteur null!");
+                                    }
+                                }
+                            }
+                            catch (Exception f) {System.out.println("erreur de la query de récupération du nom et prénom de l'auteur!\n" + f);}
+
+                            try {
+
+                                ObservableList<Object> tableauDeLivres2 = FXCollections.observableArrayList();
+                                Bibliotheque.Livre livre2 = new Bibliotheque.Livre();
+                                Bibliotheque.Livre.Auteur auteur2 = new Bibliotheque.Livre.Auteur();
+                                livre2.setImage((String) idresult[7]);
+                                livre2.setTitre((String) idresult[1]);
+                                auteur2.setNom(nom);
+                                auteur2.setPrenom(prenom);
+                                livre2.setAuteur(auteur2);
+                                livre2.setPresentation((String) idresult[3]);
+                                livre2.setParution((int) idresult[4]);
+                                livre2.setColonne(Short.parseShort(idresult[5].toString()));
+                                livre2.setRangee(Short.parseShort(idresult[6].toString()));
+                                livre2.setResume((String) idresult[8]);
+                                livre2.setStatus((String) idresult[9]);
+                                List<Bibliotheque.Livre> livres2 = Collections.singletonList(livre2);
+                                if (!livres2.isEmpty()) {
+                                    Bibliotheque.Livre livreAjoute2 = livres2.get(0);
+                                    tableauDeLivres2.add(livreAjoute2);
+                                    System.out.println(livreAjoute2);
+                                    livres.add(livres2.get(0));
+                                    allCurrentLivre.add(livres2.get(0));
+                                    tableView.setItems(livres);
+                                }
+                                else {
+                                    System.out.println("La liste des livres est vide.");
+                                }
+
+                            }catch (Exception f) {System.out.println("erreur d'ajout des livres dans le tableaux:\n"+f);}
+
+                            editLivreListener();
+                            setImageUrl();
+
+                        }else{
+                            System.out.println("ajout des livres terminé!");
+                            Utilities.showAlertSuccess("Confirmation", "Fichier importer avec success");
+                            break;
+                        }
+                    }
+                }
+            }
+            catch(Exception e){System.out.println("echec de l'ajout de la liste des livres:\n->"+e);}
+
+        }
     }
 
     /**
@@ -671,7 +865,8 @@ public class BibliothequeController {
             Bibliotheque bibliotheque;
             if (file.exists()) {
                 bibliotheque = (Bibliotheque) jaxbContext.createUnmarshaller().unmarshal(file);
-            } else {
+            }
+            else {
                 bibliotheque = new ObjectFactory().createBibliotheque();
             }
             // Ajouter le livre à la liste des livres
@@ -681,28 +876,22 @@ public class BibliothequeController {
             Iterator<Bibliotheque.Livre> iterator2 = copyAllCurrentLivre.iterator();
             while (iterator2.hasNext()) {
                 Bibliotheque.Livre thelivre = iterator2.next();
-
                 while (iterator.hasNext()) {
                     Bibliotheque.Livre e = iterator.next();
                     if ((e.getTitre().equalsIgnoreCase(thelivre.getTitre())
                       && e.getAuteur().getNom().equalsIgnoreCase(thelivre.getAuteur().getNom())
                       && e.getAuteur().getPrenom().equals(thelivre.getAuteur().getPrenom())
                       && e.getParution() == thelivre.getParution())) {
-
-                        System.out.println("################## le livre existe déjà : " + e.toString());
-
+                        System.out.println("################## le livre existe déjà : " + e);
                         iterator2.remove();
                         livres.remove(iterator2);
                         tableView.setItems(livres);
                         Utilities.showAlert("Echec d'enregistrement","Vous avez deux livres avec des informations identiques !");
                         return;
-
                     }
                 }
             }
-
             bibliotheque.getLivre().addAll(allCurrentLivre);
-
             // Enregistrer les modifications dans le fichier XML
             marshaller.marshal(bibliotheque, file);
             Utilities.showAlertSuccess("Confirmation", "Le livre a bien été enregistré");
@@ -850,9 +1039,7 @@ public class BibliothequeController {
             livres.addAll(copyAllCurrentLivre);
             tableView.setItems(livres);
             clearForm();
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
+        } catch (JAXBException e) {e.printStackTrace();}
     }
 
 
