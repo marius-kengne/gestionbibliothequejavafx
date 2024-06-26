@@ -16,10 +16,12 @@ import java.util.Properties;
  */
 public class BibliothequeDAO {
 
-    private final Connection conn = Connexion.initConnexion(new Properties());
-    Connection connection = Connexion.initConnexion(new Properties());
+    private final Connection conn;
 
-
+    // Ajout d'un constructeur pour permettre l'injection de connexion
+    public BibliothequeDAO(Connection conn) {
+        this.conn = conn;
+    }
     /**
      * Enregistre un livre dans la base de données.
      *
@@ -29,24 +31,24 @@ public class BibliothequeDAO {
      */
     public Bibliotheque.Livre save(Bibliotheque.Livre livre, Bibliotheque.Livre.Auteur auteur){
 
-        String query = "INSERT INTO livre (" +
+        String query = "INSERT INTO livres (" +
                 "titre, auteur_id, presentation, parution, colonne, rangee, image, resume, status" +
                 ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement result = conn.prepareStatement(query)) {
 
-            Bibliotheque.Livre.Auteur currentAuteur = new AuteurDAO(connection).save(auteur);
+            Bibliotheque.Livre.Auteur currentAuteur = new AuteurDAO(conn).save(auteur);
 
             if (currentAuteur != null){
                 result.setString(1, livre.getTitre());
-                result.setString(2, livre.getPresentation());
+                result.setString(2, livre.getAuteur().getNom() + " " +livre.getAuteur().getPrenom());
                 result.setString(3, livre.getPresentation());
                 result.setInt(4, livre.getParution());
                 result.setInt(5, livre.getColonne());
                 result.setInt(6, livre.getRangee());
                 result.setString(7, livre.getImage());
                 result.setString(8, livre.getResume());
-                result.setString(8, livre.getStatus());
+                result.setString(9, livre.getStatus());
 
                 int affectedRows = result.executeUpdate();
 
@@ -62,14 +64,6 @@ public class BibliothequeDAO {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                System.out.println("SQLException: " + ex.getMessage());
-            }
         }
 
         return null;

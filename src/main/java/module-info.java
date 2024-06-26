@@ -14,6 +14,7 @@ module fr.openjava.gestionbibliothequejavafx {
     opens fr.openjava.gestionbibliothequejavafx to javafx.fxml;
     exports fr.openjava.gestionbibliothequejavafx;
     exports fr.openjava.gestionbibliothequejavafx.controllers;
+    exports fr.openjava.gestionbibliothequejavafx.DAO;
     opens fr.openjava.gestionbibliothequejavafx.controllers to javafx.fxml;
     opens fr.openjava.gestionbibliothequejavafx.models.generated to java.xml.bind, javafx.base;
 
